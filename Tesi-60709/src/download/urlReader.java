@@ -106,7 +106,10 @@ public class urlReader  {
 			} catch (IOException e1) {
 				e1.printStackTrace();
 	    		OutputTxt.writeException(e.getLocalizedMessage());
-	    		OutputTxt.writeException("Errore nell'ecezione della " + tabella + "Reader dell'utente: " + user);	
+	    		OutputTxt.writeException("Errore nell'ecezione della " + tabella + "Reader dell'utente: " + user);
+	    		try {in.close();} catch (IOException e2) {}
+	    		System.out.println("Fine del " + tabella + " reader dell'utente " + user);
+	    		return;
 			}
 			e.printStackTrace();
     		OutputTxt.writeException(e.getLocalizedMessage());
@@ -141,27 +144,28 @@ public class urlReader  {
 			Contatore.incApi();
 			in = new BufferedReader(new InputStreamReader(metafeedUrl.openStream()));
 			
-			inputLine = in.readLine();
-			if (inputLine.contains("</openSearch:itemsPerPage></feed>")) {
-				in.close();
-				return; // DA SISTEMARE QUANDO SI PARLERÀ DEL DATABASE MA DIREI DI SUSCIRE E BASTA
-			}
-			else if (inputLine.contains("<openSearch:total")) {
-				totale = inputLine.substring(inputLine.indexOf("totalResults")+ 13, inputLine.indexOf("</openSearch"));
-				tot = Integer.parseInt(totale);
-			}
-			while (inputLine.contains("<entry")) {				    	
-				inputLine = inputLine.substring(inputLine.indexOf("<entry") + 53 );
-				id = inputLine.substring(0 , inputLine.indexOf("</id>"));
-				published = inputLine.substring(inputLine.indexOf("<published>") + 11, inputLine.indexOf("</published>")-5);
-				count++;
-				System.out.println(count + ": Inserimento nella tabella favorites della tupla: " 
-						+ user + " - "+ id + " - " + published );
-				DatabaseMySql.insert("utenti", "favorites" , user, id, published);
-				if (count == 1000) {
+			while ((inputLine = in.readLine()) != null) {
+				if (inputLine.contains("</openSearch:itemsPerPage></feed>")) {
 					in.close();
-					System.out.println("Cap di favorites raggiunto per l'user: " + user);
-					return;
+					return; // DA SISTEMARE QUANDO SI PARLERÀ DEL DATABASE MA DIREI DI SUSCIRE E BASTA
+				}
+				else if (inputLine.contains("<openSearch:total")) {
+					totale = inputLine.substring(inputLine.indexOf("totalResults")+ 13, inputLine.indexOf("</openSearch"));
+					tot = Integer.parseInt(totale);
+				}
+				while (inputLine.contains("<entry")) {				    	
+					inputLine = inputLine.substring(inputLine.indexOf("<entry") + 53 );
+					id = inputLine.substring(0 , inputLine.indexOf("</id>"));
+					published = inputLine.substring(inputLine.indexOf("<published>") + 11, inputLine.indexOf("</published>")-5);
+					count++;
+					System.out.println(count + ": Inserimento nella tabella favorites della tupla: " 
+							+ user + " - "+ id + " - " + published );
+					DatabaseMySql.insert("utenti", "favorites" , user, id, published);
+					if (count == 1000) {
+						in.close();
+						System.out.println("Cap di favorites raggiunto per l'user: " + user);
+						return;
+					}
 				}
 			}
 			in.close();
