@@ -10,7 +10,7 @@ public class Crawler {
 		Scan.popularScan();
 		Runtime.getRuntime().gc();
 		Scan.toCheck();
-		Runtime.getRuntime().gc();
+		Runtime.getRuntime().gc(); 
 		Scan.inactive();
 		Runtime.getRuntime().gc();
 		// Scansione completa

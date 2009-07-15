@@ -40,6 +40,7 @@ public class Scan {
 				}
 				else
 					DatabaseMySql.insert("utenti", "blocked", userTemp[0]);
+				DatabaseMySql.insert("utenti", "popular", userTemp[0], userTemp[1], userTemp[2]);
 				if (temp == 100) {
 					temp = 0;
 					Runtime.getRuntime().gc();

@@ -435,9 +435,8 @@ public class urlReader  {
 				}
 				else if (temp.contains("many")) {
 					in.close();
-					OutputTxt.writeLog("Errore 403: Rete floodata dalle API dall'user " + user);
 					// Reinserire contatto ed eliminare System.exit
-					System.exit(0);
+					API.notifyFlood(tabella, user);
 					return;
 				}	
 				else if (temp.contains("not found")) {
