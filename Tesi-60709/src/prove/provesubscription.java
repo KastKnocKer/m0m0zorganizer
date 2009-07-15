@@ -24,7 +24,7 @@ public class provesubscription {
     	
         Socket soc = new java.net.Socket();
         try {
-            soc.connect(new InetSocketAddress("37.237.2.161", 80));
+            soc.connect(new InetSocketAddress("www.google.it", 80));
             System.out.println(API.getUser("active", "Staffgrillo"));
         } catch (IOException e) {
             e.printStackTrace();
