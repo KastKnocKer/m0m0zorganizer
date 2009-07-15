@@ -19,10 +19,7 @@ public class provesubscription {
     	
     	new Scan();
     	
-    	String[] temp;
-    	for (; (temp = DatabaseMySql.extract("utenti", "active", "user")) != null ;)
-    		DatabaseMySql.insert("utenti", "toCheck", temp[0]);
-
+    	System.out.println(API.getUser("active", "Staffgrillo"));
     	
     /*	for (;;) {
     		API.getUser("animegamer3");

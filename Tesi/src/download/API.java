@@ -62,7 +62,7 @@ import java.net.URL;
             OutputTxt.writeException("Errore nel getUser dell'utente: " + user);
             return false;
         }
-        return false;
+		return false;
 	}
 	          
     public static void notifyFlood (String tabella, String user) {
