@@ -1,6 +1,5 @@
 package prove;
 
-import database.DatabaseMySql;
 import download.*;
 
 public class provesubscription {
