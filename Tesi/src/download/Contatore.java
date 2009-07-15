@@ -39,6 +39,14 @@ public class Contatore {
 		return "" + Url;
 	}	
 	
+	public static String getTotApi () {
+		return "" + totApi;
+	}	
+	
+	public static String getTotUrl () {
+		return "" + totUrl;
+	}	
+	
 	public static void decUrl () {
 		Url++;
 	}

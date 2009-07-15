@@ -214,7 +214,10 @@ import java.net.*;
     public static void notifyFlood (String tabella, String user) {
     	OutputTxt.writeLog("Errore 403: Rete floodata dalle API dall'user " + user);    // DA RIFAREEEEE
 		OutputTxt.writeLog("Richieste API: " + Contatore.getApi());
+		OutputTxt.writeLog("Totale    API: " + Contatore.getTotApi());
 		OutputTxt.writeLog("Richieste URL: " + Contatore.getUrl());
+		OutputTxt.writeLog("Totale    URL: " + Contatore.getTotUrl());
+		
 		Contatore.setApi(0);
 		Contatore.setUrl(0);
 		try {
