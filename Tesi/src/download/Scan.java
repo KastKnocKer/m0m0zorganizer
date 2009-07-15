@@ -26,38 +26,47 @@ public class Scan {
 	}
 	
 	public static void popularScan () {
+		int temp = 0;
 		String[] userTemp;	
 		for (; (userTemp = DatabaseMySql.extract("utenti", "popToCheck", "user")) != null ;) {
 			if (!DatabaseMySql.contiene("utenti", userTemp[0], "active")) {	
 				if (API.getUser("active", userTemp[0])) {		// E' un utente sospeso?  No --> active
 					if (urlReader.activityApiReader(userTemp[0])) {	// Ha activityFeed? 
 						completeScan(userTemp[0], false);	// Si attivo scansione completa senza activity
-						Runtime.getRuntime().gc();
 					}
 					else 		// Non è attivo lo tolgo dagli active e lo metto negli inactive
 						DatabaseMySql.moveUser("utenti", "active", "inactive", "user", userTemp[0]);
+					temp++;
 				}
 				else
 					DatabaseMySql.insert("utenti", "blocked", userTemp[0]);
+				if (temp == 100) {
+					temp = 0;
+					Runtime.getRuntime().gc();
+				}
 			}
 		}
 	}
 
 	public static void toCheck() {
+		int temp = 0;
 		String[] userTemp;	
 		for (; (userTemp = DatabaseMySql.extract("utenti", "toCheck", "user")) != null ;) {
 			if (!DatabaseMySql.checkUserDB("utenti", userTemp[0])) {  // L'ho già fatto?
 				if (API.getUser("active", userTemp[0])) {			// E' un utente sospeso?  No --> active
-					if (urlReader.activityApiReader(userTemp[0])) {	// Ha activityFeed? 
+					if (urlReader.activityApiReader(userTemp[0]))	// Ha activityFeed? 
 						completeScan(userTemp[0], false);	// Si attivo scansione completa senza activity
-						Runtime.getRuntime().gc();
-					}
 					else 		// Non è attivo lo tolgo dagli active e lo metto negli inactive
 						DatabaseMySql.moveUser("utenti", "active", "inactive", "user", userTemp[0]);
+					temp++;
 				}
 				else
 					DatabaseMySql.insert("utenti", "blocked", userTemp[0]);
-			}
+				if (temp == 100) {
+					temp = 0;
+					Runtime.getRuntime().gc();
+				}
+			}			
 		}
 	}
 	
