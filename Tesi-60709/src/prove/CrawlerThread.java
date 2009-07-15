@@ -1,5 +1,6 @@
 package prove;
 
+import download.API;
 import download.Scan;
 import download.urlReader;
 
@@ -32,7 +33,8 @@ public class CrawlerThread extends Thread {
 		System.out.println("Avvio Thread FIGLIOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO!");
 		System.out.println("Avvio Thread FIGLIOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO!");
 		
-		new Scan();
+		new urlReader();
+		new API();
 		Scan.toCheck();
 	}
 	
