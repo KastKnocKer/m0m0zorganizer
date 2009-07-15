@@ -1,0 +1,16 @@
+2009-07-14T19:32:05: Server returned HTTP response code: 500 for URL: http://www.youtube.com/profile?user=123nitro&view=subscribers&start=80
+2009-07-14T19:32:05: Errore nel subscribersReader dell'utente: 123nitro
+2009-07-14T19:32:23: Stream closed
+2009-07-14T19:32:23: Errore nel getErrorCode dell'utente: 123nitro
+2009-07-14T19:33:30: Stream closed
+2009-07-14T19:33:30: Errore nel getErrorCode dell'utente: utenti
+2009-07-14T19:34:20: Stream closed
+2009-07-14T19:34:21: Errore nel getErrorCode dell'utente: 123Saif456
+2009-07-14T19:40:36: Server returned HTTP response code: 500 for URL: http://www.youtube.com/profile?user=123saringan22&view=subscribers&start=720
+2009-07-14T19:40:37: Errore nel subscribersReader dell'utente: 123saringan22
+2009-07-14T19:40:45: Server returned HTTP response code: 500 for URL: http://www.youtube.com/profile?user=0012340&ytsession=wiV5MGVtuAto6CvRcYs4LJSlU_v2f55WhJ2aF9pkV59RC2_7sJEDx-ICpm6jyqQ2iX_vgN4lSeTDkfbQ3LXO95Ezs2yHqC3sM_nhfIZBMfv_Rz6Y9BW1n2JRtpfMuG2QUk52AdKw_aOWs56tFmis6tOmQwTV2KdMCJ_iHE9Aac3sFt8DYZ6njA
+2009-07-14T19:40:45: Errore nel subscribersReader dell'utente: 0012340
+2009-07-14T19:46:36: Stream closed
+2009-07-14T19:46:36: Errore nel getErrorCode dell'utente: 105gaara1
+2009-07-14T19:46:37: Server returned HTTP response code: 500 for URL: http://www.youtube.com/profile?user=105gaara1&view=friends&start=0
+2009-07-14T19:46:37: Errore nel friendsReader dell'utente: 105gaara1

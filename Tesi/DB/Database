@@ -1,0 +1,55 @@
+Accesso
+
+mysql -h 127.0.0.1 -u root -p
+
+Configurazione database
+
+
+
+drop table utenti.username;
+drop table utenti.friends;
+drop table utenti.subscribers;
+drop table utenti.subscriptions;
+drop table utenti.video;
+drop table utenti.favorites;
+
+create database utentiDATA;
+
+drop database utenti;
+
+create database utenti;
+
+create table utenti.popular 		(user Char(20), data char(19), tipo Char(10), PRIMARY KEY(user, tipo));
+create table utenti.popToCheck		(user Char(20), data char(19), tipo Char(10), PRIMARY KEY(user, tipo));
+create table utenti.toCheck	 	(user Char(20), PRIMARY KEY (user));
+create table utenti.active 		(user Char(20), subcount Int(6), viewcount Int(9), videowatch Int(9), lastacc Char(20), PRIMARY KEY(user));
+create table utenti.inactive 		(user Char(20), subcount Int(6), viewcount Int(9), videowatch Int(9), lastacc Char(20), PRIMARY KEY(user));
+create table utenti.blocked 		(user Char(20), PRIMARY KEY(user));
+
+create table utenti.friends 		(user Char(20), friend char(20), PRIMARY KEY (user, friend));
+create table utenti.subscribers		(user Char(20), subscriber char(20), published char(19), PRIMARY KEY (user, subscriber));
+create table utenti.subscriptions	(user Char(20), subscription char(20), published char(19), PRIMARY KEY (user, subscription));
+create table utenti.video		(user Char(20), id Char(11), published char(19), PRIMARY KEY(user, id));
+create table utenti.favorites 		(user Char(20), id Char(11), published char(19), PRIMARY KEY(user, id));
+create table utenti.activity 		(user Char(20), id Char(20), action char(20), updated char(19),  PRIMARY KEY(user, id, action));
+
+
+grant all on utenti.* to m0m0z@localhost identifield by 'PASSWPRD';
+
+
+insert into utenti.LISTA (COLONNA) values ("USERNAME")
+
+delete from utenti.LISTA where user= 'USERNAME';
+
+drop table utenti.username;
+drop table utenti.friends;
+drop table utenti.subscribers;
+drop table utenti.subscriptions;
+drop table utenti.video;
+drop table utenti.favorites;
+
+Inizio scansione 13
+
+Partito da 40200
+
+Stanotte 1:32:18 29600
