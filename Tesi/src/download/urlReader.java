@@ -196,27 +196,26 @@ public class urlReader  {
 					"&start-index=" + (count + 1));
 			Contatore.incApi();
 			in = new BufferedReader(new InputStreamReader(metafeedUrl.openStream()));
-			while ((inputLine = in.readLine()) != null) {
-				if (inputLine.contains("</openSearch:itemsPerPage></feed>"))
-					return; // DA SISTEMARE QUANDO SI PARLERÀ DEL DATABASE MA DIREI DI USCIRE E BASTA
-				else if (inputLine.contains("<openSearch:total")) {
-					totale = inputLine.substring(inputLine.indexOf("totalResults")+ 13, inputLine.indexOf("</openSearch"));
-					tot = Integer.parseInt(totale);
+			inputLine = in.readLine();
+			if (inputLine.contains("</openSearch:itemsPerPage></feed>"))
+				return; // DA SISTEMARE QUANDO SI PARLERÀ DEL DATABASE MA DIREI DI USCIRE E BASTA
+			else if (inputLine.contains("<openSearch:total")) {
+				totale = inputLine.substring(inputLine.indexOf("totalResults")+ 13, inputLine.indexOf("</openSearch"));
+				tot = Integer.parseInt(totale);
+			}
+			while (inputLine.contains("<entry")) {				    	
+				inputLine = inputLine.substring(inputLine.indexOf("<entry") + 53 );
+				id = inputLine.substring(0 , inputLine.indexOf("</id>"));
+				published = inputLine.substring(inputLine.indexOf("<published>") + 11, inputLine.indexOf("</published>")-5);
+				count++;
+				System.out.println(count + ": Inserimento nella tabella video della tupla: " 
+						+ user + " - "+ id + " - " + published );
+				DatabaseMySql.insert("utenti", "video" , user, id, published);
+				if (count == 1000) {
+					System.out.println("Cap dei video raggiunto per l'user: " + user);
+					in.close();
+					return;
 				}
-			    while (inputLine.contains("<entry")) {				    	
-			    	inputLine = inputLine.substring(inputLine.indexOf("<entry") + 53 );
-			    	id = inputLine.substring(0 , inputLine.indexOf("</id>"));
-			    	published = inputLine.substring(inputLine.indexOf("<published>") + 11, inputLine.indexOf("</published>")-5);
-			    	count++;
-			    	System.out.println(count + ": Inserimento nella tabella video della tupla: " 
-			    			+ user + " - "+ id + " - " + published );
-			    	DatabaseMySql.insert("utenti", "video" , user, id, published);
-			    	if (count == 1000) {
-			    		System.out.println("Cap dei video raggiunto per l'user: " + user);
-			    		in.close();
-			    		return;
-			    	}
-			    }
 			}
 			in.close();
 			if (count != 0 && count < tot) {

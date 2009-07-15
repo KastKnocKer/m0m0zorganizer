@@ -5,9 +5,9 @@ public class Crawler {
 	public static void main(String[] args) {
 
 		new Scan();
-		urlReader.popularReader();
+		//urlReader.popularReader();
 		Runtime.getRuntime().gc();
-		Scan.popularScan();
+		//Scan.popularScan();
 		Runtime.getRuntime().gc();
 		Scan.toCheck();
 		Runtime.getRuntime().gc();
