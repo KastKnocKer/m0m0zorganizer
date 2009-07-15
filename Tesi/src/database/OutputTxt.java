@@ -1,14 +1,15 @@
 package database;
 
-import java.io.*; 
-import java.util.Vector;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class OutputTxt {
 	
 	public OutputTxt () {
 			writeLog("Inizio scansione");
 	}
-	
+	/*
 	// Da automatizzareeeeeeeee
 	public  void writeFile(Vector<String[]> user) {
 		BufferedWriter writer; // il writer che userò per scrivere le informazioni
@@ -38,13 +39,13 @@ public class OutputTxt {
 		catch (IOException e) {
 			System.out.println("Eccezione durante un'operazione di Output sul file: " + File );
 			}
-	}
+	} */
 	
 	public static void writeLog (String check) {
 		try {			
 			logWriter = new BufferedWriter(new FileWriter("./Log", true));
 			new Orario();
-			System.out.println(Orario.getDataOra() + ": " + check);
+			//System.out.println(Orario.getDataOra() + ": " + check);
 			logWriter.write(Orario.getDataOra() + ": " + check);
 			logWriter.newLine();			
 			logWriter.flush();
@@ -53,13 +54,13 @@ public class OutputTxt {
 			System.out.println("Errore nel writeLog");
 			e.printStackTrace();
 		}
+		return;
 	}
 	 
 	public static void writeException (String check) {
 		try {			
 			logWriter = new BufferedWriter(new FileWriter("./Exception", true));
 			new Orario();
-			System.out.println(Orario.getDataOra() + ": " + check);
 			logWriter.write(Orario.getDataOra() + ": " + check);
 			logWriter.newLine();			
 			logWriter.flush();
@@ -68,8 +69,10 @@ public class OutputTxt {
 			System.out.println("Errore nel writeLog");
 			e.printStackTrace();
 		}
+		return;
 	}
 	
+	/*
 	// Read dal file + analisi statistica del numero degli amici
 	public static String[] readFileCount () {
 		String[][] utenti;
@@ -157,7 +160,6 @@ public class OutputTxt {
 	public void setFile (String File) {
 		 OutputTxt.File = File;
 	 }
-	 
-	private static String File = "./File";
+	 */
 	private static BufferedWriter logWriter;
 }

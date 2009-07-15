@@ -27,10 +27,6 @@ public class Contatore {
 
 	}
 	
-	public static void decApi () {
-		Api--;
-	}	
-	
 	public static String getApi () {
 		return "" + Api;
 	}	
@@ -47,10 +43,7 @@ public class Contatore {
 		return "" + totUrl;
 	}	
 	
-	public static void decUrl () {
-		Url++;
-	}
-	
+	/*
 	public static boolean checkApi () {   	// Ritornano true se NON è ancora arrivato al cap
 		if (Api == capApi)
 			return false;
@@ -62,6 +55,7 @@ public class Contatore {
 			return false;
 		return true;
 	}
+	*/
 	
 	public static void setApi (int num) {
 		Contatore.Api = num;
@@ -71,12 +65,13 @@ public class Contatore {
 		Contatore.Url = num;
 	}
 	
+	/*
 	public static boolean checkCompleteScan () {
 		if (capUrl - 84 >= Url)
 			return true;
 		return false;
 	}
-	
+	*/
 
 	private static int Api;
 	private static int Url;

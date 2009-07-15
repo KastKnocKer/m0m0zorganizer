@@ -29,13 +29,11 @@ public class Scan {
 		String[] userTemp;	
 		for (; (userTemp = DatabaseMySql.extract("utenti", "popToCheck", "user")) != null ;) {
 			if (!DatabaseMySql.contiene("utenti", userTemp[0], "active")) {				
-				if (API.getUser("active", userTemp[0])) {
-					DatabaseMySql.insert("utenti", "popular", userTemp[0], userTemp[1], userTemp[2]);
-					completeScan(userTemp[0], true);
-				}
+				if (API.getUser("active", userTemp[0]))
+					DatabaseMySql.insert("utenti", "popular", userTemp[0], userTemp[1], userTemp[2]);					
 				else
 					DatabaseMySql.insert("utenti", "blocked", userTemp[0]);
-			//	Runtime.getRuntime().gc();
+				Runtime.getRuntime().gc();
 			}
 		}
 	}
@@ -49,14 +47,12 @@ public class Scan {
 						completeScan(userTemp[0], false);	// Si attivo scansione completa senza activity
 						Runtime.getRuntime().gc();
 					}
-					else {		// Non è attivo lo tolgo dagli active e lo metto negli inactive
+					else 		// Non è attivo lo tolgo dagli active e lo metto negli inactive
 						DatabaseMySql.moveUser("utenti", "active", "inactive", "user", userTemp[0]);
-					}
 				}
 				else
 					DatabaseMySql.insert("utenti", "blocked", userTemp[0]);
 			}
-		//	Runtime.getRuntime().gc();
 		}
 	}
 	
@@ -67,6 +63,7 @@ public class Scan {
 				if (urlReader.activityApiReader(userTemp[0]))	// Ha activityFeed? 
 					DatabaseMySql.moveUser("utenti", "inactive", "active", "user", userTemp[0]);
 				completeScan(userTemp[0], false);	// Si attivo scansione completa senza activity
+				Runtime.getRuntime().gc();
 			}
 			else
 				DatabaseMySql.insert("utenti", "blocked", userTemp[0]);
