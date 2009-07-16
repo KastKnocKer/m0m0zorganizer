@@ -1,12 +1,14 @@
 package download;
 
 import database.DatabaseMySql;
+import database.OutputTxt;
 
 public class scanPopular {
 
 	public scanPopular () {
 		new DatabaseMySql();		// Definisco il database per tutto il programma
 		DatabaseMySql.connetti();	// Connessione al database
+		new OutputTxt();
 		new API();
 		
 		popularScan();
