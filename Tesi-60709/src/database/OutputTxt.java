@@ -6,9 +6,7 @@ import java.io.IOException;
 
 public class OutputTxt {
 	
-	public OutputTxt () {
-			writeLog("Inizio scansione");
-	}
+	public OutputTxt () {}
 	/*
 	// Da automatizzareeeeeeeee
 	public  void writeFile(Vector<String[]> user) {

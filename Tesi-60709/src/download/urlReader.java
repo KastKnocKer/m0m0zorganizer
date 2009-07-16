@@ -158,7 +158,26 @@ public class urlReader  {
 					id = inputLine.substring(0 , inputLine.indexOf("</id>"));
 					published = inputLine.substring(inputLine.indexOf("<published>") + 11, inputLine.indexOf("</published>")-5);
 					count++;
-					System.out.println(count + ": Inserimento nella tabella favorites della tupla: " 
+					if (inputLine.contains("</openSearch:itemsPerPage></feed>"))
+						return; // DA SISTEMARE QUANDO SI PARLERÀ DEL DATABASE MA DIREI DI USCIRE E BASTA
+					else if (inputLine.contains("<openSearch:total")) {
+						totale = inputLine.substring(inputLine.indexOf("totalResults")+ 13, inputLine.indexOf("</openSearch"));
+						tot = Integer.parseInt(totale);
+					}
+					while (inputLine.contains("<entry")) {				    	
+						inputLine = inputLine.substring(inputLine.indexOf("<entry") + 53 );
+						id = inputLine.substring(0 , inputLine.indexOf("</id>"));
+						published = inputLine.substring(inputLine.indexOf("<published>") + 11, inputLine.indexOf("</published>")-5);
+						count++;
+						System.out.println(count + ": Inserimento nella tabella video della tupla: " 
+								+ user + " - "+ id + " - " + published );
+						DatabaseMySql.insert("utenti", "video" , user, id, published);
+						if (count == 1000) {
+							System.out.println("Cap dei video raggiunto per l'user: " + user);
+							in.close();
+							return;
+						}
+					}				System.out.println(count + ": Inserimento nella tabella favorites della tupla: " 
 							+ user + " - "+ id + " - " + published );
 					DatabaseMySql.insert("utenti", "favorites" , user, id, published);
 					if (count == 1000) {
@@ -200,31 +219,31 @@ public class urlReader  {
 					"&start-index=" + (count + 1));
 			Contatore.incApi();
 			in = new BufferedReader(new InputStreamReader(metafeedUrl.openStream()));
-			inputLine = in.readLine();
-			if (inputLine.contains("</openSearch:itemsPerPage></feed>"))
-				return; // DA SISTEMARE QUANDO SI PARLERÀ DEL DATABASE MA DIREI DI USCIRE E BASTA
-			else if (inputLine.contains("<openSearch:total")) {
-				totale = inputLine.substring(inputLine.indexOf("totalResults")+ 13, inputLine.indexOf("</openSearch"));
-				tot = Integer.parseInt(totale);
-			}
-			while (inputLine.contains("<entry")) {				    	
-				inputLine = inputLine.substring(inputLine.indexOf("<entry") + 53 );
-				id = inputLine.substring(0 , inputLine.indexOf("</id>"));
-				published = inputLine.substring(inputLine.indexOf("<published>") + 11, inputLine.indexOf("</published>")-5);
-				count++;
-				System.out.println(count + ": Inserimento nella tabella video della tupla: " 
-						+ user + " - "+ id + " - " + published );
-				DatabaseMySql.insert("utenti", "video" , user, id, published);
-				if (count == 1000) {
-					System.out.println("Cap dei video raggiunto per l'user: " + user);
-					in.close();
-					return;
+			while ((inputLine = in.readLine()) != null) {
+				if (inputLine.contains("</openSearch:itemsPerPage></feed>"))
+					return; // DA SISTEMARE QUANDO SI PARLERÀ DEL DATABASE MA DIREI DI USCIRE E BASTA
+				else if (inputLine.contains("<openSearch:total")) {
+					totale = inputLine.substring(inputLine.indexOf("totalResults")+ 13, inputLine.indexOf("</openSearch"));
+					tot = Integer.parseInt(totale);
+				}
+				while (inputLine.contains("<entry")) {				    	
+					inputLine = inputLine.substring(inputLine.indexOf("<entry") + 53 );
+					id = inputLine.substring(0 , inputLine.indexOf("</id>"));
+					published = inputLine.substring(inputLine.indexOf("<published>") + 11, inputLine.indexOf("</published>")-5);
+					count++;
+					System.out.println(count + ": Inserimento nella tabella video della tupla: " 
+							+ user + " - "+ id + " - " + published );
+					DatabaseMySql.insert("utenti", "video" , user, id, published);
+					if (count == 1000) {
+						System.out.println("Cap dei video raggiunto per l'user: " + user);
+						in.close();
+						return;
+					}
 				}
 			}
 			in.close();
-			if (count != 0 && count < tot) {
+			if (count != 0 && count < tot)
 				videoApiReader (user, count, ++n);
-			}
 		}catch (IOException e) {
 			OutputTxt.writeLog("Errore api dell'user " + user);
 			getErrorCode("videos", metafeedUrl, user);
@@ -322,47 +341,48 @@ public class urlReader  {
     					"&start-index=" + (count + 1));
 			Contatore.incApi();
 			in = new BufferedReader(new InputStreamReader(metafeedUrl.openStream()));
-			inputLine = in.readLine();
-			if (inputLine.contains("</openSearch:itemsPerPage></feed>")) {
-				in.close();
-				return; // DA SISTEMARE QUANDO SI PARLERÀ DEL DATABASE MA DIREI DI USCIRE E BASTA
-			}
-			temp = inputLine.substring(inputLine.indexOf("totalResults")+ 13, inputLine.indexOf("</openSearch"));
-			tot = Integer.parseInt(temp);
-			
-			while (inputLine.contains("<entry")) {	
-				inputLine = inputLine.substring(inputLine.indexOf("<entry") + 2);
-				temp = inputLine.substring(0 , inputLine.indexOf("</entry"));
-				if (temp.contains("matching")){
-					if (++count == 1000) {
+			while((inputLine = in.readLine()) != null) {
+				if (inputLine.contains("</openSearch:itemsPerPage></feed>")) {
+					in.close();
+					return; // DA SISTEMARE QUANDO SI PARLERÀ DEL DATABASE MA DIREI DI USCIRE E BASTA
+				}
+				temp = inputLine.substring(inputLine.indexOf("totalResults")+ 13, inputLine.indexOf("</openSearch"));
+				tot = Integer.parseInt(temp);
+				
+				while (inputLine.contains("<entry")) {	
+					inputLine = inputLine.substring(inputLine.indexOf("<entry") + 2);
+					temp = inputLine.substring(0 , inputLine.indexOf("</entry"));
+					if (temp.contains("matching")){
+						if (++count == 1000) {
+							System.out.println("Cap dei video raggiunto per l'user: " + user);
+							in.close();
+							return;
+						}
+						else 
+							continue;
+					}
+					else {
+						temp = inputLine.substring(inputLine.indexOf("<published>"),
+				    				inputLine.indexOf("</entry>"));
+						pubTemp = temp.substring(11 , temp.indexOf("</published>") - 10);
+						temp = temp.substring(temp.indexOf("<yt:username>") + 13);
+						subTemp = temp.substring(0, temp.indexOf("</yt:username>"));
+						count++;
+					}
+					System.out.println(count + ": Inserimento nella tabella subscriptions della tupla: " 
+							+ user + " - "+ subTemp + " - " + pubTemp );
+					DatabaseMySql.insert("utenti", "subscriptions" , user, subTemp, pubTemp);
+					DatabaseMySql.insert("utenti", "toCheck", subTemp);
+					if (count == 1000) {
 						System.out.println("Cap dei video raggiunto per l'user: " + user);
 						in.close();
 						return;
-					}
-					else 
-						continue;
+					}	
 				}
-				else {
-					temp = inputLine.substring(inputLine.indexOf("<published>"),
-			    				inputLine.indexOf("</entry>"));
-					pubTemp = temp.substring(11 , temp.indexOf("</published>") - 10);
-					temp = temp.substring(temp.indexOf("<yt:username>") + 13);
-					subTemp = temp.substring(0, temp.indexOf("</yt:username>"));
-					count++;
-				}
-				System.out.println(count + ": Inserimento nella tabella subscriptions della tupla: " 
-						+ user + " - "+ subTemp + " - " + pubTemp );
-				DatabaseMySql.insert("utenti", "subscriptions" , user, subTemp, pubTemp);
-				DatabaseMySql.insert("utenti", "toCheck", subTemp);
-				if (count == 1000) {
-					System.out.println("Cap dei video raggiunto per l'user: " + user);
-					in.close();
-					return;
-				}	
 			}
 			in.close();
 			if (count != 0 && count < tot) 
-				subscriptionsApiReader (user, count, ++n);	
+				subscriptionsApiReader (user, count, ++n);
       	}
       	catch (IOException e) {
       		getErrorCode("subscriptions", metafeedUrl, user);
@@ -458,67 +478,7 @@ public class urlReader  {
 		return;
 	}
     
-    public static void popularReader () {
-    	popularReader("t", 1);
-    	popularReader("w", 1);
-    	popularReader("m", 1);
-    }
-    
-    public static void popularReader (String time) {
-    	popularReader(time, 1);
-    }
-    
-    public static void popularReader (String time, int pag) {
-    		String[] temp;
-    		int tmp = 24 * (pag - 1);
-        	System.out.println("\n popularReader reader del " + time);
-        	String inputLine;
-          	try {
-          		metafeedUrl = new URL("http://www.youtube.com/members?&t=" + time + "&p=" + pag);
-          		Contatore.incUrl();
-            	in = new BufferedReader(new InputStreamReader(metafeedUrl.openStream()));
-            	
-          		while ((inputLine = in.readLine()) != null) {
-        			if (inputLine.contains("Siamo spiacenti per l'interruzione"))
-        				urlReader.checkFlood(inputLine, "","");  // GESTIRE ANCHE SE E' DIFFICILE CHE SI VERIFICHI 
-        			else if (inputLine.contains("<div class=\"channel-short-title\">")) {
-        		    	inputLine = in.readLine();
-        		    	inputLine = inputLine.substring(19, inputLine.indexOf("\" title"));
-        		    	tmp++;
-        		    	System.out.println(tmp +": Inserimento del popular da controllare: " + inputLine);
-        		    	if(DatabaseMySql.contiene("utenti", inputLine, "popToCheck")) {
-        		    		temp = DatabaseMySql.eseguiExtractUser("utenti", "popToCheck", "user", inputLine);
-        		    		DatabaseMySql.insert("utenti", "popToCheck" , inputLine, Orario.getDataOra(), temp[2] + "-" + time);	
-        		    	}
-        		    	else 
-        		    		DatabaseMySql.insert("utenti", "popToCheck" , inputLine, Orario.getDataOra(), time);	
-        		    }  
-        		    if (inputLine.equals("</html>")){
-        	        	if (++pag <= 5) { 
-        		    		in.close();
-            				popularReader (time, pag);
-            				return;
-        		    	}
-        		    	else {
-        		    		in.close();
-        		    		return;
-        		    	}
-        		    }
-        		}
-          		in.close();
-        	}
-        	catch (MalformedURLException e) {  
-        		e.printStackTrace();
-        		OutputTxt.writeException(e.getLocalizedMessage());
-                OutputTxt.writeException("Errore nel popularReader del tipo " + time + " alla pag: " + pag);	
-                } 					
-        	catch (IOException e) { 
-    			OutputTxt.writeLog("Errore nel download dei canali più popolari del " + time);
-    			getErrorCode("activity", metafeedUrl, "utenti");
-    		}
-        	try {in.close();} catch (IOException e) {}
-        	return;
-    }
+   
     
     private static URL metafeedUrl;
     private static BufferedReader in;

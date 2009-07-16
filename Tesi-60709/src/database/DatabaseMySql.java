@@ -57,6 +57,15 @@ public class DatabaseMySql {
 				" values (\"" + values + "\")");
 	}
 	
+	
+	public static int getCount (String nomeDB, String tabella) {
+		Vector<String[]> tempVect;
+		String[] temp;
+		tempVect = DatabaseMySql.eseguiQuery("Select count(*) from " + nomeDB + "." + tabella);
+		temp = tempVect.get(0);
+		return Integer.parseInt(temp[0]);
+		}
+	
 	public static boolean insert (String nomeDB, String lista, String values1 , String values2) {
 		return db.eseguiAggiornamento("insert into " + nomeDB + "." + lista + 
 				" values (\"" + values1 + "\" , \"" + values2 + "\")");
