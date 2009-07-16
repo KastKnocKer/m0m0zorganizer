@@ -1,11 +1,5 @@
 package prove;
 
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.Socket;
-
-import download.*;
-
 public class provesubscription {
 
 	/**
@@ -20,21 +14,6 @@ public class provesubscription {
     	prova[4] = "BarackObamadotcom";
     	prova[5] = "enfry1983";
     	
-    	new Scan();
-    	
-        Socket soc = new java.net.Socket();
-        try {
-            soc.connect(new InetSocketAddress("www.google.it", 80));
-            System.out.println(API.getUser("active", "Staffgrillo"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }     	    	
-        try {
-			soc.getInputStream();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
     	
     	
     /*	for (;;) {

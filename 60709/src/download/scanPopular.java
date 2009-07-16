@@ -18,7 +18,7 @@ public class scanPopular {
 		int temp = 0;
 		String[] userTemp;	
 		for (; (userTemp = DatabaseMySql.extract("utenti", "popToCheck", "user")) != null ;) {
-			if (!DatabaseMySql.contiene("utenti", userTemp[0], "active")) {	
+			if (!DatabaseMySql.contiene("utenti", "active", userTemp[0])) {	
 				if (API.getUser("active", userTemp[0])) {		// E' un utente sospeso?  No --> active
 					if (urlReader.activityApiReader(userTemp[0])) {	// Ha activityFeed? 
 						completeScan(userTemp[0], false);	// Si attivo scansione completa senza activity

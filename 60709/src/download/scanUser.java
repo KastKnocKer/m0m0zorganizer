@@ -3,15 +3,17 @@ package download;
 import database.DatabaseMySql;
 import database.OutputTxt;
 
-public class Scan {
+public class scanUser {
 	
-	public Scan() {
+	public scanUser () {
 		new DatabaseMySql();		// Definisco il database per tutto il programma
 		DatabaseMySql.connetti();	// Connessione al database
 		new OutputTxt(); 			// Definisco il FileHandler per tutto il programma
 		new Contatore ();
+		
 		new API();
-		new urlReader();
+		
+		toCheck();
 	}
 	
 	public static void completeScan(String user, Boolean flag) {
@@ -25,30 +27,6 @@ public class Scan {
 		urlReader.subscriptionsApiReader(user);
 	}
 	
-	public static void popularScan () {
-		int temp = 0;
-		String[] userTemp;	
-		for (; (userTemp = DatabaseMySql.extract("utenti", "popToCheck", "user")) != null ;) {
-			if (!DatabaseMySql.contiene("utenti", userTemp[0], "active")) {	
-				if (API.getUser("active", userTemp[0])) {		// E' un utente sospeso?  No --> active
-					if (urlReader.activityApiReader(userTemp[0])) {	// Ha activityFeed? 
-						completeScan(userTemp[0], false);	// Si attivo scansione completa senza activity
-					}
-					else 		// Non è attivo lo tolgo dagli active e lo metto negli inactive
-						DatabaseMySql.moveUser("utenti", "active", "inactive", "user", userTemp[0]);
-					temp++;
-				}
-				else
-					DatabaseMySql.insert("utenti", "blocked", userTemp[0]);
-				DatabaseMySql.insert("utenti", "popular", userTemp[0], userTemp[1], userTemp[2]);
-				if (temp == 100) {
-					temp = 0;
-					Runtime.getRuntime().gc();
-				}
-			}
-		}
-	}
-
 	public static void toCheck() {
 		int temp = 0;
 		String[] userTemp;	

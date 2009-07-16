@@ -67,6 +67,7 @@ import java.net.URL;
 	          
     public static void notifyFlood (String tabella, String user) {
     	OutputTxt.writeLog("Errore 403: Rete floodata dalle API dall'user " + user);    // DA RIFAREEEEE
+    	System.out.println("Errore 403: Rete floodata dalle API dall'user " + user);
 		OutputTxt.writeLog("Richieste API: " + Contatore.getApi());
 		OutputTxt.writeLog("Totale    API: " + Contatore.getTotApi());
 		OutputTxt.writeLog("Richieste URL: " + Contatore.getUrl());
@@ -75,7 +76,7 @@ import java.net.URL;
 		Contatore.setApi(0);
 		Contatore.setUrl(0);
 		try {
-			//REINSERIRE CONTATTO NEL DB
+			DatabaseMySql.inserToCheck("utenti", user);
 			Thread.currentThread();
 			Thread.sleep(331000);	 // Pausa di 4 minutiù
 			OutputTxt.writeLog("Check ora");

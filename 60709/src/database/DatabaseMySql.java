@@ -39,10 +39,13 @@ public class DatabaseMySql {
 	
 	public static String[] eseguiExtractUser(String nomeDB, String lista, String col, String user){
 		Vector<String[]> vettore;
-		String[] userTemp;
+		String[] userTemp = null;
 		vettore =  DatabaseMySql.eseguiQuery("Select * from " + nomeDB + "." + lista + " where user='" +
 				user + "' limit 1");
-		userTemp = vettore.get(0);
+		try { 
+			userTemp = vettore.get(0);
+		}
+		catch (ArrayIndexOutOfBoundsException e) {}
 		DatabaseMySql.delete (nomeDB, lista, col, user);
 		return userTemp;
 	}
@@ -69,6 +72,11 @@ public class DatabaseMySql {
 	public static boolean insert (String nomeDB, String lista, String values1 , String values2) {
 		return db.eseguiAggiornamento("insert into " + nomeDB + "." + lista + 
 				" values (\"" + values1 + "\" , \"" + values2 + "\")");
+	}
+	
+	public static boolean insert (String nomeDB, String lista, String values1 , int num) {
+		return db.eseguiAggiornamento("insert into " + nomeDB + "." + lista + 
+				" values (\"" + values1 + "\" , " + num + ")");
 	}
 	
 	public static boolean insert (String nomeDB, String lista, String values1, String values2,
@@ -105,8 +113,11 @@ public class DatabaseMySql {
 	
 	public static String[] extract (String nomeDB, String lista, String col) {
 		Vector<String[]> vettore;
-		String[] user;
-		vettore =  DatabaseMySql.eseguiQuery("Select * from " + nomeDB + "." + lista + " limit 1");
+		String[] user; 
+		if (lista.equals("toCheck"))
+			vettore =  DatabaseMySql.eseguiQuery("Select * from " + nomeDB + "." + lista + " ORDER BY priority DESC limit 1");
+		else
+			vettore =  DatabaseMySql.eseguiQuery("Select * from " + nomeDB + "." + lista + " limit 1");
 		try {
 			user = vettore.get(0);
 		}
@@ -119,6 +130,20 @@ public class DatabaseMySql {
       return user;
 	}
 	
+	public static void inserToCheck (String nomeDB, String user) {
+		inserToCheck (nomeDB, user, 0);
+	}
+	
+	public static void inserToCheck (String nomeDB, String user, int num) {
+		String[] temp;
+		if(DatabaseMySql.contiene("utenti", "toCheck", user)) {
+			temp = DatabaseMySql.eseguiExtractUser("utenti", "toCheck", "user", user);
+			num = Integer.parseInt(temp[1]);
+			num++;
+		}
+		DatabaseMySql.insert("utenti", "toCheck" , user, num);			
+	}
+	
 	public static void moveUser (String nomeDB, String from, String to, String col, String user) {
 		String[] userTemp;
 		userTemp = DatabaseMySql.eseguiExtractUser(nomeDB, from, col, user);
@@ -126,7 +151,7 @@ public class DatabaseMySql {
 			DatabaseMySql.insert(nomeDB, to, userTemp[0], userTemp[1], userTemp[2], userTemp[3], userTemp[4]);
 	}
 		
-	public static boolean contiene (String nomeDB, String user, String lista) {
+	public static boolean contiene (String nomeDB, String lista, String user ) {
 		Vector<String[]> vettore = db.eseguiQuery("select * from " + nomeDB + "." + lista + 
 				" where user = '" + user + "'");
 		String[] record;
@@ -139,15 +164,15 @@ public class DatabaseMySql {
 	}
 	
 	public static boolean checkUserDB (String nomeDB, String user) {
-		if 	(contiene(nomeDB ,user, "active")) {
+		if 	(contiene(nomeDB ,"active", user)) {
 			System.out.println("Errore: utente " + user + " scartato perchè già presente nei active");
 			return true;
 		}
-		else if (contiene(nomeDB ,user, "inactive")) {
+		else if (contiene(nomeDB, "inactive", user)) {
 			System.out.println("Errore: utente " + user + " scartato perchè già presente nei inactive");
 			return true;
 		}
-		else if (contiene(nomeDB ,user, "blocked")) {
+		else if (contiene(nomeDB , "blocked", user)) {
 			System.out.println("Errore: utente " + user + " scartato perchè già presente nei blocked");
 			return true;
 		}

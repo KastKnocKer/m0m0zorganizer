@@ -35,12 +35,9 @@ public class urlReader  {
 					urlReader.checkFlood(inputLine, "","");
 				else if (inputLine.contains("is down for") || inputLine.contains("manutenzione")) {
 					in.close();
-					OutputTxt.writeLog("Youtube down per manutenzione o non al 100%");
-					DatabaseMySql.insert("utenti", "toCheck" , user);	    
-					pausa(600);
+					OutputTxt.writeLog("Youtube down per manutenzione o non al 100%");   
+					pausa(600, user);
 					return;
-					// REINSERIRE IL CONTATTO DA CONTROLLARE 
-					// DIREI DI CHIUDERE IL BUFFER E DI PROSEGUIRE CON IL PROX UTENTE
 				}
 				else if (inputLine.contains("non ha") && count <= 1) {
 					in.close();
@@ -57,7 +54,7 @@ public class urlReader  {
 			    	if (DatabaseMySql.insert("utenti", tabella , user, inputLine))
 			    		System.out.println(count + " : " + ++effettivi + ": Inserimento nella tabella " + tabella + 
 			    				" della tupla: "+ user + " - " + inputLine);
-			    		DatabaseMySql.insert("utenti", "toCheck" , inputLine);	    	
+			    		DatabaseMySql.inserToCheck("utenti", inputLine);	    	
 			    }
 			    else if (inputLine.contains("Non è")) {
 					in.close();
@@ -372,7 +369,7 @@ public class urlReader  {
 					System.out.println(count + ": Inserimento nella tabella subscriptions della tupla: " 
 							+ user + " - "+ subTemp + " - " + pubTemp );
 					DatabaseMySql.insert("utenti", "subscriptions" , user, subTemp, pubTemp);
-					DatabaseMySql.insert("utenti", "toCheck", subTemp);
+					DatabaseMySql.inserToCheck("utenti", subTemp);
 					if (count == 1000) {
 						System.out.println("Cap dei video raggiunto per l'user: " + user);
 						in.close();
@@ -404,23 +401,22 @@ public class urlReader  {
 			Contatore.setUrl(0);
 			System.out.println("Rete floodata dalle URL.");
 			Runtime.getRuntime().gc();
-			pausa(1800);
+			pausa(1800, user);
 			return;
     }
     
-    public static void pausa(int sec) {
-	     try {
-		    	// DatabaseMySql.insert("utenti", tabella , user);
-		    	// System.out.println(("Reinserisco fra i contatti da controllare: " + user));
-		         Thread.currentThread();
-		         Thread.sleep(sec * 1000);	 // Pausa di sec secondi
-		         }
-		      catch (InterruptedException e) { 
-		  		e.printStackTrace();
-		    	  OutputTxt.writeException(e.getLocalizedMessage());
-		          OutputTxt.writeException("Errore nella funzione pausa.");	
-		         }
-		      return;
+    public static void pausa(int sec, String user) {
+    	try {
+    		DatabaseMySql.eseguiExtractUser("utenti", "active", "user", user);
+    		DatabaseMySql.inserToCheck("utenti", user, 50);
+    		Thread.currentThread();
+    		Thread.sleep(sec * 1000);	 // Pausa di sec secondi
+    	}
+    	catch (InterruptedException e) { 
+    		e.printStackTrace();
+    		OutputTxt.writeException(e.getLocalizedMessage());
+    		OutputTxt.writeException("Errore nella funzione pausa.");	
+    	}
     }
     
     public static void getErrorCode (String tabella ,URL url ,String user) {
@@ -437,13 +433,13 @@ public class urlReader  {
 					if (temp.contains("is down for") || temp.contains("manutenzione")) {
 						in.close();
 						OutputTxt.writeLog("Youtube down per manutenzione o non al 100%");
-						pausa(600);
-						// REINSERIRE CONTATTO 
+						DatabaseMySql.inserToCheck("utenti", user, 9999);
+						pausa(600, user);
 						return;
 					}
 				}
 				in.close();
-				DatabaseMySql.insert("utenti", "toCheck", user);
+				DatabaseMySql.inserToCheck("utenti", user);
 				OutputTxt.writeLog("Errore 500+ : servizio non disponibile al momento.");
 				OutputTxt.writeLog("Errore 500+ : user " + user + " reinserito in toCheck.");
 			// Direi di fare una pausa e di richiamare la stessa funzione
@@ -459,7 +455,7 @@ public class urlReader  {
 				}
 				else if (temp.contains("many")) {
 					in.close();
-					// Reinserire contatto ed eliminare System.exit
+					DatabaseMySql.inserToCheck("utenti", user, 9999);
 					API.notifyFlood(tabella, user);
 					return;
 				}	

@@ -1,9 +1,11 @@
 import database.DatabaseMySql;
 import database.OutputTxt;
-import download.*;
+import download.Contatore;
+import download.scanUser;
 
-public class crawler {
 
+public class crawlerUser {
+	
 	public static void main(String[] args) {		
 		new DatabaseMySql();		// Definisco il database per tutto il programma
 		DatabaseMySql.connetti();	// Connessione al database
@@ -19,7 +21,7 @@ public class crawler {
 		System.out.println("AVVIO NUOVO FILE");
 		System.out.println("AVVIO NUOVO FILE");
 		
-		new scanPopular();
+		new scanUser();
 		
 		DatabaseMySql.Disconnetti();
 	}

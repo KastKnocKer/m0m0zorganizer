@@ -115,23 +115,32 @@ public class Database {
    public boolean eseguiAggiornamento(String query) {
       boolean risultato = false;
       try {
-         Statement stmt = db.createStatement();
-         stmt.executeUpdate(query);
-         risultato = true;
-         stmt.close();
+	      Statement stmt = db.createStatement();
+	      stmt.executeUpdate(query);
+	      risultato = true;
+	      stmt.close();
       } catch (SQLException e) {
-    	 if (e.getMessage().contains("Duplicate entry"))
-    		 System.out.println("Notifica ErroreSQL from Database: utente-contatto già presente nella lista.");
-    	 else {
-    		 e.printStackTrace();
-    		 OutputTxt.writeException(e.getLocalizedMessage());
-    		 OutputTxt.writeException("Errore SQL nel Database.eseguiAggiornamento()");
-    		 OutputTxt.writeException("Stringa errore: " + query);
-    		 risultato = false;
-    	 }
-      }
+     	 if (e.getMessage().contains("Duplicate entry"))
+     		 System.out.println("Notifica ErroreSQL from Database: utente-contatto già presente nella lista.");
+     	 else {
+     		 e.printStackTrace();
+     		 OutputTxt.writeException(e.getLocalizedMessage());
+     		 OutputTxt.writeException("Errore SQL nel Database.eseguiAggiornamento()");
+     		 OutputTxt.writeException("Stringa errore: " + query);
+     		 risultato = false;
+     	 }
+       }
       return risultato;
    }
+   
+   public boolean eseguiAggiornamentoCheck(String query) throws SQLException {
+	      boolean risultato = false;
+	      Statement stmt = db.createStatement();
+	      stmt.executeUpdate(query);
+	      risultato = true;
+	      stmt.close();	
+	      return risultato;
+	   }
    
    // Chiude la connessione con il Database
    public void disconnetti() {
