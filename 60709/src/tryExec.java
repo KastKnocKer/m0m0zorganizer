@@ -13,7 +13,6 @@ public class tryExec {
 		try {
 			pb = new ProcessBuilder ("/home/m0m0z/Scrivania/tesina_exec/start.sh");
 			Process starter = pb.start ();
-			//Process p = Runtime.getRuntime().exec("amulecmd --command='set bwlimit up 22'"Â«Â»);
 			BufferedReader in = new BufferedReader(	new InputStreamReader(starter.getInputStream()));
 			String line = null;
 			while ((line = in.readLine()) != null)	{
