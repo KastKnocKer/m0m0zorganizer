@@ -166,17 +166,15 @@ public class urlReader  {
 						id = inputLine.substring(0 , inputLine.indexOf("</id>"));
 						published = inputLine.substring(inputLine.indexOf("<published>") + 11, inputLine.indexOf("</published>")-5);
 						count++;
-						System.out.println(count + ": Inserimento nella tabella video della tupla: " 
+						System.out.println(count + ": Inserimento nella tabella favorites della tupla: " 
 								+ user + " - "+ id + " - " + published );
-						DatabaseMySql.insert("utenti", "video" , user, id, published);
+						DatabaseMySql.insert("utenti", "favorites" , user, id, published);
 						if (count == 1000) {
-							System.out.println("Cap dei video raggiunto per l'user: " + user);
+							System.out.println("Cap dei favorites raggiunto per l'user: " + user);
 							in.close();
 							return;
 						}
-					}				System.out.println(count + ": Inserimento nella tabella favorites della tupla: " 
-							+ user + " - "+ id + " - " + published );
-					DatabaseMySql.insert("utenti", "favorites" , user, id, published);
+					}		
 					if (count == 1000) {
 						in.close();
 						System.out.println("Cap di favorites raggiunto per l'user: " + user);
