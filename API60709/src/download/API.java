@@ -86,7 +86,7 @@ import java.net.URL;
 				 	System.out.println(count  + " : RESTRICTED");
 				}
 				else {					
-					System.out.println(count + " : Inserimento per l'utente " + user + "del favorites " +
+					System.out.println(count + " : Inserimento per l'utente " + user + " del favorites " +
 							videoEntry.getMediaGroup().getVideoId() + " : " + 
 							videoEntry.getPublished().toString().substring(0,19));
 					DatabaseMySql.insert("utenti", "favorites", user , videoEntry.getMediaGroup().getVideoId(), 
@@ -126,7 +126,7 @@ import java.net.URL;
 				 	System.out.println(count  + " : RESTRICTED");
 				}
 				else {					
-					System.out.println(count + " : Inserimento per l'utente " + user + "del favorites  " +
+					System.out.println(count + " : Inserimento per l'utente " + user + " del video  " +
 							videoEntry.getMediaGroup().getVideoId() + " : " + 
 							videoEntry.getPublished().toString().substring(0,19));
 					DatabaseMySql.insert("utenti", "video", user , videoEntry.getMediaGroup().getVideoId(), 

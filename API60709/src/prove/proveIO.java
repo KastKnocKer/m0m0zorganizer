@@ -10,6 +10,7 @@ public class proveIO {
 		DatabaseMySql.connetti();	// Connessione al database		
 		
 		new API();
+		API.getFavorites("hereforyou13");
 		
 	}
 }
