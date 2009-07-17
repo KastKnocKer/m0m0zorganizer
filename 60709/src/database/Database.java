@@ -120,9 +120,7 @@ public class Database {
 	      risultato = true;
 	      stmt.close();
       } catch (SQLException e) {
-     	 if (e.getMessage().contains("Duplicate entry"))
-     		 System.out.println("Notifica ErroreSQL from Database: utente-contatto già presente nella lista.");
-     	 else {
+     	 if (e.getMessage().contains("Duplicate entry")) {
      		 e.printStackTrace();
      		 OutputTxt.writeException(e.getLocalizedMessage());
      		 OutputTxt.writeException("Errore SQL nel Database.eseguiAggiornamento()");
