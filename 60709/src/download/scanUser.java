@@ -42,8 +42,7 @@ public class scanUser {
 				else
 					DatabaseMySql.insert("utenti", "blocked", userTemp[0]);
 				if (temp == 100) {
-					temp = 0;
-					Runtime.getRuntime().gc();
+					return;
 				}
 			}			
 		}

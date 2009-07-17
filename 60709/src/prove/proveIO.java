@@ -8,7 +8,11 @@ public class proveIO {
 		new DatabaseMySql();		// Definisco il database per tutto il programma
 		DatabaseMySql.connetti();	// Connessione al database		
 		
-		DatabaseMySql.eseguiExtractUser("utenti", "active", "user", "moo");
+		DatabaseMySql.inserToCheck("utenti", "moo");
+		DatabaseMySql.inserToCheck("utenti", "loool");
+		DatabaseMySql.inserToCheck("utenti", "moo");
+		DatabaseMySql.inserToCheck("utenti", "moo");
+		
 		
 	}
 }

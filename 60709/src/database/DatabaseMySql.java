@@ -135,13 +135,8 @@ public class DatabaseMySql {
 	}
 	
 	public static void inserToCheck (String nomeDB, String user, int num) {
-		String[] temp;
-		if(DatabaseMySql.contiene("utenti", "toCheck", user)) {
-			temp = DatabaseMySql.eseguiExtractUser("utenti", "toCheck", "user", user);
-			num = Integer.parseInt(temp[1]);
-			num++;
-		}
-		DatabaseMySql.insert("utenti", "toCheck" , user, num);			
+		DatabaseMySql.eseguiAggiornamento("insert into " + nomeDB + ".toCheck values (\"" + user + "\" , "
+				+ num + ") on duplicate key update priority = priority + 1"); 	
 	}
 	
 	public static void moveUser (String nomeDB, String from, String to, String col, String user) {
