@@ -5,7 +5,7 @@ import java.util.Vector;
  * Classe fatta da me per utilizzare staticamente il database :O
  * non usa tutti i comandi possibili della classe Database, ma basta aggiungerli :O
  */
-
+ 
 public class DatabaseMySql {
 	
 	private static Database db = null;
@@ -132,11 +132,14 @@ public class DatabaseMySql {
 	
 	public static void inserToCheck (String nomeDB, String user) {
 		inserToCheck (nomeDB, user, 0);
+		return;
 	}
 	
 	public static void inserToCheck (String nomeDB, String user, int num) {
-		DatabaseMySql.eseguiAggiornamento("insert into " + nomeDB + ".toCheck values (\"" + user + "\" , "
-				+ num + ") on duplicate key update priority = priority + 1"); 	
+		if(!DatabaseMySql.contiene(nomeDB, "active", user))
+			DatabaseMySql.eseguiAggiornamento("insert into " + nomeDB + ".toCheck values (\"" + user + "\" , "
+				+ num + ") on duplicate key update priority = priority + 1");
+		return;
 	}
 	
 	public static void moveUser (String nomeDB, String from, String to, String col, String user) {
