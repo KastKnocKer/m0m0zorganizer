@@ -31,6 +31,25 @@ public class tryExec {
 			System.out.println(e);
 		}  
 		Process scanner;
+		pb.command ("/home/m0m0z/Scrivania/tesina_exec/scanPopular.sh");
+		while (DatabaseMySql.getCount("utenti", "popToCheck") != 0) {
+			try {
+				scanner = pb.start();
+				BufferedReader in = new BufferedReader(	new InputStreamReader(scanner.getInputStream()));
+				String line = null;
+				while ((line = in.readLine()) != null)	{
+					System.out.println(line);
+				}
+				try {
+					scanner.waitFor();
+				}
+				catch (Exception e1) {
+					e1.printStackTrace();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 		pb.command ("/home/m0m0z/Scrivania/tesina_exec/scanUser.sh");
 		while (DatabaseMySql.getCount("utenti", "toCheck") != 0) {
 			try {
@@ -49,6 +68,6 @@ public class tryExec {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-	}
+		}
 	}
 }
