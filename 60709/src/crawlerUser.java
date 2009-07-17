@@ -20,6 +20,7 @@ public class crawlerUser {
 		System.out.println("AVVIO NUOVO FILE");
 		System.out.println("AVVIO NUOVO FILE");
 		System.out.println("AVVIO NUOVO FILE");
+		OutputTxt.writeLog("Nuovo crawler user");
 		
 		new scanUser();
 		
