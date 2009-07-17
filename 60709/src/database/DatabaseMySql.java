@@ -136,7 +136,7 @@ public class DatabaseMySql {
 	}
 	
 	public static void inserToCheck (String nomeDB, String user, int num) {
-		if(!DatabaseMySql.contiene(nomeDB, "active", user))
+		//if(!DatabaseMySql.contiene(nomeDB, "active", user))
 			DatabaseMySql.eseguiAggiornamento("insert into " + nomeDB + ".toCheck values (\"" + user + "\" , "
 				+ num + ") on duplicate key update priority = priority + 1");
 		return;
