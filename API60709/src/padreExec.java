@@ -4,7 +4,7 @@ import java.io.*;
 
 import database.DatabaseMySql;
 
-public class tryExec {
+public class padreExec {
 
 	public static void main(String[] args) {
 		new DatabaseMySql();		// Definisco il database per tutto il programma
