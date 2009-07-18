@@ -28,7 +28,20 @@ public class urlReader  {
 	    	in = new BufferedReader(new InputStreamReader(metafeedUrl.openStream()));
 	    	
 			while ((inputLine = in.readLine()) != null) {
-				if (inputLine.contains("Siamo spiacenti per l'interruzione"))
+				if (inputLine.contains("<div class=\"user-thumb")) {
+			    	inputLine = in.readLine();
+			    	inputLine = inputLine.substring(15, inputLine.indexOf("\" onmousedown"));
+			    	count++;
+			    	if (DatabaseMySql.insert("utenti", tabella , user, inputLine))
+			    		System.out.println(count + " : " + ++effettivi + ": Inserimento nella tabella " + tabella + 
+			    				" della tupla: "+ user + " - " + inputLine);
+			    		DatabaseMySql.inserToCheck("utenti", inputLine);
+				}
+				else if (inputLine.contains("channel-box-item-count")) {
+			    	 inputLine = inputLine.substring(inputLine.indexOf(">") + 1, inputLine.indexOf("</span>"));
+			    	 tot = Integer.parseInt(inputLine);    	
+			    }
+				else if (inputLine.contains("Siamo spiacenti per l'interruzione"))
 					urlReader.checkFlood(inputLine, "","");
 				else if (inputLine.contains("is down for") || inputLine.contains("manutenzione")) {
 					in.close();
@@ -40,19 +53,6 @@ public class urlReader  {
 					in.close();
 			    	OutputTxt.writeLog("Errore: L' utente " + user + " non ha aggiunto " + tabella + ".");
 			    	return;
-			    }
-				else if (inputLine.contains("channel-box-item-count")) {
-			    	 inputLine = inputLine.substring(inputLine.indexOf(">") + 1, inputLine.indexOf("</span>"));
-			    	 tot = Integer.parseInt(inputLine);
-				}
-				else if (inputLine.contains("<div class=\"user-thumb")) {
-			    	inputLine = in.readLine();
-			    	inputLine = inputLine.substring(15, inputLine.indexOf("\" onmousedown"));
-			    	count++;
-			    	if (DatabaseMySql.insert("utenti", tabella , user, inputLine))
-			    		System.out.println(count + " : " + ++effettivi + ": Inserimento nella tabella " + tabella + 
-			    				" della tupla: "+ user + " - " + inputLine);
-			    		DatabaseMySql.inserToCheck("utenti", inputLine);	    	
 			    }
 			    else if (inputLine.contains("Non è")) {
 					in.close();
