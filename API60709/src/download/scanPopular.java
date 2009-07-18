@@ -28,7 +28,6 @@ public class scanPopular {
 				}
 				else
 					DatabaseMySql.insert("utenti", "blocked", userTemp[0]);
-				DatabaseMySql.insert("utenti", "popular", userTemp[0], userTemp[1], userTemp[2]);
 			}
 		}
 	}

@@ -36,6 +36,7 @@ public class popularReader {
 					inputLine = inputLine.substring(19, inputLine.indexOf("\" title"));
 					System.out.println(++tmp +" : " + ++count + " Inserimento del popular da controllare: " + inputLine);
 					DatabaseMySql.insert("utenti", "popToCheck" , inputLine, Orario.getDataOra(), time);	
+					DatabaseMySql.insert("utenti", "popular" , inputLine, Orario.getDataOra(), time);
 				} 	
 				
 				if (inputLine.equals("</html>")){
