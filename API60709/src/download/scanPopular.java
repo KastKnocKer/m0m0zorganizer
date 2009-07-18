@@ -1,48 +1,45 @@
 package download;
 
+import com.google.gdata.client.youtube.YouTubeService;
+
 import database.DatabaseMySql;
 import database.OutputTxt;
 
 public class scanPopular {
 
-	public scanPopular () {
+	public scanPopular (YouTubeService myService) {
 		new DatabaseMySql();		// Definisco il database per tutto il programma
 		DatabaseMySql.connetti();	// Connessione al database
 		new OutputTxt();
 		
-		new API();
-		popularScan();
+		popularScan(myService);
 	}
 	
-	public static void popularScan () {
-		int temp = 0;
+	public static void popularScan (YouTubeService myService) {
 		String[] userTemp;	
 		for (; (userTemp = DatabaseMySql.extract("utenti", "popToCheck", "user")) != null ;) {
 			if (!DatabaseMySql.contiene("utenti", "active", userTemp[0])) {	
-				if (API.getUser("active", userTemp[0])) {		// E' un utente sospeso?  No --> active
-					if (urlReader.activityApiReader(userTemp[0])) {	// Ha activityFeed? 
-						completeScan(userTemp[0], false);	// Si attivo scansione completa senza activity
+				if (API.getUser(myService, "active", userTemp[0])) {		// E' un utente sospeso?  No --> active
+					if (API.getActivity(myService, userTemp[0])) {	// Ha activityFeed? 
+						completeScan(myService, userTemp[0], false);	// Si attivo scansione completa senza activity
 					}
 					else 		// Non è attivo lo tolgo dagli active e lo metto negli inactive
 						DatabaseMySql.moveUser("utenti", "active", "inactive", "user", userTemp[0]);
-					temp++;
 				}
 				else
 					DatabaseMySql.insert("utenti", "blocked", userTemp[0]);
 				DatabaseMySql.insert("utenti", "popular", userTemp[0], userTemp[1], userTemp[2]);
 			}
-			if (temp == 100) 
-				return;
 		}
 	}
 	
-	public static void completeScan(String user, Boolean flag) {
-		API.getVideo(user);		// Alternati in modo da limitare i flood di rete
+	public static void completeScan(YouTubeService myService, String user, Boolean flag) {
+		API.getVideo(myService, user);		// Alternati in modo da limitare i flood di rete
 		urlReader.userReader("subscribers", user);
 		if (flag)
-			urlReader.activityApiReader(user);		
-		API.getFavorites(user);
+			API.getActivity(myService, user);		
+		API.getFavorites(myService, user);
 		urlReader.userReader("friends", user);
-		API.getSubscriptions(user);
+		API.getSubscriptions(myService, user);
 	}
 }
