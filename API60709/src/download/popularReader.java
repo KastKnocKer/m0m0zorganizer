@@ -19,7 +19,6 @@ public class popularReader {
 	}	
 	    
 	public static void popularReaderTool (String time, int pag) {
-		String[] temp;
 		int count = 0;
 		int tmp = 24 * (pag - 1);
 		System.out.println("\n popularReader reader del " + time);
@@ -35,20 +34,13 @@ public class popularReader {
 				else if (inputLine.contains("<div class=\"channel-short-title\">")) {
 					inputLine = in.readLine();
 					inputLine = inputLine.substring(19, inputLine.indexOf("\" title"));
-					tmp++;
-					count++;
-					System.out.println(tmp +": Inserimento del popular da controllare: " + inputLine);
-					if(DatabaseMySql.contiene("utenti", "popToCheck", inputLine)) {
-						temp = DatabaseMySql.eseguiExtractUser("utenti", "popToCheck", "user", inputLine);
-						DatabaseMySql.insert("utenti", "popToCheck" , inputLine, Orario.getDataOra(), temp[2] + "-" + time);
-					}
-					else 
-						DatabaseMySql.insert("utenti", "popToCheck" , inputLine, Orario.getDataOra(), time);	
+					System.out.println(++tmp +" : " + ++count + " Inserimento del popular da controllare: " + inputLine);
+					DatabaseMySql.insert("utenti", "popToCheck" , inputLine, Orario.getDataOra(), time);	
 				} 	
 				
 				if (inputLine.equals("</html>")){
 					if (++pag <= 5) { 
-						if (count  < 24)
+						if (count < 24)
 							pag--;
 						in.close();
 						popularReaderTool (time, pag);
