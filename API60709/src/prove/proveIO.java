@@ -5,6 +5,7 @@ import com.google.gdata.client.youtube.YouTubeService;
 import database.DatabaseMySql;
 import database.OutputTxt;
 import download.API;
+import download.urlReader;
 
 public class proveIO {
 
@@ -15,9 +16,16 @@ public class proveIO {
 		//vdovina,staffgrillo,covy1986
 		new OutputTxt();
 		new API();
-		
-		for (;;)
-			API.getActivity(myService,"momoz1987");
+		String[] userTemp;
+		for (; DatabaseMySql.getCount("utenti","popToCheck") > 0 ;) {
+			userTemp = DatabaseMySql.extract("utenti", "popToCheck", "user");
+			API.getUser(myService, "active", userTemp[0]);
+			API.getVideo(myService, userTemp[0]);		// Alternati in modo da limitare i flood di rete
+			API.getFavorites(myService, userTemp[0]);
+			API.getSubscriptions(myService, userTemp[0]);
+			urlReader.userReader("subscribers", userTemp[0]);
+			urlReader.userReader("friends", userTemp[0]);			
+		}
 		//urlReader.favoritesApiReader("marcoEalyssa");
 		
 	}
