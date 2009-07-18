@@ -14,7 +14,7 @@ public class start {
 		
 		OutputTxt.writeLog("Inizio scansione");
 		new popularReader();
-		
+		// LOL
 		DatabaseMySql.Disconnetti();
 	}
 }
