@@ -5,7 +5,6 @@ package download;
  * 
  */
  
-import com.google.gdata.client.GoogleService.ServiceUnavailableException;
 import com.google.gdata.client.youtube.YouTubeService;
 import com.google.gdata.data.youtube.*;
 import com.google.gdata.util.AuthenticationException;
