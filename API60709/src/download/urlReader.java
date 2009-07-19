@@ -129,50 +129,30 @@ public class urlReader  {
     
     public static void getErrorCode (String tabella ,URL url ,String user) {
 		HttpURLConnection connection;
-		try {
-			String temp;		
+		try {		
 			Contatore.incApi();
 			connection = (HttpURLConnection) url.openConnection();
 			System.out.println(connection.getResponseCode());
 			if (connection.getResponseCode() >= 500) {
-				Contatore.incUrl();
-				in = new BufferedReader(new InputStreamReader(new URL("http://www.youtube.com").openStream()));
-				while ((temp = in.readLine()) != null) {
-					if (temp.contains("is down for") || temp.contains("manutenzione")) {
-						in.close();
-						System.out.println("Youtube down per manutenzione o non al 100%");
-						OutputTxt.writeLog("Youtube down per manutenzione o non al 100%");
-						pausa(300, user);
-						return;
-					}
-				}
-				in.close();
-				DatabaseMySql.delete("utenti", "actve", "user", user);
-				DatabaseMySql.inserToCheck("utenti", user);
+				pausa(300, user);
 				System.out.println("Errore 500+ : servizio non disponibile al momento.");
 				OutputTxt.writeLog("Errore 500+ : servizio non disponibile al momento.");
-				OutputTxt.writeLog("Errore 500+ : user " + user + " reinserito in toCheck.");
+				return;
 			// Direi di fare una pausa e di richiamare la stessa funzione
 			}				
-			else if (connection.getErrorStream() != null) {
-				in = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
-				while ((temp = in.readLine()) != null) {
-					if (temp.contains("must be logged") || temp.contains("are not public")  ) {
-						in.close();
-						OutputTxt.writeLog("Errore 403: Informazione non pubblica: " + tabella + " dell' user " + user);
-						return;
-					}
-					else if (temp.contains("many")) {
-						in.close();
-						API.notifyApiFlood(tabella, user);
-						return;
-					}	
-					else if (temp.contains("not found")) {
-						in.close();
-						OutputTxt.writeLog("Errore 404: User not found: " + user);
-						return; 
-					}
-				}
+			else if (connection.getResponseMessage().contains("many")) {
+				API.notifyApiFlood(tabella, user);
+				return;
+			}	
+			else if (connection.getResponseCode() == 403) {
+				System.out.println("Errore 403: Informazione non pubblica: " + tabella + " dell' user " + user);
+				OutputTxt.writeLog("Errore 403: Informazione non pubblica: " + tabella + " dell' user " + user);
+				return;
+			}
+			else if (connection.getResponseCode() == 404) {
+				System.out.println("Errore 404: User not found: " + user);
+				OutputTxt.writeLog("Errore 404: User not found: " + user);
+				return; 
 			}
 		} catch (IOException e) { 
 			e.printStackTrace();

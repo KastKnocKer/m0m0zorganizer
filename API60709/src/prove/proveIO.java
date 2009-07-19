@@ -17,7 +17,7 @@ public class proveIO {
 		new OutputTxt();
 		new API();
 		
-			API.getFavorites(myService, "momoz1987");
+			API.getFavorites(myService, "enfry1983");
 		
 	}
 }
