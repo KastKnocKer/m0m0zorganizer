@@ -137,6 +137,7 @@ public class urlReader  {
     }
     
     public static void getErrorCode (String tabella ,URL url ,String user) {
+    	System.out.println("GetErrorCode sui " + tabella  + " dell'utente " + user);
 		HttpURLConnection connection;
 		try {		
 			Contatore.incApi();
