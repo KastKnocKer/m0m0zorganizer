@@ -38,15 +38,13 @@ public class DatabaseMySql {
 	}
 	
 	public static String[] eseguiExtractUser(String nomeDB, String lista, String col, String user){
-		Vector<String[]> vettore;
 		String[] userTemp = null;
-		vettore =  DatabaseMySql.eseguiQuery("Select * from " + nomeDB + "." + lista + " where user='" +
-				user + "' limit 1");
 		try { 
-			userTemp = vettore.get(0);
+			userTemp = (DatabaseMySql.eseguiQuery("Select * from " + nomeDB + "." + lista + " where user='" +
+					user + "' limit 1")).get(0);
+			DatabaseMySql.delete (nomeDB, lista, col, user);
 		}
 		catch (ArrayIndexOutOfBoundsException e) {}
-		DatabaseMySql.delete (nomeDB, lista, col, user);
 		return userTemp;
 	}
 	
@@ -62,10 +60,7 @@ public class DatabaseMySql {
 	
 	
 	public static int getCount (String nomeDB, String tabella) {
-		Vector<String[]> tempVect;
-		String[] temp;
-		tempVect = DatabaseMySql.eseguiQuery("Select count(*) from " + nomeDB + "." + tabella);
-		temp = tempVect.get(0);
+		String[] temp = (DatabaseMySql.eseguiQuery("Select count(*) from " + nomeDB + "." + tabella)).get(0);
 		return Integer.parseInt(temp[0]);
 		}
 	
@@ -112,27 +107,26 @@ public class DatabaseMySql {
 	}
 	
 	public static String[] extract (String nomeDB, String lista, String col) {
-		Vector<String[]> vettore;
-		String[] user; 
-		if (lista.equals("toCheck"))
-			vettore =  DatabaseMySql.eseguiQuery("Select * from " + nomeDB + "." + lista + " ORDER BY priority DESC limit 1");
-		else
-			vettore =  DatabaseMySql.eseguiQuery("Select * from " + nomeDB + "." + lista + " limit 1");
+		String[] user; 		
 		try {
-			user = vettore.get(0);
+			if (lista.equals("toCheck"))
+				user =  (DatabaseMySql.eseguiQuery("Select * from " + nomeDB + "." + lista + 
+						" GROUP BY priority DESC limit 1")).get(0);
+			else
+				user =  (DatabaseMySql.eseguiQuery("Select * from " + nomeDB + "." + lista + 
+						" limit 1")).get(0);
+			DatabaseMySql.delete (nomeDB, lista, col, user[0]);
 		}
-      catch (ArrayIndexOutOfBoundsException e) {
-    	  OutputTxt.writeException(e.getLocalizedMessage());
-    	  OutputTxt.writeLog("Lista analizzata conclusa.");
-    	  return null;
-      }
-      DatabaseMySql.delete (nomeDB, lista, col, user[0]);
-      return user;
+		catch (ArrayIndexOutOfBoundsException e) {
+			OutputTxt.writeException(e.getLocalizedMessage());
+			OutputTxt.writeLog("Lista analizzata conclusa.");
+			return null;
+		}
+		return user;
 	}
 	
 	public static void inserToCheck (String nomeDB, String user) {
 		inserToCheck (nomeDB, user, 0);
-		return;
 	}
 	
 	public static void inserToCheck (String nomeDB, String user, int num) {
@@ -150,14 +144,10 @@ public class DatabaseMySql {
 	}
 		
 	public static boolean contiene (String nomeDB, String lista, String user ) {
-		Vector<String[]> vettore = db.eseguiQuery("select * from " + nomeDB + "." + lista + 
-				" where user = '" + user + "'");
-		String[] record;
-		for(int i=0; i<vettore.size(); i++){
-			record = vettore.get(i);
-			if (record[0].equals(user))
-				return true;
-		}
+		String[] record = (db.eseguiQuery("select * from " + nomeDB + "." + lista + 
+				" where user = '" + user + "'")).get(0);
+		if (record[0].equals(user))
+			return true;
 		return false;
 	}
 	

@@ -54,7 +54,7 @@ import java.net.URL;
         	return false;
         }
         catch(ServiceException e) {
-        	notifyFlood("profile" , user);
+        	notifyApiFlood("profile" , user);
         	return false;
         }
         catch(IOException e) { 
@@ -67,10 +67,10 @@ import java.net.URL;
 	}
 	
 	public static void getFavorites (YouTubeService myService, String user) {
-		getFavorites(myService, user,1);
+		getFavorites(myService, user,1, 0);
 	}
 	
-	public static void getFavorites (YouTubeService myService, String user, int count) {
+	public static void getFavorites (YouTubeService myService, String user, int count, int giriVuoto) {
 		countTemp = false;
 		try {
 			metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/users/" + user + "/favorites?max-results=50" 
@@ -83,19 +83,24 @@ import java.net.URL;
 				 	System.out.println(count  + " : RESTRICTED");
 				}
 				else {					
+					
 					System.out.println(count + " : Inserimento per l'utente " + user + " del favorites " +
 							videoEntry.getMediaGroup().getVideoId() + " : " + 
 							videoEntry.getPublished().toString().substring(0,19));
 					DatabaseMySql.insert("utenti", "favorites", user , videoEntry.getMediaGroup().getVideoId(), 
+							videoEntry.getMediaGroup().getUploader() ,
 							videoEntry.getPublished().toString().substring(0,19));
+					System.out.println(videoEntry.getMediaGroup().getUploader());
 				}
 				if (++count == 1001) {
 					return;
 				}
 			}
-			if (countTemp  && videoFeed.getTotalResults() >= count) {
+			if (!countTemp) 
+				giriVuoto++;
+			if (giriVuoto < 2 && videoFeed.getTotalResults() >= count) {
 				System.out.println(videoFeed.getTotalResults());
-				getFavorites( myService, user, count);
+				getFavorites( myService, user, count, giriVuoto);
 			}
 			else 
 				return;
@@ -106,15 +111,15 @@ import java.net.URL;
 		} catch (ServiceForbiddenException e) {
 			urlReader.getErrorCode("favorites", metafeedUrl, user);
 		} catch (ServiceException e) {
-			e.printStackTrace();
+        	notifyApiFlood("favorites" , user);
 		}
 	}
 	
 	public static void getVideo (YouTubeService myService, String user) {
-		getVideo(myService, user,1);
+		getVideo(myService, user,1, 0);
 	}
 	
-	public static void getVideo (YouTubeService myService, String user, int count) {
+	public static void getVideo (YouTubeService myService, String user, int count, int giriVuoto) {
 		countTemp = false;
 		try {
 			metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/users/" + user + "/uploads?max-results=50" 
@@ -122,7 +127,7 @@ import java.net.URL;
 			Contatore.incApi();
 			videoFeed = myService.getFeed(metafeedUrl, VideoFeed.class);
 			for (VideoEntry videoEntry : videoFeed.getEntries() ) {
-				countTemp =  true;
+				countTemp = true;
 				if (videoEntry.isDraft()) {
 				 	System.out.println(count  + " : RESTRICTED");
 				}
@@ -137,9 +142,11 @@ import java.net.URL;
 					return;
 				}
 			}
-			if (countTemp  && videoFeed.getTotalResults() >= count) {
+			if (!countTemp) 
+				giriVuoto++;
+			if (giriVuoto < 2 && videoFeed.getTotalResults() >= count) {
 				System.out.println(videoFeed.getTotalResults());
-				getVideo(myService, user,count);
+				getVideo( myService, user, count, giriVuoto);
 			}
 			else 
 				return;
@@ -150,15 +157,15 @@ import java.net.URL;
 		} catch (ServiceForbiddenException e) {
 			urlReader.getErrorCode("video", metafeedUrl, user);
 		} catch (ServiceException e) {
-			e.printStackTrace();
+        	notifyApiFlood("video" , user);
 		}
 	}
 	
 	public static boolean getActivity (YouTubeService myService, String user) {
-		return getActivity(myService, user,1);
+		return getActivity(myService, user,1, 0);
 	}
 	
-	public static boolean getActivity (YouTubeService myService, String user, int count) {
+	public static boolean getActivity (YouTubeService myService, String user, int count, int giriVuoto) {
 		countTemp = false;
 		try {
 			metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/events?&max-results=50&start-index=" + count + "&author=" 
@@ -213,18 +220,20 @@ import java.net.URL;
 				count++;
 			  }
 			int tot;
-			if (countTemp && (tot = activityFeed.getTotalResults()) >= count) {
+			if(!countTemp)
+				giriVuoto++;
+			if (giriVuoto < 2 && (tot = activityFeed.getTotalResults()) >= count) {
 				System.out.println(tot);
-				getActivity(myService, user, count);
+				getActivity(myService, user, count, giriVuoto);
 				return true;
 			}
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
-			urlReader.getErrorCode("activity", metafeedUrl, "utenti");
+			urlReader.getErrorCode("activity", metafeedUrl, user);
 			return false;
 		} catch (ServiceException e) {
-			urlReader.getErrorCode("activity", metafeedUrl, "utenti");
+        	notifyApiFlood("activity" , user);
 			return false;
 		}
 		if (countTemp)
@@ -232,10 +241,10 @@ import java.net.URL;
 		return false;
 		}
 	public static void getSubscriptions (YouTubeService myService, String user) {
-			getSubscriptions(myService, user, 1);
+			getSubscriptions(myService, user, 1,0 );
 	}
 	
-	public static void getSubscriptions (YouTubeService myService, String user, int count) {
+	public static void getSubscriptions (YouTubeService myService, String user, int count, int giriVuoto) {
 		String temp;
 		countTemp = false;
 		try {
@@ -262,22 +271,24 @@ import java.net.URL;
 				count++;
 			}
 			int tot;
-			if (countTemp && (tot = feed.getTotalResults()) >= count) {
+			if (!countTemp)
+				giriVuoto++;
+			if (giriVuoto < 2 && (tot = feed.getTotalResults()) >= count) {
 				System.out.println(tot);
-				getSubscriptions(myService, user, count);	
+				getSubscriptions(myService, user, count, giriVuoto);	
 			}
 			else
 				return;
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
-			urlReader.getErrorCode("activity", metafeedUrl, "utenti");
+			urlReader.getErrorCode("subscriptions", metafeedUrl, user);
 		} catch (ServiceException e) {
-			urlReader.getErrorCode("activity", metafeedUrl, "utenti");
+        	notifyApiFlood("subscriptions" , user);
 		}
 	}
 	
-    public static void notifyFlood (String tabella, String user) {
+    public static void notifyApiFlood (String tabella, String user) {
     	OutputTxt.writeLog("Errore 403: Rete floodata dalle API dall'user " + user);    // DA RIFAREEEEE
     	System.out.println("Errore 403: Rete floodata dalle API dall'user " + user);
 		OutputTxt.writeLog("Richieste API: " + Contatore.getApi());
@@ -288,18 +299,17 @@ import java.net.URL;
 		Contatore.setApi(0);
 		Contatore.setUrl(0);
 		try {
-			DatabaseMySql.inserToCheck("utenti", user, 50);
+			DatabaseMySql.delete("utenti", "active", "user", user);
+			DatabaseMySql.inserToCheck("utenti", user, 9999);
 			Thread.currentThread();
-			Thread.sleep(331000);	 // Pausa di 4 minuti
-			OutputTxt.writeLog("Check ora");
+			Thread.sleep(331000);	 // Pausa di 3 minuti e mezzo
+			System.out.println("PAUSA DI 331 secondi per flood API");
 		}
 		catch (InterruptedException e) { 
 			e.printStackTrace();
             OutputTxt.writeException(e.getLocalizedMessage());
             OutputTxt.writeException("Errore nel notifyFlood dell'utente.");
 		}
-		Runtime.getRuntime().gc();
-		return;
     }
 	
     private static YtUserProfileStatistics userStats;

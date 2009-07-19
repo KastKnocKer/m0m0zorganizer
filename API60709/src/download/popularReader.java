@@ -29,17 +29,14 @@ public class popularReader {
 			in = new BufferedReader(new InputStreamReader(metafeedUrl.openStream()));
 			
 			while ((inputLine = in.readLine()) != null) {
-				if (inputLine.contains("Siamo spiacenti per l'interruzione"))
-					urlReader.checkFlood(inputLine, "","");  // GESTIRE ANCHE SE E' DIFFICILE CHE SI VERIFICHI 
-				else if (inputLine.contains("<div class=\"channel-short-title\">")) {
+				if (inputLine.contains("<div class=\"channel-short-title\">")) {
 					inputLine = in.readLine();
 					inputLine = inputLine.substring(19, inputLine.indexOf("\" title"));
 					System.out.println(++tmp +" : " + ++count + " Inserimento del popular da controllare: " + inputLine);
 					DatabaseMySql.insert("utenti", "popToCheck" , inputLine, Orario.getDataOra(), time);	
 					DatabaseMySql.insert("utenti", "popular" , inputLine, Orario.getDataOra(), time);
 				} 	
-				
-				if (inputLine.equals("</html>")){
+				else if (inputLine.equals("</html>")){
 					if (++pag <= 5) { 
 						if (count < 24)
 							pag--;
@@ -52,6 +49,8 @@ public class popularReader {
 						return;
 					}
 				}
+				else if (inputLine.contains("Siamo spiacenti per l'interruzione"))
+					urlReader.notifyUrlFlood(inputLine, "");  // GESTIRE ANCHE SE E' DIFFICILE CHE SI VERIFICHI 
 			}
 			in.close();
 		}

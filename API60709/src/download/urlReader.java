@@ -28,6 +28,11 @@ public class urlReader  {
 	    	in = new BufferedReader(new InputStreamReader(metafeedUrl.openStream()));
 	    	
 			while ((inputLine = in.readLine()) != null) {
+				if (count != 0 && (count == 1008 || count == tot)) {
+			    	in.close();
+			    	System.out.println("Cap dei " + tabella + " raggiunto per l'utente " + user + ".");
+			    	return;
+			    }
 				if (inputLine.contains("<div class=\"user-thumb")) {
 			    	inputLine = in.readLine();
 			    	inputLine = inputLine.substring(15, inputLine.indexOf("\" onmousedown"));
@@ -41,14 +46,6 @@ public class urlReader  {
 			    	 inputLine = inputLine.substring(inputLine.indexOf(">") + 1, inputLine.indexOf("</span>"));
 			    	 tot = Integer.parseInt(inputLine);    	
 			    }
-				else if (inputLine.contains("Siamo spiacenti per l'interruzione"))
-					urlReader.checkFlood(inputLine, "","");
-				else if (inputLine.contains("is down for") || inputLine.contains("manutenzione")) {
-					in.close();
-					OutputTxt.writeLog("Youtube down per manutenzione o non al 100%");   
-					pausa(600, user);
-					return;
-				}
 				else if (inputLine.contains("non ha") && count <= 1) {
 					in.close();
 			    	OutputTxt.writeLog("Errore: L' utente " + user + " non ha aggiunto " + tabella + ".");
@@ -64,16 +61,20 @@ public class urlReader  {
 			    	OutputTxt.writeLog("Errore 404: User not found: " + user);
 			    	return;
 			    }
-			    else if (count != 0 && (count == 1008 || count == tot)) {
-			    	in.close();
-			    	System.out.println("Cap dei " + tabella + " raggiunto per l'utente " + user + ".");
-			    	return;
-			    }
 			    else if (inputLine.equals("</html>") && count != 0 && count < tot) {
 			    	in.close();
 			    	userReader(tabella, user, count, effettivi);
 			    	return;
 			    }
+				else if (inputLine.contains("is down for") || inputLine.contains("manutenzione")) {
+					in.close();
+					OutputTxt.writeLog("Youtube down per manutenzione o non al 100%");   
+					pausa(600, user);
+					return;
+				}
+				else if (inputLine.contains("Siamo spiacenti per l'interruzione"))
+					notifyUrlFlood(inputLine, user);
+				
 			}
     	}
     	catch (MalformedURLException e) { 
@@ -83,10 +84,11 @@ public class urlReader  {
     	}
     	catch (IOException e) {  
     		if(e.getMessage().contains("Server returned HTTP response code: 50")) {
-    			getErrorCode(tabella, metafeedUrl, user);
+				System.out.println("Errore 500+ : servizio non disponibile al momento.");
+				OutputTxt.writeLog("Errore 500+ : servizio non disponibile al momento.");
+    			pausa(300, user);
+    			return;
     		}
-    		OutputTxt.writeException(e.getLocalizedMessage());
-    		OutputTxt.writeException("Errore nel " + tabella + "Reader dell'utente: " + user);	
     	}
     	catch (StringIndexOutOfBoundsException e) {
     		OutputTxt.writeException(e.getLocalizedMessage());
@@ -98,14 +100,15 @@ public class urlReader  {
     	return;
     }
 	
-    public static void checkFlood (String inputLine, String tabella, String user) {
+    public static void notifyUrlFlood (String inputLine, String user) {
 			OutputTxt.writeLog("Rete floodata dalle URL.");    // DA RIFAREEEEE
 			OutputTxt.writeLog("Richieste API: " + Contatore.getApi());
 			OutputTxt.writeLog("Richieste URL: " + Contatore.getUrl());
 			Contatore.setApi(0);
 			Contatore.setUrl(0);
 			System.out.println("Rete floodata dalle URL.");
-			Runtime.getRuntime().gc();
+			DatabaseMySql.delete("utenti", "active", "user", user);
+			DatabaseMySql.inserToCheck("utenti", user, 9999);
 			pausa(1800, user);
 			return;
     }
@@ -131,45 +134,44 @@ public class urlReader  {
 			Contatore.incApi();
 			connection = (HttpURLConnection) url.openConnection();
 			System.out.println(connection.getResponseCode());
-			if (connection.getResponseCode() == 503)
-				OutputTxt.writeLog("Errore 503 : servizio non disponibile al momento.");
-			else if (connection.getResponseCode() >= 500) {
+			if (connection.getResponseCode() >= 500) {
 				Contatore.incUrl();
 				in = new BufferedReader(new InputStreamReader(new URL("http://www.youtube.com").openStream()));
 				while ((temp = in.readLine()) != null) {
 					if (temp.contains("is down for") || temp.contains("manutenzione")) {
 						in.close();
+						System.out.println("Youtube down per manutenzione o non al 100%");
 						OutputTxt.writeLog("Youtube down per manutenzione o non al 100%");
-						DatabaseMySql.inserToCheck("utenti", user, 9999);
-						pausa(600, user);
+						pausa(300, user);
 						return;
 					}
 				}
 				in.close();
+				DatabaseMySql.delete("utenti", "actve", "user", user);
 				DatabaseMySql.inserToCheck("utenti", user);
+				System.out.println("Errore 500+ : servizio non disponibile al momento.");
 				OutputTxt.writeLog("Errore 500+ : servizio non disponibile al momento.");
 				OutputTxt.writeLog("Errore 500+ : user " + user + " reinserito in toCheck.");
 			// Direi di fare una pausa e di richiamare la stessa funzione
-			}
-				
-			if (connection.getErrorStream() != null)
+			}				
+			else if (connection.getErrorStream() != null) {
 				in = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
-			while ((temp = in.readLine()) != null) {
-				if (temp.contains("must be logged") || temp.contains("are not public")  ) {
-					in.close();
-					OutputTxt.writeLog("Errore 403: Informazione non pubblica: " + tabella + " dell' user " + user);
-					return;
-				}
-				else if (temp.contains("many")) {
-					in.close();
-					DatabaseMySql.inserToCheck("utenti", user, 9999);
-					API.notifyFlood(tabella, user);
-					return;
-				}	
-				else if (temp.contains("not found")) {
-					in.close();
-					OutputTxt.writeLog("Errore 404: User not found: " + user);
-					return; 
+				while ((temp = in.readLine()) != null) {
+					if (temp.contains("must be logged") || temp.contains("are not public")  ) {
+						in.close();
+						OutputTxt.writeLog("Errore 403: Informazione non pubblica: " + tabella + " dell' user " + user);
+						return;
+					}
+					else if (temp.contains("many")) {
+						in.close();
+						API.notifyApiFlood(tabella, user);
+						return;
+					}	
+					else if (temp.contains("not found")) {
+						in.close();
+						OutputTxt.writeLog("Errore 404: User not found: " + user);
+						return; 
+					}
 				}
 			}
 		} catch (IOException e) { 

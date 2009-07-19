@@ -18,12 +18,10 @@ public class scanUser {
 		toCheck(myService);
 	}
 	
-	public static void completeScan(YouTubeService myService, String user, Boolean flag) {
+	public static void completeScan(YouTubeService myService, String user) {
 		// if (Contatore.checkCompleteScan())  PENSARE SE METTERLO
 		API.getVideo(myService, user);		// Alternati in modo da limitare i flood di rete
-		urlReader.userReader("subscribers", user);
-		if (flag)
-			API.getActivity(myService, user);		
+		urlReader.userReader("subscribers", user);	
 		API.getFavorites(myService, user);
 		urlReader.userReader("friends", user);
 		API.getSubscriptions(myService, user);
@@ -34,18 +32,15 @@ public class scanUser {
 		String[] userTemp;	
 		for (; (userTemp = DatabaseMySql.extract("utenti", "toCheck", "user")) != null ;) {
 			if (!DatabaseMySql.checkUserDB("utenti", userTemp[0])) {  // L'ho già fatto?
-				if (API.getUser(myService, "active", userTemp[0])) {			// E' un utente sospeso?  No --> active
-					if (API.getActivity(myService, userTemp[0]))	// Ha activityFeed? 
-						completeScan(myService, userTemp[0], false);	// Si attivo scansione completa senza activity
+				if (API.getActivity(myService, userTemp[0])) {	// Ha activityFeed?
+					if (API.getUser(myService, "active", userTemp[0]))			// E' un utente sospeso?  No --> active
+						completeScan(myService, userTemp[0]);	// Si attivo scansione completa senza activity
 					else 		// Non è attivo lo tolgo dagli active e lo metto negli inactive
-						DatabaseMySql.moveUser("utenti", "active", "inactive", "user", userTemp[0]);
+						DatabaseMySql.insert("utenti", "blocked", userTemp[0]);
 					temp++;
-				}
+					}
 				else
-					DatabaseMySql.insert("utenti", "blocked", userTemp[0]);
-			//	if (temp == 250) {
-			//		return;
-			//	}
+					DatabaseMySql.insert("utenti", "inactive", userTemp[0]);
 			}			
 		}
 	}
