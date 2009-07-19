@@ -106,10 +106,8 @@ import java.net.URL;
 			urlReader.getErrorCode("favorites", metafeedUrl, user);
 		} catch(ResourceNotFoundException e){
         	OutputTxt.writeLog("Errore 404: User not found: " + user);
-        }catch (ServiceForbiddenException e) {
-			urlReader.getErrorCode("favorites", metafeedUrl, user);
         } catch(ServiceException e) {
-        	notifyApiFlood("profile" , user);
+        	urlReader.getErrorCode("favorites", metafeedUrl, user);
         }
 	}
 	
@@ -153,11 +151,9 @@ import java.net.URL;
 		}  catch(ResourceNotFoundException e){
         	OutputTxt.writeLog("Errore 404: User not found: " + user);
         } catch (IOException e) {
-			urlReader.getErrorCode("video", metafeedUrl, user);
-		} catch (ServiceForbiddenException e) {
-			urlReader.getErrorCode("video", metafeedUrl, user);
+			urlReader.getErrorCode("video", metafeedUrl, user);	
 		} catch(ServiceException e) {
-        	notifyApiFlood("profile" , user);
+			urlReader.getErrorCode("video", metafeedUrl, user);
         }
 	}
 	
@@ -251,6 +247,7 @@ import java.net.URL;
 		try {
 			metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/users/" + user + "/subscriptions?max-results=50"  
 				+ "&start-index=" + count);
+			System.out.println(metafeedUrl);
 			Contatore.incApi();
 			feed = myService.getFeed(metafeedUrl, SubscriptionFeed.class);
 			for(SubscriptionEntry entry : feed.getEntries()) {
@@ -287,7 +284,7 @@ import java.net.URL;
 		} catch (IOException e) {
 			urlReader.getErrorCode("subscriptions", metafeedUrl, user);
 		} catch(ServiceException e) {
-        	notifyApiFlood("profile" , user);
+			urlReader.getErrorCode("subscriptions", metafeedUrl, user);
         }
 	}
 	

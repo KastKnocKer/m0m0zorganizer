@@ -14,8 +14,9 @@ public class proveIO {
 		DatabaseMySql.connetti();	// Connessione al database		
 		new OutputTxt();
 		new API();
+		YouTubeService myService = new YouTubeService("Tesina");
 		
-		System.out.println(DatabaseMySql.contiene("utenti", "popular", "momoz1987"));
+		API.getSubscriptions(myService, "staffgrillo");
 		
 	}
 }

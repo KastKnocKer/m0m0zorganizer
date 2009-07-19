@@ -143,6 +143,7 @@ public class urlReader  {
 			Contatore.incApi();
 			connection = (HttpURLConnection) url.openConnection();
 			System.out.println(connection.getResponseCode());
+			System.out.println(connection.getResponseMessage());
 			if (connection.getResponseCode() >= 500) {
 				pausa(300, user);
 				System.out.println("Errore 500+ : servizio non disponibile al momento.");
@@ -150,15 +151,16 @@ public class urlReader  {
 				return;
 			// Direi di fare una pausa e di richiamare la stessa funzione
 			}				
-			else if (connection.getResponseMessage().contains("many")) {
-				API.notifyApiFlood(tabella, user);
-				return;
-			}	
-			else if (connection.getResponseCode() == 403) {
+			else if (connection.getResponseMessage().contains("Forbidden") ||
+					connection.getResponseMessage().contains("are not public")) {
 				System.out.println("Errore 403: Informazione non pubblica: " + tabella + " dell' user " + user);
 				OutputTxt.writeLog("Errore 403: Informazione non pubblica: " + tabella + " dell' user " + user);
 				return;
 			}
+			else if (connection.getResponseMessage().contains("many")) {
+				API.notifyApiFlood(tabella, user);
+				return;
+			}	
 			else if (connection.getResponseCode() == 404) {
 				System.out.println("Errore 404: User not found: " + user);
 				OutputTxt.writeLog("Errore 404: User not found: " + user);
@@ -169,7 +171,6 @@ public class urlReader  {
 			OutputTxt.writeException(e.getLocalizedMessage());
 	        OutputTxt.writeException("Errore nel getErrorCode dell'utente: " + user);	
 		}
-		try {in.close();} catch (IOException e) {}
 		return;
 	}
     
