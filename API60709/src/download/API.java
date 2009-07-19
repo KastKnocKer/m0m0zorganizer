@@ -42,22 +42,18 @@ import java.net.URL;
         	OutputTxt.writeException(e.getCodeName() + " : " + e.getLocalizedMessage());
         	OutputTxt.writeException("Errore nel getUser dell'utente: " + user);
         	return false;
-        }
-        catch(MalformedURLException e) { 
+        } catch(MalformedURLException e) { 
     		e.printStackTrace();
             OutputTxt.writeException(e.getLocalizedMessage());
             OutputTxt.writeException("Errore nel getUser dell'utente: " + user);
             return false;
-        }
-        catch(ResourceNotFoundException e){
+        } catch(ResourceNotFoundException e){
         	OutputTxt.writeLog("Errore 404: User not found: " + user);
         	return false;
-        }
-        catch(ServiceException e) {
+        } catch(ServiceException e) {
         	notifyApiFlood("profile" , user);
         	return false;
-        }
-        catch(IOException e) { 
+        } catch(IOException e) { 
     		e.printStackTrace();
             OutputTxt.writeException(e.getLocalizedMessage());
             OutputTxt.writeException("Errore nel getUser dell'utente: " + user);
@@ -108,11 +104,13 @@ import java.net.URL;
 			e.printStackTrace();
 		} catch (IOException e) {
 			urlReader.getErrorCode("favorites", metafeedUrl, user);
-		} catch (ServiceForbiddenException e) {
+		} catch(ResourceNotFoundException e){
+        	OutputTxt.writeLog("Errore 404: User not found: " + user);
+        }catch (ServiceForbiddenException e) {
 			urlReader.getErrorCode("favorites", metafeedUrl, user);
-		} catch (ServiceException e) {
-        	notifyApiFlood("favorites" , user);
-		}
+        } catch(ServiceException e) {
+        	notifyApiFlood("profile" , user);
+        }
 	}
 	
 	public static void getVideo (YouTubeService myService, String user) {
@@ -152,13 +150,15 @@ import java.net.URL;
 				return;
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
-		} catch (IOException e) {
+		}  catch(ResourceNotFoundException e){
+        	OutputTxt.writeLog("Errore 404: User not found: " + user);
+        } catch (IOException e) {
 			urlReader.getErrorCode("video", metafeedUrl, user);
 		} catch (ServiceForbiddenException e) {
 			urlReader.getErrorCode("video", metafeedUrl, user);
-		} catch (ServiceException e) {
-        	notifyApiFlood("video" , user);
-		}
+		} catch(ServiceException e) {
+        	notifyApiFlood("profile" , user);
+        }
 	}
 	
 	public static boolean getActivity (YouTubeService myService, String user) {
@@ -229,13 +229,14 @@ import java.net.URL;
 			}
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
+        	return false;
 		} catch (IOException e) {
 			urlReader.getErrorCode("activity", metafeedUrl, user);
 			return false;
-		} catch (ServiceException e) {
-        	notifyApiFlood("activity" , user);
-			return false;
-		}
+		} catch(ServiceException e) {
+        	notifyApiFlood("profile" , user);
+        	return false;
+        }
 		if (countTemp)
 			return true;
 		return false;
@@ -281,11 +282,13 @@ import java.net.URL;
 				return;
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
+		}  catch(ResourceNotFoundException e){
+        	OutputTxt.writeLog("Errore 404: User not found: " + user);
 		} catch (IOException e) {
 			urlReader.getErrorCode("subscriptions", metafeedUrl, user);
-		} catch (ServiceException e) {
-        	notifyApiFlood("subscriptions" , user);
-		}
+		} catch(ServiceException e) {
+        	notifyApiFlood("profile" , user);
+        }
 	}
 	
     public static void notifyApiFlood (String tabella, String user) {
@@ -295,7 +298,7 @@ import java.net.URL;
 		OutputTxt.writeLog("Totale    API: " + Contatore.getTotApi());
 		OutputTxt.writeLog("Richieste URL: " + Contatore.getUrl());
 		OutputTxt.writeLog("Totale    URL: " + Contatore.getTotUrl());
-		
+		System.out.println("PAUSA di 331 secondi per flood API");
 		Contatore.setApi(0);
 		Contatore.setUrl(0);
 		try {
@@ -303,7 +306,6 @@ import java.net.URL;
 			DatabaseMySql.inserToCheck("utenti", user, 9999);
 			Thread.currentThread();
 			Thread.sleep(331000);	 // Pausa di 3 minuti e mezzo
-			System.out.println("PAUSA DI 331 secondi per flood API");
 		}
 		catch (InterruptedException e) { 
 			e.printStackTrace();
