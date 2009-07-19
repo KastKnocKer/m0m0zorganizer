@@ -27,7 +27,8 @@ public class scanPopular {
 						DatabaseMySql.insert("utenti", "blocked", userTemp[0]);
 				}
 				else
-					DatabaseMySql.insert("utenti", "inactive", userTemp[0]);
+					if (!API.getUser(myService, "inactive", userTemp[0]))
+						DatabaseMySql.insert("utenti", "blocked", userTemp[0]);					
 			}
 		}
 	}

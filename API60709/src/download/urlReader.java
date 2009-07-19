@@ -68,8 +68,9 @@ public class urlReader  {
 			    }
 				else if (inputLine.contains("is down for") || inputLine.contains("manutenzione")) {
 					in.close();
-					OutputTxt.writeLog("Youtube down per manutenzione o non al 100%");   
-					pausa(600, user);
+					OutputTxt.writeLog("Youtube down per manutenzione o non al 100%");
+					System.out.println("Youtube down per manutenzione o non al 100%");  
+					pausa(60, user);
 					return;
 				}
 				else if (inputLine.contains("Siamo spiacenti per l'interruzione"))
