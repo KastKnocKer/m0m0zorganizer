@@ -107,18 +107,27 @@ public class urlReader  {
 			Contatore.setApi(0);
 			Contatore.setUrl(0);
 			System.out.println("Rete floodata dalle URL.");
-			DatabaseMySql.delete("utenti", "active", "user", user);
-			DatabaseMySql.inserToCheck("utenti", user, 9999);
-			pausa(1800, user);
+			System.out.println("PAUSA di 30 minuti per flood URL");
+			try {
+				DatabaseMySql.delete("utenti", "active", "user", user);
+				DatabaseMySql.inserToCheck("utenti", user, 9999);
+				Thread.currentThread();
+				Thread.sleep(1800000);	 // Pausa di 3 minuti e mezzo
+			}
+			catch (InterruptedException e) { 
+				e.printStackTrace();
+	            OutputTxt.writeException(e.getLocalizedMessage());
+	            OutputTxt.writeException("Errore nel notifyFlood dell'utente.");
+			}
 			return;
     }
     
     public static void pausa(int sec, String user) {
     	try {
-    		DatabaseMySql.eseguiExtractUser("utenti", "active", "user", user);
-    		DatabaseMySql.inserToCheck("utenti", user, 50);
+    		DatabaseMySql.delete("utenti", "active", "user", user);
+    		DatabaseMySql.inserToCheck("utenti", user, DatabaseMySql.getMaxPriority() - 3);
     		Thread.currentThread();
-    		Thread.sleep(sec * 1000);	 // Pausa di sec secondi
+    		Thread.sleep(sec * 1000 - 1);	 // Pausa di sec secondi
     	}
     	catch (InterruptedException e) { 
     		e.printStackTrace();
