@@ -144,11 +144,13 @@ public class DatabaseMySql {
 	}
 		
 	public static boolean contiene (String nomeDB, String lista, String user ) {
-		String[] record = (db.eseguiQuery("select * from " + nomeDB + "." + lista + 
+		try {
+			(db.eseguiQuery("select * from " + nomeDB + "." + lista + 
 				" where user = '" + user + "'")).get(0);
-		if (record[0].equals(user))
 			return true;
-		return false;
+		} catch (ArrayIndexOutOfBoundsException e) {
+			return false;
+		}
 	}
 	
 	public static int getMaxPriority () {

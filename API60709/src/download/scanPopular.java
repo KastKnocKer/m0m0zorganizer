@@ -17,7 +17,9 @@ public class scanPopular {
 	public static void popularScan (YouTubeService myService) {
 		String[] userTemp;	
 		for (; (userTemp = DatabaseMySql.extract("utenti", "popToCheck", "user")) != null ;) {
-			if (!DatabaseMySql.contiene("utenti", "active", userTemp[0])) {	
+			System.out.println("LOL");
+			if (!DatabaseMySql.contiene("utenti", "active", userTemp[0])) {
+				System.out.println("ASD");
 				if (API.getActivity(myService, userTemp[0])) {	// Ha activityFeed? 
 					if (API.getUser(myService, "active", userTemp[0]))		// E' un utente sospeso?  No --> active
 						completeScan(myService, userTemp[0]);	// Si attivo scansione completa senza activity
