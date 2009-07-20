@@ -3,6 +3,7 @@ package prove;
 import database.DatabaseMySql;
 import database.OutputTxt;
 import download.API;
+import download.ethernet;
 
 public class proveIO {
 
@@ -13,7 +14,6 @@ public class proveIO {
 		new API();
 		//YouTubeService myService = new YouTubeService("Tesina");
 		
-		System.out.println(DatabaseMySql.getMaxPriority());
-		
+		ethernet.switchTo(false);
 	}
 }
