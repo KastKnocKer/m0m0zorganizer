@@ -1,7 +1,6 @@
 
 import java.io.*;
 import database.DatabaseMySql;
-import download.ethernet;
 
 public class padreExec {
 

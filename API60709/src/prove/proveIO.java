@@ -3,7 +3,6 @@ package prove;
 import database.DatabaseMySql;
 import database.OutputTxt;
 import download.API;
-import download.ethernet;
 
 public class proveIO {
 
@@ -13,7 +12,6 @@ public class proveIO {
 		new OutputTxt();
 		new API();
 		//YouTubeService myService = new YouTubeService("Tesina");
-		
-		ethernet.switchTo(false);
+
 	}
 }
