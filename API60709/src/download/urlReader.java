@@ -141,33 +141,35 @@ public class urlReader  {
     }
     
     public static void getErrorCode (String tabella ,URL url ,String user) {
+    	String msg;
+    	int code;
     	System.out.println("GetErrorCode sui " + tabella  + " dell'utente " + user);
 		HttpURLConnection connection;
 		try {		
 			Contatore.incApi();
 			ethernet.checkEthernet("utenti");
 			connection = (HttpURLConnection) url.openConnection();
-			System.out.println(connection.getResponseCode());
-			System.out.println(connection.getResponseMessage());
-			if (connection.getResponseCode() >= 500) {
+			System.out.println((code = connection.getResponseCode()));
+			System.out.println(msg = connection.getResponseMessage());
+			if (code >= 500) {
 				pausa(300, user);
 				System.out.println("Errore 500+ : servizio non disponibile al momento.");
 				OutputTxt.writeLog("Errore 500+ : servizio non disponibile al momento.");
 				return;
 			// Direi di fare una pausa e di richiamare la stessa funzione
 			}				
-			else if (connection.getResponseMessage().contains("Forbidden") ||
+			else if (msg.contains("Forbidden") ||
 					connection.getResponseMessage().contains("are not public")) {
 				DatabaseMySql.insert("utenti", "infoReserved", user, tabella);
 				System.out.println("Errore 403: Informazione non pubblica: " + tabella + " dell' user " + user);
 				OutputTxt.writeLog("Errore 403: Informazione non pubblica: " + tabella + " dell' user " + user);
 				return;
 			}
-			else if (connection.getResponseMessage().contains("many")) {
+			else if (msg.contains("many")) {
 				API.notifyApiFlood(tabella, user);
 				return;
 			}	
-			else if (connection.getResponseCode() == 404) {
+			else if (code == 404) {
 				System.out.println("Errore 404: User not found: " + user);
 				OutputTxt.writeLog("Errore 404: User not found: " + user);
 				return; 
