@@ -1,3 +1,4 @@
+package download;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,11 +12,11 @@ public class ethernet {
 	public static void switchTo (boolean flag) {		
 		try {
 			if (flag) {
-				pb = new ProcessBuilder ("/home/m0m0z/Scrivania/tesina_exec/swith_to_eth1.sh");
+				pb = new ProcessBuilder ("/home/m0m0z/Scrivania/tesina_exec/switch_to_eth1.sh");
 				System.out.println("Switch from eth0 to eth1");
 			}
 			else {
-				pb = new ProcessBuilder ("/home/m0m0z/Scrivania/tesina_exec/swith_to_eth0.sh");
+				pb = new ProcessBuilder ("/home/m0m0z/Scrivania/tesina_exec/switch_to_eth0.sh");
 				System.out.println("Switch from eth1 to eth0");
 			}
 			scanner = pb.start ();

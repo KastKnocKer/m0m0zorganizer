@@ -111,7 +111,7 @@ public class urlReader  {
 			System.out.println("Rete floodata dalle URL.");
 			System.out.println("PAUSA di 30 minuti per flood URL");
 			try {
-				DatabaseMySql.delete("utenti", "active", "user", user);
+				DatabaseMySql.delete("utenti", "profile", "user", user);
 				DatabaseMySql.inserToCheck("utenti", user, 9999);
 				Thread.currentThread();
 				Thread.sleep(1800000);	 // Pausa di 3 minuti e mezzo
@@ -126,7 +126,7 @@ public class urlReader  {
     
     public static void pausa(int sec, String user) {
     	try {
-    		DatabaseMySql.delete("utenti", "active", "user", user);
+    		DatabaseMySql.delete("utenti", "profile", "user", user);
     		DatabaseMySql.inserToCheck("utenti", user, DatabaseMySql.getMaxPriority() - 3);
     		Thread.currentThread();
     		Thread.sleep(sec * 1000 - 1);	 // Pausa di sec secondi

@@ -224,7 +224,7 @@ import java.net.URL;
 			urlReader.getErrorCode("activity", metafeedUrl, user);
 			return false;
 		} catch(ServiceException e) {
-        	notifyApiFlood("profile" , user);
+			urlReader.getErrorCode("activity", metafeedUrl, user);
         	return false;
         }
 		if (countTemp)
@@ -294,7 +294,7 @@ import java.net.URL;
 		Contatore.setApi(0);
 		Contatore.setUrl(0);
 		try {
-			DatabaseMySql.delete("utenti", "active", "user", user);
+			DatabaseMySql.delete("utenti", "profile", "user", user);
 			DatabaseMySql.inserToCheck("utenti", user, 9999);
 			Thread.currentThread();
 			Thread.sleep(331000);	 // Pausa di 3 minuti e mezzo
