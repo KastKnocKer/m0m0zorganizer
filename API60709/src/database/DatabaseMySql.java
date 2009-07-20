@@ -101,6 +101,13 @@ public class DatabaseMySql {
 						" \"" + values4 + "\" , \"" + values5 + "\")");
 	}
 	
+	public static boolean insert (String nomeDB, String lista, String values1, String values2, Long values3,
+			Long values4, Long values5 , String values6) {
+		return db.eseguiAggiornamento("insert into " + nomeDB + "." + lista + 
+				" values (\"" + values1 + "\" , \"" + values2 + "\" , \"" + values3 + "\" ," +
+				"\"" + values4 + "\" , \"" + values5 + "\" , \"" + values6 + "\")");
+	}
+	
 	public static boolean delete (String nomeDB, String lista, String col, String values) {
 		return db.eseguiAggiornamento("delete from " + nomeDB + "." + lista + " where " + 
 				col + "= '" + values + "'");

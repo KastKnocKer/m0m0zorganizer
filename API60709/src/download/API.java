@@ -15,7 +15,7 @@ import java.net.URL;
 	  
 	public API () {}
 	 
-	public static boolean getUser (YouTubeService myService, String tabella, String user){
+	public static boolean getUser (YouTubeService myService, String status, String user){
 	    try {            	
             metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/users/" + user);
             Contatore.incApi();
@@ -25,7 +25,7 @@ import java.net.URL;
            	System.out.println("Username: " + profileEntry.getUsername());           	
            	userStats = profileEntry.getStatistics();
            	if(userStats != null) {
-           		DatabaseMySql.insert("utenti", tabella, user,  userStats.getSubscriberCount(),
+           		DatabaseMySql.insert("utenti", "profile", user, status, userStats.getSubscriberCount(),
            				userStats.getViewCount(), userStats.getVideoWatchCount(),
            				userStats.getLastWebAccess().toUiString());
            		return true;
@@ -259,7 +259,8 @@ import java.net.URL;
 						temp + " : " + entry.getPublished().toString().substring(0,19));
 				DatabaseMySql.insert("utenti","subscriptions",user, temp, entry.getPublished().toString().substring(0,19));
 				System.out.println(temp + " : " + entry.getPublished().toString().substring(0,19));
-				DatabaseMySql.inserToCheck("utenti", temp);
+				if(!DatabaseMySql.contiene("utenti", "scanned", temp))
+					DatabaseMySql.inserToCheck("utenti", temp);
 				count++;
 			}
 			int tot;
