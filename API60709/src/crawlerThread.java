@@ -18,9 +18,6 @@ public class crawlerThread implements Runnable {
 	}
 	
 	public void run() {
-		try {
-			Thread.sleep(15000);
-		} catch (InterruptedException e) {e.printStackTrace();}
 		new figlioExec();
 		System.out.println("Usicta crawlerFiglio");
 	}

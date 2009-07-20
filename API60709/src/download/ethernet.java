@@ -22,7 +22,8 @@ public class ethernet {
 				System.out.println("Switch from eth1 to eth0");
 			}
 			DatabaseMySql.delete(nomeDB, "ethernet", "rete", "eth");
-			DatabaseMySql.insert(nomeDB, "ethernet", "true");
+			DatabaseMySql.insert(nomeDB, "ethernet", "false");
+			try {Thread.sleep(250);} catch (InterruptedException e2) {}
 			scanner = pb.start ();
 			BufferedReader in = new BufferedReader(	new InputStreamReader(scanner.getInputStream()));
 			String line = null;
@@ -43,8 +44,7 @@ public class ethernet {
 	}
 	
 	public static void checkEthernet (String nomeDB) {
-		String temp = DatabaseMySql.eseguiQuery("Select flag from " + nomeDB + ".ethernet").get(0)[0];
-		if (temp.equals("true"))
+		if (DatabaseMySql.eseguiQuery("Select flag from " + nomeDB + ".ethernet").get(0)[0].contains("true"))
 			return;
 		else {
 			try {

@@ -11,6 +11,9 @@ public class figlioExec {
 		DatabaseMySql.connetti();	// Connessione al database
 		ProcessBuilder pb = null;
 		try {
+			try {
+				Thread.sleep(15000);
+			} catch (InterruptedException e) {e.printStackTrace();}
 			pb = new ProcessBuilder ("/home/m0m0z/Scrivania/tesina_exec/scanPopular.sh");
 			Process starter = pb.start ();
 			//Process p = Runtime.getRuntime().exec("amulecmd --command='set bwlimit up 22'"Â«Â»);
