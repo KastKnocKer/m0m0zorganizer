@@ -14,9 +14,9 @@ public class figlioExec {
 			try {
 				Thread.sleep(15000);
 			} catch (InterruptedException e) {e.printStackTrace();}
+			
 			pb = new ProcessBuilder ("/home/m0m0z/Scrivania/tesina_exec/scanPopular.sh");
 			Process starter = pb.start ();
-			//Process p = Runtime.getRuntime().exec("amulecmd --command='set bwlimit up 22'"Â«Â»);
 			BufferedReader in = new BufferedReader(	new InputStreamReader(starter.getInputStream()));
 			String line = null;
 			while ((line = in.readLine()) != null)	{

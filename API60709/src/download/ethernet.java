@@ -13,6 +13,8 @@ public class ethernet {
 	
 	public static void switchTo (String nomeDB, boolean flag) {		
 		try {
+			DatabaseMySql.delete(nomeDB, "ethernet", "rete", "eth");
+			DatabaseMySql.insert(nomeDB, "ethernet", "eth", "false");
 			if (flag) {
 				pb = new ProcessBuilder ("/home/m0m0z/Scrivania/tesina_exec/switch_to_eth1.sh");
 				System.out.println("Switch from eth0 to eth1");
@@ -20,9 +22,7 @@ public class ethernet {
 			else {
 				pb = new ProcessBuilder ("/home/m0m0z/Scrivania/tesina_exec/switch_to_eth0.sh");
 				System.out.println("Switch from eth1 to eth0");
-			}
-			DatabaseMySql.delete(nomeDB, "ethernet", "rete", "eth");
-			DatabaseMySql.insert(nomeDB, "ethernet", "false");
+			}			
 			try {Thread.sleep(250);} catch (InterruptedException e2) {}
 			scanner = pb.start ();
 			BufferedReader in = new BufferedReader(	new InputStreamReader(scanner.getInputStream()));
@@ -33,7 +33,7 @@ public class ethernet {
 			try {
 				Thread.sleep(7500);
 				DatabaseMySql.delete(nomeDB, "ethernet", "rete", "eth");
-				DatabaseMySql.insert(nomeDB, "ethernet", "true");
+				DatabaseMySql.insert(nomeDB, "ethernet", "eth", "true");
 			} catch (InterruptedException e1) {}
 			try	{scanner.waitFor ();} catch (Exception e) {System.out.println(e);}
 		}

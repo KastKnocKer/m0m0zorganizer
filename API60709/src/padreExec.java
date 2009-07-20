@@ -10,8 +10,9 @@ public class padreExec {
 		DatabaseMySql.connetti();	// Connessione al database
 		ProcessBuilder pb = null;
 		
-		boolean flagEth = true;  // true eth0 up eth1 down     false eth0 down eth1 up
-		ethernet.switchTo("utenti",false); // Se ho true sono a eth0 up e switho a eth1 e viceversa
+		boolean flagEth = true; 		    // true eth0 up eth1 down     false eth0 down eth1 up
+		ethernet.switchTo("utenti",false); 	// Se ho true sono a eth0 up e switho a eth1 e viceversa
+		
 		try {
 			pb = new ProcessBuilder ("/home/m0m0z/Scrivania/tesina_exec/start.sh");
 			Process starter = pb.start ();
