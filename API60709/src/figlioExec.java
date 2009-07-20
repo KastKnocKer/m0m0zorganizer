@@ -6,7 +6,7 @@ import database.DatabaseMySql;
 
 public class figlioExec {
 
-	public figlioExec () {
+	public static void main(String[] args) {
 		new DatabaseMySql();		// Definisco il database per tutto il programma
 		DatabaseMySql.connetti();	// Connessione al database
 		ProcessBuilder pb = null;
@@ -28,7 +28,7 @@ public class figlioExec {
 			catch (Exception e)	{
 				System.out.println(e);
 			}
-		}
+		}public padreExec() {
 		catch (IOException e) {
 			System.out.println(e);
 		}  

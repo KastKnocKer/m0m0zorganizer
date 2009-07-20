@@ -5,7 +5,7 @@ import download.ethernet;
 
 public class padreExec {
 
-	public padreExec() {
+	public static void main(String[] args) {
 		new DatabaseMySql();		// Definisco il database per tutto il programma
 		DatabaseMySql.connetti();	// Connessione al database
 		ProcessBuilder pb = null;
