@@ -40,7 +40,7 @@ public class urlReader  {
 			    	if (DatabaseMySql.insert("utenti", tabella , user, inputLine))
 			    		System.out.println(count + " : " + ++effettivi + ": Inserimento nella tabella " + tabella + 
 			    				" della tupla: "+ user + " - " + inputLine);
-			    	if(!DatabaseMySql.contiene("utenti", "scanned", inputLine))
+			    	if(!DatabaseMySql.contiene("utenti", "profile", inputLine))
 			    		DatabaseMySql.inserToCheck("utenti", inputLine);
 				}
 				else if (inputLine.contains("channel-box-item-count")) {

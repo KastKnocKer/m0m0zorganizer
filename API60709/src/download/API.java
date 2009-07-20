@@ -259,7 +259,7 @@ import java.net.URL;
 						temp + " : " + entry.getPublished().toString().substring(0,19));
 				DatabaseMySql.insert("utenti","subscriptions",user, temp, entry.getPublished().toString().substring(0,19));
 				System.out.println(temp + " : " + entry.getPublished().toString().substring(0,19));
-				if(!DatabaseMySql.contiene("utenti", "scanned", temp))
+				if(!DatabaseMySql.contiene("utenti", "profile", temp))
 					DatabaseMySql.inserToCheck("utenti", temp);
 				count++;
 			}
