@@ -28,7 +28,7 @@ public class figlioExec {
 			catch (Exception e)	{
 				System.out.println(e);
 			}
-		}public padreExec() {
+		}
 		catch (IOException e) {
 			System.out.println(e);
 		}  
