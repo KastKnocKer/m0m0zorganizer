@@ -25,6 +25,7 @@ public class urlReader  {
 	    	metafeedUrl = new URL("http://www.youtube.com/profile?user=" + user + "&view=" + tabella + "&start=" + count);
 	    	Contatore.incUrl();
 	    	System.out.println(metafeedUrl);
+	    	ethernet.checkEthernet("utenti");
 	    	in = new BufferedReader(new InputStreamReader(metafeedUrl.openStream()));
 	    	
 			while ((inputLine = in.readLine()) != null) {
@@ -55,6 +56,7 @@ public class urlReader  {
 			    else if (inputLine.contains("Non è")) {
 					in.close();
 			    	OutputTxt.writeLog("Errore 403: Informazione non pubblica: " + tabella + " dell' user " + user);
+			    	DatabaseMySql.insert("utenti", "infoReserved", user, tabella);
 			    	return;
 			    }
 			    else if (inputLine.contains("Questo account è stato")) {
@@ -143,6 +145,7 @@ public class urlReader  {
 		HttpURLConnection connection;
 		try {		
 			Contatore.incApi();
+			ethernet.checkEthernet("utenti");
 			connection = (HttpURLConnection) url.openConnection();
 			System.out.println(connection.getResponseCode());
 			System.out.println(connection.getResponseMessage());
@@ -155,6 +158,7 @@ public class urlReader  {
 			}				
 			else if (connection.getResponseMessage().contains("Forbidden") ||
 					connection.getResponseMessage().contains("are not public")) {
+				DatabaseMySql.insert("utenti", "infoReserved", user, tabella);
 				System.out.println("Errore 403: Informazione non pubblica: " + tabella + " dell' user " + user);
 				OutputTxt.writeLog("Errore 403: Informazione non pubblica: " + tabella + " dell' user " + user);
 				return;

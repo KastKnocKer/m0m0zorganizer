@@ -27,12 +27,12 @@ public class scanUser {
 					if (API.getUser(myService, "active", userTemp[0]))			// E' un utente sospeso?  No --> active
 						completeScan(myService, userTemp[0]);	// Si attivo scansione completa senza activity
 					else 		// Non è attivo lo tolgo dagli active e lo metto negli inactive
-						DatabaseMySql.insert("utenti", "profile", userTemp[0], "blocked", null, null, null, "");
+						DatabaseMySql.insert("utenti", "profile", userTemp[0], "blocked", "block", "block", "block", "block");
 					temp++;
 					}
 				else
 					if (!API.getUser(myService, "inactive", userTemp[0]))
-						DatabaseMySql.insert("utenti", "profile", userTemp[0], "blocked", null, null, null, "");
+						DatabaseMySql.insert("utenti", "profile", userTemp[0], "blocked", "block", "block", "block", "block");
 			}
 			if (temp == 50)
 				return;

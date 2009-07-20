@@ -19,14 +19,15 @@ import java.net.URL;
 	    try {            	
             metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/users/" + user);
             Contatore.incApi();
+            ethernet.checkEthernet("utenti");
             UserProfileEntry profileEntry = myService.getEntry(metafeedUrl, 
            			UserProfileEntry.class);
             
            	System.out.println("Username: " + profileEntry.getUsername());           	
            	userStats = profileEntry.getStatistics();
            	if(userStats != null) {
-           		DatabaseMySql.insert("utenti", "profile", user, status, userStats.getSubscriberCount(),
-           				userStats.getViewCount(), userStats.getVideoWatchCount(),
+           		DatabaseMySql.insert("utenti", "profile", user, status, userStats.getSubscriberCount() + "",
+           				userStats.getViewCount() + "", userStats.getVideoWatchCount() + "",
            				userStats.getLastWebAccess().toUiString());
            		return true;
            	}
@@ -66,6 +67,7 @@ import java.net.URL;
 			metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/users/" + user + "/favorites?max-results=50" 
 			+ "&start-index=" + count);
 			Contatore.incApi();
+			ethernet.checkEthernet("utenti");
 			videoFeed = myService.getFeed(metafeedUrl, VideoFeed.class);
 			for (VideoEntry videoEntry : videoFeed.getEntries() ) {
 				countTemp = true;
@@ -115,6 +117,7 @@ import java.net.URL;
 			metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/users/" + user + "/uploads?max-results=50" 
 			+ "&start-index=" + count);
 			Contatore.incApi();
+			ethernet.checkEthernet("utenti");
 			videoFeed = myService.getFeed(metafeedUrl, VideoFeed.class);
 			for (VideoEntry videoEntry : videoFeed.getEntries() ) {
 				countTemp = true;
@@ -162,6 +165,7 @@ import java.net.URL;
 					+ user + "&key=AI39si6Eq4oBSKdw1KHpCX9rhwVpdsxO04VqiFyB13xRa37gbQR3D0i-PBiSqLAi8vfaEya3w95AZFq8T6qbIwQwxVuyaADJsQ");
 			System.out.println(metafeedUrl);
 			Contatore.incApi();
+			ethernet.checkEthernet("utenti");
 			activityFeed = myService.getFeed(metafeedUrl, UserEventFeed.class);
 			if (activityFeed.getEntries().size() == 0) {
 				System.out.println("This feed contains no entries.");
@@ -243,6 +247,7 @@ import java.net.URL;
 				+ "&start-index=" + count);
 			System.out.println(metafeedUrl);
 			Contatore.incApi();
+			ethernet.checkEthernet("utenti");
 			feed = myService.getFeed(metafeedUrl, SubscriptionFeed.class);
 			for(SubscriptionEntry entry : feed.getEntries()) {
 				countTemp = true;
