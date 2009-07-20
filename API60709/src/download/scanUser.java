@@ -18,15 +18,6 @@ public class scanUser {
 		toCheck(myService);
 	}
 	
-	public static void completeScan(YouTubeService myService, String user) {
-		// if (Contatore.checkCompleteScan())  PENSARE SE METTERLO
-		API.getVideo(myService, user);		// Alternati in modo da limitare i flood di rete
-		urlReader.userReader("subscribers", user);	
-		API.getFavorites(myService, user);
-		urlReader.userReader("friends", user);
-		API.getSubscriptions(myService, user);
-	}
-	
 	public static void toCheck(YouTubeService myService) {
 		int temp = 0;
 		String[] userTemp;	
@@ -43,8 +34,20 @@ public class scanUser {
 					if (!API.getUser(myService, "inactive", userTemp[0]))
 						DatabaseMySql.insert("utenti", "blocked", userTemp[0]);	
 				DatabaseMySql.insert("utenti", "scanned", userTemp[0]);
-			}			
+			}
+			if (temp == 50)
+				return;
 		}
+	}
+	
+	
+	public static void completeScan(YouTubeService myService, String user) {
+		// if (Contatore.checkCompleteScan())  PENSARE SE METTERLO
+		API.getVideo(myService, user);		// Alternati in modo da limitare i flood di rete
+		urlReader.userReader("subscribers", user);	
+		API.getFavorites(myService, user);
+		urlReader.userReader("friends", user);
+		API.getSubscriptions(myService, user);
 	}
 	/*
 	public static void inactive() {

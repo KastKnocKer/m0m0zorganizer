@@ -15,6 +15,7 @@ public class scanPopular {
 	}
 	
 	public static void popularScan (YouTubeService myService) {
+		int temp = 0;
 		String[] userTemp;	
 		for (; (userTemp = DatabaseMySql.extract("utenti", "popToCheck", "user")) != null ;) {
 			if (!DatabaseMySql.contiene("utenti", "active", userTemp[0])) {
@@ -27,8 +28,11 @@ public class scanPopular {
 				else
 					if (!API.getUser(myService, "inactive", userTemp[0]))
 						DatabaseMySql.insert("utenti", "blocked", userTemp[0]);			
-				DatabaseMySql.insert("utenti", "scanned", userTemp[0]);			
+				DatabaseMySql.insert("utenti", "scanned", userTemp[0]);		
+				temp++;
 			}
+			if (temp == 10)
+				return;
 		}
 	}
 	
