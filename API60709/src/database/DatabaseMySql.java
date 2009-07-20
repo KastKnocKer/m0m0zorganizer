@@ -156,20 +156,4 @@ public class DatabaseMySql {
 	public static int getMaxPriority () {
 		return Integer.parseInt((DatabaseMySql.eseguiQuery("Select MAX(priority) from utenti.toCheck")).get(0)[0].toString());
 	}
-	
-	public static boolean checkUserDB (String nomeDB, String user) {
-		if 	(contiene(nomeDB ,"active", user)) {
-			System.out.println("Errore: utente " + user + " scartato perchè già presente nei active");
-			return true;
-		}
-		else if (contiene(nomeDB, "inactive", user)) {
-			System.out.println("Errore: utente " + user + " scartato perchè già presente nei inactive");
-			return true;
-		}
-		else if (contiene(nomeDB , "blocked", user)) {
-			System.out.println("Errore: utente " + user + " scartato perchè già presente nei blocked");
-			return true;
-		}
-		return false;
-	}
 }

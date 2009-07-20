@@ -1,16 +1,10 @@
 package download;
-/**
- * @author Monduzzi Mattia 
- * Matr. 25505
- * 
- */
  
 import com.google.gdata.client.youtube.YouTubeService;
 import com.google.gdata.data.youtube.*;
 import com.google.gdata.util.AuthenticationException;
 import com.google.gdata.util.ResourceNotFoundException;
 import com.google.gdata.util.ServiceException;
-import com.google.gdata.util.ServiceForbiddenException;
 import database.DatabaseMySql;
 import database.OutputTxt;
 import java.io.IOException;

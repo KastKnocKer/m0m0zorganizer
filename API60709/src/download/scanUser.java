@@ -31,7 +31,7 @@ public class scanUser {
 		int temp = 0;
 		String[] userTemp;	
 		for (; (userTemp = DatabaseMySql.extract("utenti", "toCheck", "user")) != null ;) {
-			if (!DatabaseMySql.checkUserDB("utenti", userTemp[0])) {  // L'ho già fatto?
+			if (!DatabaseMySql.contiene("utenti", "scanned", userTemp[0])) {  // L'ho già fatto?
 				if (API.getActivity(myService, userTemp[0])) {	// Ha activityFeed?
 					if (API.getUser(myService, "active", userTemp[0]))			// E' un utente sospeso?  No --> active
 						completeScan(myService, userTemp[0]);	// Si attivo scansione completa senza activity
@@ -40,7 +40,9 @@ public class scanUser {
 					temp++;
 					}
 				else
-					DatabaseMySql.insert("utenti", "inactive", userTemp[0]);
+					if (!API.getUser(myService, "inactive", userTemp[0]))
+						DatabaseMySql.insert("utenti", "blocked", userTemp[0]);	
+				DatabaseMySql.insert("utenti", "scanned", userTemp[0]);
 			}			
 		}
 	}
