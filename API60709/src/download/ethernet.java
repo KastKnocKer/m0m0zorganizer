@@ -23,7 +23,7 @@ public class ethernet {
 				pb = new ProcessBuilder ("/home/m0m0z/Scrivania/tesina_exec/switch_to_eth0.sh");
 				System.out.println("Switch from eth1 to eth0");
 			}			
-			try {Thread.sleep(250);} catch (InterruptedException e2) {}
+			try {Thread.sleep(1000);} catch (InterruptedException e2) {}
 			scanner = pb.start ();
 			BufferedReader in = new BufferedReader(	new InputStreamReader(scanner.getInputStream()));
 			String line = null;
@@ -49,7 +49,7 @@ public class ethernet {
 		else {
 			try {
 				System.out.println("Ethernet switching..Attendere..");
-				Thread.sleep(7500);	
+				Thread.sleep(8500);	
 				return;
 			} catch (InterruptedException e1) {}
 		}
