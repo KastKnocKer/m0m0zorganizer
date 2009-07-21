@@ -13,6 +13,7 @@ public class ethernet {
 	
 	public static void switchTo (String nomeDB, boolean flag) {		
 		try {
+			System.out.println("Avvio switching ethernet..Attendere..");			
 			DatabaseMySql.eseguiAggiornamento("insert into utenti.ethernet values (\"eth\", \"false\") " +
 					"on duplicate key update flag ='false'");
 			try {Thread.sleep(7500);} catch (InterruptedException e2) {}

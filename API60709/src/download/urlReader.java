@@ -128,10 +128,11 @@ public class urlReader  {
     
     public static void pausa(int sec, String user) {
     	try {
+    		System.out.println("Pausa di " + sec + " secondi sull'utente " + user);
     		DatabaseMySql.delete("utenti", "profile", "user", user);
     		DatabaseMySql.inserToCheck("utenti", user, DatabaseMySql.getMaxPriority() - 3);
     		Thread.currentThread();
-    		Thread.sleep(sec * 1000 - 1);	 // Pausa di sec secondi
+    		Thread.sleep(sec * 1000);	 // Pausa di sec secondi
     	}
     	catch (InterruptedException e) { 
     		e.printStackTrace();
@@ -152,9 +153,9 @@ public class urlReader  {
 			System.out.println((code = connection.getResponseCode()));
 			System.out.println(msg = connection.getResponseMessage());
 			if (code >= 500) {
-				pausa(300, user);
-				System.out.println("Errore 500+ : servizio non disponibile al momento.");
 				OutputTxt.writeLog("Errore 500+ : servizio non disponibile al momento.");
+				System.out.println("Errore 500+ : servizio non disponibile al momento.");
+				pausa(300, user);
 				return;
 			// Direi di fare una pausa e di richiamare la stessa funzione
 			}				
