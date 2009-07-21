@@ -13,9 +13,8 @@ public class ethernet {
 	
 	public static void switchTo (String nomeDB, boolean flag) {		
 		try {
-			System.out.println("Avvio switching ethernet..Attendere..");			
-			DatabaseMySql.eseguiAggiornamento("insert into utenti.ethernet values (\"eth\", \"false\") " +
-					"on duplicate key update flag ='false'");
+			System.out.println("Avvio switching ethernet..Attendere..");
+			DatabaseMySql.eseguiAggiornamento("update utenti.ethernet set flag ='false'");
 			try {Thread.sleep(7500);} catch (InterruptedException e2) {}
 			if (flag) {
 				pb = new ProcessBuilder ("/home/m0m0z/Scrivania/tesina_exec/switch_to_eth1.sh");

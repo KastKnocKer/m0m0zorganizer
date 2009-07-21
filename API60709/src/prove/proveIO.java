@@ -1,5 +1,7 @@
 package prove;
 
+import com.google.gdata.client.youtube.YouTubeService;
+
 import database.DatabaseMySql;
 import database.OutputTxt;
 import download.API;
@@ -11,9 +13,8 @@ public class proveIO {
 		DatabaseMySql.connetti();	// Connessione al database		
 		new OutputTxt();
 		new API();
-		//YouTubeService myService = new YouTubeService("Tesina");
-		DatabaseMySql.delete("utenti", "ethernet", "rete", "eth");
-		System.out.print(DatabaseMySql.eseguiQuery("Select flag from utenti.ethernet").get(0)[0].contains("true"));
+		YouTubeService myService = new YouTubeService("Tesina");
+		API.getSubscriptions(myService, "ale2008web");
 
 	}
 }

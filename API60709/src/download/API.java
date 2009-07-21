@@ -253,7 +253,7 @@ import java.net.URL;
 				+ "&start-index=" + count);
 			System.out.println(metafeedUrl);
 			Contatore.incApi();
-		//	ethernet.checkEthernet("utenti");
+			ethernet.checkEthernet("utenti");
 			feed = myService.getFeed(metafeedUrl, SubscriptionFeed.class);
 			for(SubscriptionEntry entry : feed.getEntries()) {
 				countTemp = true;
