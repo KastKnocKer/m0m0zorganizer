@@ -13,8 +13,8 @@ public class ethernet {
 	
 	public static void switchTo (String nomeDB, boolean flag) {		
 		try {
-			DatabaseMySql.delete(nomeDB, "ethernet", "rete", "eth");
-			DatabaseMySql.insert(nomeDB, "ethernet", "eth", "false");
+			DatabaseMySql.eseguiAggiornamento("insert into utenti.ethernet values (\"eth\", \"false\") " +
+					"on duplicate key update flag ='false'");
 			try {Thread.sleep(7500);} catch (InterruptedException e2) {}
 			if (flag) {
 				pb = new ProcessBuilder ("/home/m0m0z/Scrivania/tesina_exec/switch_to_eth1.sh");
@@ -32,8 +32,7 @@ public class ethernet {
 			}
 			try {
 				Thread.sleep(7500);
-				DatabaseMySql.delete(nomeDB, "ethernet", "rete", "eth");
-				DatabaseMySql.insert(nomeDB, "ethernet", "eth", "true");
+				DatabaseMySql.eseguiAggiornamento("update utenti.ethernet set flag ='true'");
 			} catch (InterruptedException e1) {}
 			try	{scanner.waitFor ();} catch (Exception e) {System.out.println(e);}
 		}
@@ -47,8 +46,7 @@ public class ethernet {
 		if (DatabaseMySql.eseguiQuery("Select flag from " + nomeDB + ".ethernet").get(0)[0].contains("true"))
 			return;
 		else {
-			DatabaseMySql.insert(nomeDB, "ethernet", "eth", "false");
-			while (!DatabaseMySql.eseguiQuery("Select flag from " + nomeDB + ".ethernet").get(0)[0].contains("true")) {
+			while (DatabaseMySql.eseguiQuery("Select flag from " + nomeDB + ".ethernet").get(0)[0].contains("false")) {
 				try {
 					System.out.println("Ethernet switching..Attendere..");
 					Thread.sleep(1000);	

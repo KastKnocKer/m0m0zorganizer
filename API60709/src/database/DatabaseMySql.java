@@ -126,8 +126,7 @@ public class DatabaseMySql {
 	}
 	
 	public static void inserToCheck (String nomeDB, String user, int num) {
-			DatabaseMySql.eseguiAggiornamento("insert into " + nomeDB + ".toCheck values (\"" + num + "\" , "
-				+ user + ") on duplicate key update priority = priority - 1");
+			DatabaseMySql.eseguiAggiornamento("insert into " + nomeDB + ".toCheck values (\"" + num + "\" , \"" + user + "\") on duplicate key update priority = priority - 1");
 		return;
 	}
 	
