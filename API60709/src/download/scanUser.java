@@ -20,19 +20,19 @@ public class scanUser {
 	
 	public static void toCheck(YouTubeService myService) {
 		int temp = 0;
-		String[] userTemp;	
-		for (; (userTemp = DatabaseMySql.extract("utenti", "toCheck", "user")) != null ;) {
-			if (!DatabaseMySql.contiene("utenti", "profile", userTemp[0])) {  // L'ho già fatto?
-				if (API.getActivity(myService, userTemp[0])) {	// Ha activityFeed?
-					if (API.getUser(myService, "active", userTemp[0]))			// E' un utente sospeso?  No --> active
-						completeScan(myService, userTemp[0]);	// Si attivo scansione completa senza activity
+		String userToCheck;	
+		for (; (userToCheck = DatabaseMySql.extract("utenti", "toCheck", "user")[1]) != null ;) {
+			if (!DatabaseMySql.contiene("utenti", "profile", userToCheck)) {  // L'ho già fatto?
+				if (API.getActivity(myService, userToCheck)) {	// Ha activityFeed?
+					if (API.getUser(myService, "active", userToCheck))			// E' un utente sospeso?  No --> active
+						completeScan(myService, userToCheck);	// Si attivo scansione completa senza activity
 					else 		// Non è attivo lo tolgo dagli active e lo metto negli inactive
-						DatabaseMySql.insert("utenti", "profile", userTemp[0], "blocked", "block", "block", "block", "block");
+						DatabaseMySql.insert("utenti", "profile", userToCheck, "blocked", "block", "block", "block", "block");
 					temp++;
 					}
 				else
-					if (!API.getUser(myService, "inactive", userTemp[0]))
-						DatabaseMySql.insert("utenti", "profile", userTemp[0], "blocked", "block", "block", "block", "block");
+					if (!API.getUser(myService, "inactive", userToCheck))
+						DatabaseMySql.insert("utenti", "profile", userToCheck, "blocked", "block", "block", "block", "block");
 			}
 			if (temp == 50)
 				return;

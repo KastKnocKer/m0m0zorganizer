@@ -109,11 +109,7 @@ public class DatabaseMySql {
 	public static String[] extract (String nomeDB, String lista, String col) {
 		String[] user; 		
 		try {
-			if (lista.equals("toCheck"))
-				user =  (DatabaseMySql.eseguiQuery("Select * from " + nomeDB + "." + lista + 
-						" GROUP BY priority DESC limit 1")).get(0);
-			else
-				user =  (DatabaseMySql.eseguiQuery("Select * from " + nomeDB + "." + lista + 
+			user =  (DatabaseMySql.eseguiQuery("Select * from " + nomeDB + "." + lista + 
 						" limit 1")).get(0);
 			DatabaseMySql.delete (nomeDB, lista, col, user[0]);
 		}
@@ -130,9 +126,8 @@ public class DatabaseMySql {
 	}
 	
 	public static void inserToCheck (String nomeDB, String user, int num) {
-		//if(!DatabaseMySql.contiene(nomeDB, "active", user))
-			DatabaseMySql.eseguiAggiornamento("insert into " + nomeDB + ".toCheck values (\"" + user + "\" , "
-				+ num + ") on duplicate key update priority = priority + 1");
+			DatabaseMySql.eseguiAggiornamento("insert into " + nomeDB + ".toCheck values (\"" + num + "\" , "
+				+ user + ") on duplicate key update priority = priority - 1");
 		return;
 	}
 	
