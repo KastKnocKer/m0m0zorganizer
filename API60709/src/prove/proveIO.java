@@ -12,6 +12,8 @@ public class proveIO {
 		new OutputTxt();
 		new API();
 		//YouTubeService myService = new YouTubeService("Tesina");
+		DatabaseMySql.delete("utenti", "ethernet", "rete", "eth");
+		System.out.print(DatabaseMySql.eseguiQuery("Select flag from utenti.ethernet").get(0)[0].contains("true"));
 
 	}
 }

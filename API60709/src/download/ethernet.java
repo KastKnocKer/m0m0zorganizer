@@ -15,7 +15,7 @@ public class ethernet {
 		try {
 			DatabaseMySql.delete(nomeDB, "ethernet", "rete", "eth");
 			DatabaseMySql.insert(nomeDB, "ethernet", "eth", "false");
-			try {Thread.sleep(2500);} catch (InterruptedException e2) {}
+			try {Thread.sleep(7500);} catch (InterruptedException e2) {}
 			if (flag) {
 				pb = new ProcessBuilder ("/home/m0m0z/Scrivania/tesina_exec/switch_to_eth1.sh");
 				System.out.println("Switch from eth0 to eth1");
@@ -47,11 +47,13 @@ public class ethernet {
 		if (DatabaseMySql.eseguiQuery("Select flag from " + nomeDB + ".ethernet").get(0)[0].contains("true"))
 			return;
 		else {
-			try {
-				System.out.println("Ethernet switching..Attendere..");
-				Thread.sleep(9000);	
-				return;
-			} catch (InterruptedException e1) {}
+			DatabaseMySql.insert(nomeDB, "ethernet", "eth", "false");
+			while (!DatabaseMySql.eseguiQuery("Select flag from " + nomeDB + ".ethernet").get(0)[0].contains("true")) {
+				try {
+					System.out.println("Ethernet switching..Attendere..");
+					Thread.sleep(1000);	
+				} catch (InterruptedException e1) {}
+			}
 		}
 	}
 		
