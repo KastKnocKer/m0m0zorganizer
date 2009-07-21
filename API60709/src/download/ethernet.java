@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import database.DatabaseMySql;
+import database.OutputTxt;
 
 
 public class ethernet {
@@ -19,10 +20,12 @@ public class ethernet {
 			if (flag) {
 				pb = new ProcessBuilder ("/home/m0m0z/Scrivania/tesina_exec/switch_to_eth1.sh");
 				System.out.println("Switch from eth0 to eth1");
+				OutputTxt.writeLog("Switch from eth0 to eth1");
 			}
 			else {
 				pb = new ProcessBuilder ("/home/m0m0z/Scrivania/tesina_exec/switch_to_eth0.sh");
 				System.out.println("Switch from eth1 to eth0");
+				OutputTxt.writeLog("Switch from eth1 to eth0");
 			}			
 			scanner = pb.start ();
 			BufferedReader in = new BufferedReader(	new InputStreamReader(scanner.getInputStream()));
@@ -43,15 +46,21 @@ public class ethernet {
 	}
 	
 	public static void checkEthernet (String nomeDB) {
-		if (DatabaseMySql.eseguiQuery("Select flag from " + nomeDB + ".ethernet").get(0)[0].contains("true"))
-			return;
-		else {
-			while (DatabaseMySql.eseguiQuery("Select flag from " + nomeDB + ".ethernet").get(0)[0].contains("false")) {
-				try {
-					System.out.println("Ethernet switching..Attendere..");
-					Thread.sleep(1000);	
-				} catch (InterruptedException e1) {}
+		try {
+			if (DatabaseMySql.eseguiQuery("Select flag from " + nomeDB + ".ethernet").get(0)[0].contains("true"))
+				return;
+			else {
+				while (DatabaseMySql.eseguiQuery("Select flag from " + nomeDB + ".ethernet").get(0)[0].contains("false")) {
+					try {
+						System.out.println("Ethernet switching..Attendere..");
+						Thread.sleep(1000);	
+					} catch (InterruptedException e1) {}
+				}
 			}
+		} catch (ArrayIndexOutOfBoundsException e) { 
+			try {Thread.sleep(1000);} catch (InterruptedException e1) {}
+			System.out.println("Possibile switching ethernet..Controllo in corso..");
+			checkEthernet(nomeDB);			
 		}
 	}
 		

@@ -5,6 +5,7 @@ import com.google.gdata.client.youtube.YouTubeService;
 import database.DatabaseMySql;
 import database.OutputTxt;
 import download.API;
+import download.ethernet;
 
 public class proveIO {
 
@@ -14,7 +15,7 @@ public class proveIO {
 		new OutputTxt();
 		new API();
 		YouTubeService myService = new YouTubeService("Tesina");
-		API.getSubscriptions(myService, "ale2008web");
+		ethernet.checkEthernet("utenti");
 
 	}
 }
