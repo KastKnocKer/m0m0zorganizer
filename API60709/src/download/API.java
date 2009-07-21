@@ -88,10 +88,13 @@ import java.net.URL;
 					return;
 				}
 			}
-			if (!countTemp) 
+			int tot;
+			if ((tot = videoFeed.getTotalResults()) > 1000)
+				tot = 1000;
+			if (!countTemp)
 				giriVuoto++;
-			if (giriVuoto < 2 && videoFeed.getTotalResults() >= count) {
-				System.out.println(videoFeed.getTotalResults());
+			if (giriVuoto < 2 && tot >= count) {
+				System.out.println(tot);
 				getFavorites( myService, user, count, giriVuoto);
 			}
 			else 
@@ -135,10 +138,12 @@ import java.net.URL;
 					return;
 				}
 			}
-			if (!countTemp) 
+			if ((tot = videoFeed.getTotalResults()) > 1000)
+				tot = 1000;
+			if (!countTemp)
 				giriVuoto++;
-			if (giriVuoto < 2 && videoFeed.getTotalResults() >= count) {
-				System.out.println(videoFeed.getTotalResults());
+			if (giriVuoto < 2 && tot >= count) {
+				System.out.println(tot);
 				getVideo( myService, user, count, giriVuoto);
 			}
 			else 
@@ -213,10 +218,11 @@ import java.net.URL;
 			    }
 				count++;
 			  }
-			int tot;
-			if(!countTemp)
+			if ((tot = activityFeed.getTotalResults()) > 1000)
+				tot = 1000;
+			if (!countTemp)
 				giriVuoto++;
-			if (giriVuoto < 2 && (tot = activityFeed.getTotalResults()) >= count) {
+			if (giriVuoto < 2 && tot >= count) {
 				System.out.println(tot);
 				getActivity(myService, user, count, giriVuoto);
 				return true;
@@ -247,7 +253,7 @@ import java.net.URL;
 				+ "&start-index=" + count);
 			System.out.println(metafeedUrl);
 			Contatore.incApi();
-			ethernet.checkEthernet("utenti");
+		//	ethernet.checkEthernet("utenti");
 			feed = myService.getFeed(metafeedUrl, SubscriptionFeed.class);
 			for(SubscriptionEntry entry : feed.getEntries()) {
 				countTemp = true;
@@ -268,10 +274,11 @@ import java.net.URL;
 					DatabaseMySql.inserToCheck("utenti", temp);
 				count++;
 			}
-			int tot;
+			if ((tot = feed.getTotalResults()) > 1000)
+				tot = 1000;
 			if (!countTemp)
 				giriVuoto++;
-			if (giriVuoto < 2 && (tot = feed.getTotalResults()) >= count) {
+			if (giriVuoto < 2 && tot >= count) {
 				System.out.println(tot);
 				getSubscriptions(myService, user, count, giriVuoto);	
 			}
@@ -317,6 +324,7 @@ import java.net.URL;
     private static SubscriptionFeed feed;
     private static URL metafeedUrl;
     private static boolean countTemp;
+    private static int tot;
   }
 
   
