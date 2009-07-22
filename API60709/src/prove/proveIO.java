@@ -6,6 +6,7 @@ import database.DatabaseMySql;
 import database.OutputTxt;
 import download.API;
 import download.ethernet;
+import download.scanUser;
 
 public class proveIO {
 
@@ -15,7 +16,7 @@ public class proveIO {
 		new OutputTxt();
 		new API();
 		YouTubeService myService = new YouTubeService("Tesina");
-		ethernet.checkEthernet("utenti");
-
+		new scanUser(myService);
+		
 	}
 }

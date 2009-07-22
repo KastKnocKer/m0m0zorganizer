@@ -111,7 +111,10 @@ public class DatabaseMySql {
 		try {
 			user =  (DatabaseMySql.eseguiQuery("Select * from " + nomeDB + "." + lista + 
 						" limit 1")).get(0);
-			DatabaseMySql.delete (nomeDB, lista, col, user[0]);
+			if (lista.equals("toCheck"))
+				DatabaseMySql.delete (nomeDB, lista, col, user[1]);
+			else
+				DatabaseMySql.delete (nomeDB, lista, col, user[0]);
 		}
 		catch (ArrayIndexOutOfBoundsException e) {
 			OutputTxt.writeException(e.getLocalizedMessage());
