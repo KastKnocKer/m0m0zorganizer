@@ -24,7 +24,6 @@ public class urlReader  {
     	try {
 	    	metafeedUrl = new URL("http://www.youtube.com/profile?user=" + user + "&view=" + tabella + "&start=" + count);
 	    	Contatore.incUrl();
-	    	System.out.println(metafeedUrl);
 	    	ethernet.checkEthernet("utenti");
 	    	in = new BufferedReader(new InputStreamReader(metafeedUrl.openStream()));
 	    	
@@ -34,20 +33,20 @@ public class urlReader  {
 			    	System.out.println("Cap dei " + tabella + " raggiunto per l'utente " + user + ".");
 			    	return;
 			    }
-				if (inputLine.contains("<div class=\"user-thumb")) {
+				if (inputLine.contains("channel-box-item-count")) {
+			    	 inputLine = inputLine.substring(inputLine.indexOf(">") + 1, inputLine.indexOf("</span>"));
+			    	 tot = Integer.parseInt(inputLine);    	
+			    }
+				else if (inputLine.contains("<div class=\"user-thumb")) {
 			    	inputLine = in.readLine();
 			    	inputLine = inputLine.substring(15, inputLine.indexOf("\" onmousedown"));
 			    	count++;
-			    	if (DatabaseMySql.insert("utenti", tabella , user, inputLine))
+			    	if (DatabaseMySql.insert("utenti", tabella , user, inputLine, tot  + ""))
 			    		System.out.println(count + " : " + ++effettivi + ": Inserimento nella tabella " + tabella + 
 			    				" della tupla: "+ user + " - " + inputLine);
 			    	if(!DatabaseMySql.contiene("utenti", "profile", inputLine))
 			    		DatabaseMySql.inserToCheck("utenti", inputLine);
 				}
-				else if (inputLine.contains("channel-box-item-count")) {
-			    	 inputLine = inputLine.substring(inputLine.indexOf(">") + 1, inputLine.indexOf("</span>"));
-			    	 tot = Integer.parseInt(inputLine);    	
-			    }
 				else if (inputLine.contains("non ha") && count <= 1) {
 					in.close();
 			    	OutputTxt.writeLog("Errore: L' utente " + user + " non ha aggiunto " + tabella + ".");
@@ -72,7 +71,7 @@ public class urlReader  {
 				else if (inputLine.contains("is down for") || inputLine.contains("manutenzione")) {
 					in.close();
 					OutputTxt.writeLog("Youtube down per manutenzione o non al 100%");
-					System.out.println("Youtube down per manutenzione o non al 100%");  
+					System.out.println("Youtube down per manutenzione o non al 100%. Pausa 1 minuto.");  
 					pausa(60, user);
 					return;
 				}
@@ -88,7 +87,7 @@ public class urlReader  {
     	}
     	catch (IOException e) {  
     		if(e.getMessage().contains("Server returned HTTP response code: 50")) {
-				System.out.println("Errore 500+ : servizio non disponibile al momento.");
+				System.out.println("Errore 500+ : servizio non disponibile al momento.. Pausa 5 minuti.");
 				OutputTxt.writeLog("Errore 500+ : servizio non disponibile al momento.");
     			pausa(300, user);
     			return;
@@ -118,7 +117,7 @@ public class urlReader  {
 			System.out.println("PAUSA di 30 minuti per flood URL");
 			try {
 				DatabaseMySql.delete("utenti", "profile", "user", user);
-				DatabaseMySql.inserToCheck("utenti", user, 9999);
+				DatabaseMySql.inserToCheck("utenti", user, -9999);
 				Thread.currentThread();
 				Thread.sleep(1800000);	 // Pausa di 3 minuti e mezzo
 			}
@@ -134,7 +133,7 @@ public class urlReader  {
     	try {
     		System.out.println("Pausa di " + sec + " secondi sull'utente " + user);
     		DatabaseMySql.delete("utenti", "profile", "user", user);
-    		DatabaseMySql.inserToCheck("utenti", user, DatabaseMySql.getMaxPriority() - 3);
+    		DatabaseMySql.inserToCheck("utenti", user, DatabaseMySql.getMinPriority() + 3);
     		Thread.currentThread();
     		Thread.sleep(sec * 1000);	 // Pausa di sec secondi
     	}
@@ -151,14 +150,14 @@ public class urlReader  {
     	System.out.println("GetErrorCode sui " + tabella  + " dell'utente " + user);
 		HttpURLConnection connection;
 		try {		
-			Contatore.incApi();
 			ethernet.checkEthernet("utenti");
+			Contatore.incApi();
 			connection = (HttpURLConnection) url.openConnection();
 			System.out.println((code = connection.getResponseCode()));
 			System.out.println(msg = connection.getResponseMessage());
 			if (code >= 500) {
 				OutputTxt.writeLog("Errore 500+ : servizio non disponibile al momento.");
-				System.out.println("Errore 500+ : servizio non disponibile al momento.");
+				System.out.println("Errore 500+ : servizio non disponibile al momento.. Pausa 5 minuti.");
 				pausa(300, user);
 				return;
 			// Direi di fare una pausa e di richiamare la stessa funzione
@@ -179,6 +178,11 @@ public class urlReader  {
 				OutputTxt.writeLog("Errore 404: User not found: " + user);
 				return; 
 			}
+			else if (msg.contains("request")) {
+				OutputTxt.writeError("Errore bad request all'url: " + url);
+				System.out.println("Errore bad request all'url: " + url);
+				return;
+			}	
 		} catch (IOException e) { 
 			e.printStackTrace();
 			OutputTxt.writeException(e.getLocalizedMessage());

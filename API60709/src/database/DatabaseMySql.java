@@ -125,11 +125,13 @@ public class DatabaseMySql {
 	}
 	
 	public static void inserToCheck (String nomeDB, String user) {
+		if(DatabaseMySql.contiene(nomeDB, "profile", user))
+			return;
 		inserToCheck (nomeDB, user, 0);
 	}
 	
 	public static void inserToCheck (String nomeDB, String user, int num) {
-			DatabaseMySql.eseguiAggiornamento("insert into " + nomeDB + ".toCheck values (\"" + num + "\" , \"" + user + "\") on duplicate key update priority = priority - 1");
+		DatabaseMySql.eseguiAggiornamento("insert into " + nomeDB + ".toCheck values (\"" + num + "\" , \"" + user + "\") on duplicate key update priority = priority - 1");
 		return;
 	}
 	
@@ -150,7 +152,7 @@ public class DatabaseMySql {
 		}
 	}
 	
-	public static int getMaxPriority () {
-		return Integer.parseInt((DatabaseMySql.eseguiQuery("Select MAX(priority) from utenti.toCheck")).get(0)[0].toString());
+	public static int getMinPriority () {
+		return Integer.parseInt((DatabaseMySql.eseguiQuery("Select priority from utenti.toCheck limit 1")).get(0)[0].toString());
 	}
 }

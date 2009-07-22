@@ -18,8 +18,8 @@ import java.net.URL;
 	public static boolean getUser (YouTubeService myService, String status, String user){
 	    try {            	
             metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/users/" + user);
-            Contatore.incApi();
             ethernet.checkEthernet("utenti");
+            Contatore.incApi();
             UserProfileEntry profileEntry = myService.getEntry(metafeedUrl, 
            			UserProfileEntry.class);
             
@@ -28,7 +28,7 @@ import java.net.URL;
            	if(userStats != null) {
            		DatabaseMySql.insert("utenti", "profile", user, status, userStats.getSubscriberCount() + "",
            				userStats.getViewCount() + "", userStats.getVideoWatchCount() + "",
-           				userStats.getLastWebAccess().toUiString());
+           				userStats.getLastWebAccess().toString().substring(0, 19));
            		return true;
            	}
         }
@@ -66,30 +66,29 @@ import java.net.URL;
 		try {
 			metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/users/" + user + "/favorites?max-results=50" 
 			+ "&start-index=" + count);
-			Contatore.incApi();
 			ethernet.checkEthernet("utenti");
+			Contatore.incApi();
 			videoFeed = myService.getFeed(metafeedUrl, VideoFeed.class);
+			tot = videoFeed.getTotalResults();
 			for (VideoEntry videoEntry : videoFeed.getEntries() ) {
 				countTemp = true;
 				if (videoEntry.isDraft()) {
 				 	System.out.println(count  + " : RESTRICTED");
 				}
-				else {					
-					
+				else {						
 					System.out.println(count + " : Inserimento per l'utente " + user + " del favorites " +
 							videoEntry.getMediaGroup().getVideoId() + " : " + 
 							videoEntry.getPublished().toString().substring(0,19));
 					DatabaseMySql.insert("utenti", "favorites", user , videoEntry.getMediaGroup().getVideoId(), 
 							videoEntry.getMediaGroup().getUploader() ,
-							videoEntry.getPublished().toString().substring(0,19));
+							videoEntry.getPublished().toString().substring(0,19), tot + "");
 					System.out.println(videoEntry.getMediaGroup().getUploader());
 				}
 				if (++count == 1001) {
 					return;
 				}
 			}
-			int tot;
-			if ((tot = videoFeed.getTotalResults()) > 1000)
+			if (tot > 1000)
 				tot = 1000;
 			if (!countTemp)
 				giriVuoto++;
@@ -119,9 +118,10 @@ import java.net.URL;
 		try {
 			metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/users/" + user + "/uploads?max-results=50" 
 			+ "&start-index=" + count);
-			Contatore.incApi();
 			ethernet.checkEthernet("utenti");
+			Contatore.incApi();
 			videoFeed = myService.getFeed(metafeedUrl, VideoFeed.class);
+			tot = videoFeed.getTotalResults();
 			for (VideoEntry videoEntry : videoFeed.getEntries() ) {
 				countTemp = true;
 				if (videoEntry.isDraft()) {
@@ -132,13 +132,13 @@ import java.net.URL;
 							videoEntry.getMediaGroup().getVideoId() + " : " + 
 							videoEntry.getPublished().toString().substring(0,19));
 					DatabaseMySql.insert("utenti", "video", user , videoEntry.getMediaGroup().getVideoId(), 
-							videoEntry.getPublished().toString().substring(0,19));
+							videoEntry.getPublished().toString().substring(0,19), tot + "");
 				}
 				if (++count == 1001) {
 					return;
 				}
 			}
-			if ((tot = videoFeed.getTotalResults()) > 1000)
+			if (tot > 1000)
 				tot = 1000;
 			if (!countTemp)
 				giriVuoto++;
@@ -169,8 +169,8 @@ import java.net.URL;
 			metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/events?&max-results=50&start-index=" + count + "&author=" 
 					+ user + "&key=AI39si6Eq4oBSKdw1KHpCX9rhwVpdsxO04VqiFyB13xRa37gbQR3D0i-PBiSqLAi8vfaEya3w95AZFq8T6qbIwQwxVuyaADJsQ");
 			System.out.println(metafeedUrl);
-			Contatore.incApi();
 			ethernet.checkEthernet("utenti");
+			Contatore.incApi();
 			activityFeed = myService.getFeed(metafeedUrl, UserEventFeed.class);
 			if (activityFeed.getEntries().size() == 0) {
 				System.out.println("This feed contains no entries.");
@@ -252,9 +252,10 @@ import java.net.URL;
 			metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/users/" + user + "/subscriptions?max-results=50"  
 				+ "&start-index=" + count);
 			System.out.println(metafeedUrl);
-			Contatore.incApi();
 			ethernet.checkEthernet("utenti");
+			Contatore.incApi();
 			feed = myService.getFeed(metafeedUrl, SubscriptionFeed.class);
+			tot = feed.getTotalResults();
 			for(SubscriptionEntry entry : feed.getEntries()) {
 				countTemp = true;
 				temp = entry.getTitle().getPlainText();
@@ -268,13 +269,14 @@ import java.net.URL;
 				}
 				System.out.println(count + " : Inserimento per l'utente " + user + "della subscritions a" +
 						temp + " : " + entry.getPublished().toString().substring(0,19));
-				DatabaseMySql.insert("utenti","subscriptions",user, temp, entry.getPublished().toString().substring(0,19));
+				DatabaseMySql.insert("utenti","subscriptions",user, temp, 
+						entry.getPublished().toString().substring(0,19), tot + "");
 				System.out.println(temp + " : " + entry.getPublished().toString().substring(0,19));
 				if(!DatabaseMySql.contiene("utenti", "profile", temp))
 					DatabaseMySql.inserToCheck("utenti", temp);
 				count++;
 			}
-			if ((tot = feed.getTotalResults()) > 1000)
+			if (tot > 1000)
 				tot = 1000;
 			if (!countTemp)
 				giriVuoto++;
@@ -307,7 +309,7 @@ import java.net.URL;
 		Contatore.setUrl(0);
 		try {
 			DatabaseMySql.delete("utenti", "profile", "user", user);
-			DatabaseMySql.inserToCheck("utenti", user, 9999);
+			DatabaseMySql.inserToCheck("utenti", user, -9999);
 			Thread.currentThread();
 			Thread.sleep(331000);	 // Pausa di 3 minuti e mezzo
 		}

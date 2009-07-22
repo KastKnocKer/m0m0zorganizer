@@ -25,18 +25,24 @@ public class scanUser {
 			System.out.println(userToCheck);
 			if (!DatabaseMySql.contiene("utenti", "profile", userToCheck)) {  // L'ho già fatto?
 				if (API.getActivity(myService, userToCheck)) {	// Ha activityFeed?
-					if (API.getUser(myService, "active", userToCheck))			// E' un utente sospeso?  No --> active
+					if (API.getUser(myService, "active", userToCheck)) {			// E' un utente sospeso?  No --> active
 						completeScan(myService, userToCheck);	// Si attivo scansione completa senza activity
+						temp++;
+					}
 					else 		// Non è attivo lo tolgo dagli active e lo metto negli inactive
 						DatabaseMySql.insert("utenti", "profile", userToCheck, "blocked", "block", "block", "block", "block");
-					temp++;
 					}
 				else
 					if (!API.getUser(myService, "inactive", userToCheck))
 						DatabaseMySql.insert("utenti", "profile", userToCheck, "blocked", "block", "block", "block", "block");
 			}
-			if (temp == 30)
+			if (temp == 100) {
+				OutputTxt.writeLog("User scansionati   totale: " + DatabaseMySql.getCount("utenti", "profile"));
+				OutputTxt.writeLog("User scansionati   attivi: " + DatabaseMySql.eseguiQuery("Select count(*) from utenti.profile where status='active'").get(0)[0]);
+				OutputTxt.writeLog("User scansionati inattivi: " + DatabaseMySql.eseguiQuery("Select count(*) from utenti.profile where status='inactive'").get(0)[0]);
+				OutputTxt.writeLog("User scansionati bloccati: " + DatabaseMySql.eseguiQuery("Select count(*) from utenti.profile where status='blocked'").get(0)[0]);
 				return;
+			}
 		}
 	}
 	
