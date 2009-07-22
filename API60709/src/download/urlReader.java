@@ -99,7 +99,11 @@ public class urlReader  {
     		OutputTxt.writeException("Errore CONOSCIUTO E CONTROLLATO " + tabella + "Reader dell'utente: " + user);	
     		// Pensare come gestire: farei controllo se ci sono amici/subscribers nel db o se no segnalo no amici/sub
     	}
-    	try {in.close();} catch (IOException e) {}
+    	try {
+    		in.close();
+    	} catch (IOException e) {
+    		OutputTxt.writeError("Errire IO nella  " + tabella + " reader dell'utente " + user);
+    	}
     	System.out.println("Fine del " + tabella + " reader dell'utente " + user);
     	return;
     }

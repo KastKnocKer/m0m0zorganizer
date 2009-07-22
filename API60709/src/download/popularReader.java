@@ -63,7 +63,11 @@ public class popularReader {
 			OutputTxt.writeLog("Errore nel download dei canali più popolari del " + time);
 			urlReader.getErrorCode("activity", metafeedUrl, "utenti");
 		}
-		try {in.close();} catch (IOException e) {}
+		try {
+			in.close();
+		} catch (IOException e) {
+			OutputTxt.writeError ("Errore nel download dei canali più popolari del " + time);
+		}
 		return;
 	}
 	    

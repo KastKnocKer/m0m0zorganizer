@@ -1,6 +1,7 @@
 
 import java.io.*;
 import database.DatabaseMySql;
+import database.OutputTxt;
 import download.ethernet;
 
 public class padreExec {
@@ -12,7 +13,7 @@ public class padreExec {
 
 		DatabaseMySql.eseguiAggiornamento("insert into utenti.ethernet values (\"eth\", \"false\")");
 		boolean flagEth = true; 		    // true eth0 up eth1 down     false eth0 down eth1 up
-		ethernet.switchTo("utenti",false); 	// Se ho true sono a eth0 up e switho a eth1 e viceversa		
+		//ethernet.switchTo("utenti",false); 	// Se ho true sono a eth0 up e switho a eth1 e viceversa		
 		try {
 			pb = new ProcessBuilder ("/home/m0m0z/Scrivania/tesina_exec/start.sh");
 			Process starter = pb.start ();
@@ -21,15 +22,15 @@ public class padreExec {
 			while ((line = in.readLine()) != null)	{
 				System.out.println(line);
 			}
-			try	{
+			/*	try	{
 				starter.waitFor ();
 			}
 			catch (Exception e)	{
-				System.out.println(e);
-			}
+				OutputTxt.writeError("Errore exception nel try start del padreExec.");
+			} */
 		}
 		catch (IOException e) {
-			System.out.println(e);
+			OutputTxt.writeError("Errore IO nel try start del figlioExec.");
 		}  
 		Process scanner;
 		pb.command ("/home/m0m0z/Scrivania/tesina_exec/scanPopular.sh");
@@ -41,16 +42,16 @@ public class padreExec {
 				while ((line = in.readLine()) != null)	{
 					System.out.println(line);
 				}
-				try {
+				/*			try {
 					scanner.waitFor();
 				}
 				catch (Exception e1) {
-					e1.printStackTrace();
-				}
-				ethernet.switchTo("utenti", flagEth);
+					OutputTxt.writeError("Errore exception nel try scanPopular del padreExec.");
+				} */
+			//	ethernet.switchTo("utenti", flagEth);
 				flagEth = !flagEth;
 			} catch (IOException e) {
-				e.printStackTrace();
+				OutputTxt.writeError("Errore IO nel try scanPopular del padreExec.");
 			}
 		}
 		pb.command ("/home/m0m0z/Scrivania/tesina_exec/scanUser.sh");
@@ -62,16 +63,16 @@ public class padreExec {
 				while ((line = in.readLine()) != null)	{
 					System.out.println(line);
 				}
-				try {
+				/*		try {
 					scanner.waitFor();
 				}
 				catch (Exception e1) {
-					e1.printStackTrace();
-				}
+					OutputTxt.writeError("Errore exception nel try scanUser del padreExec.");
+				} */
 				ethernet.switchTo("utenti", flagEth);
 				flagEth = !flagEth;
 			} catch (IOException e) {
-				e.printStackTrace();
+				OutputTxt.writeError("Errore IO nel try scanUser del padreExec.");
 			}
 		}
 	}

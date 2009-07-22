@@ -3,6 +3,7 @@
 import java.io.*;
 
 import database.DatabaseMySql;
+import database.OutputTxt;
 
 public class figlioExec {
 
@@ -22,15 +23,15 @@ public class figlioExec {
 			while ((line = in.readLine()) != null)	{
 				System.out.println(line);
 			}
-			try	{
+	/*		try	{
 				starter.waitFor ();
 			}
 			catch (Exception e)	{
-				System.out.println(e);
-			}
+				OutputTxt.writeError("Errore exception nel try scanPopular del figlioExec.");
+			} */
 		}
 		catch (IOException e) {
-			System.out.println(e);
+			OutputTxt.writeError("Errore IO nel try scanPopular del figlioExec.");
 		}  
 		Process scanner;
 		pb.command ("/home/m0m0z/Scrivania/tesina_exec/scanUser.sh");
@@ -42,14 +43,14 @@ public class figlioExec {
 				while ((line = in.readLine()) != null)	{
 					System.out.println(line);
 				}
-				try {
+				/*	try {
 					scanner.waitFor();
 				}
 				catch (Exception e1) {
-					e1.printStackTrace();
-				}
+					OutputTxt.writeError("Errore exception nel try scanUser del figlioExec.");
+				} */
 			} catch (IOException e) {
-				e.printStackTrace();
+				OutputTxt.writeError("Errore IO nel try scanUserdel figlioExec.");
 			}
 		}
 	}

@@ -16,7 +16,11 @@ public class ethernet {
 		try {
 			System.out.println("Avvio switching ethernet..Attendere..");
 			DatabaseMySql.eseguiAggiornamento("update utenti.ethernet set flag ='false'");
-			try {Thread.sleep(7500);} catch (InterruptedException e2) {}
+			try {
+				Thread.sleep(7500);	
+			} catch (InterruptedException e2) {
+				OutputTxt.writeError("Errore di interrupt nel primo timer dello switchEthernet");
+			}
 			if (flag) {
 				pb = new ProcessBuilder ("/home/m0m0z/Scrivania/tesina_exec/switch_to_eth1.sh");
 				System.out.println("Switch from eth0 to eth1");
@@ -33,17 +37,16 @@ public class ethernet {
 			while ((line = in.readLine()) != null)	{
 				System.out.println(line);
 			}
-			try {
-				Thread.sleep(7500);
-				DatabaseMySql.eseguiAggiornamento("update utenti.ethernet set flag ='true'");
-			} catch (InterruptedException e1) {}
-			try	{scanner.waitFor ();} catch (Exception e) {System.out.println(e);}
+		} catch (IOException e) { OutputTxt.writeError("Errore di IO nello switchEthernet");
 		}
-		catch (IOException e) {
-			System.out.println(e);
-		}  
-	
+		try {
+			Thread.sleep(7500);
+			DatabaseMySql.eseguiAggiornamento("update utenti.ethernet set flag ='true'");
+		} catch (InterruptedException e1) {
+			OutputTxt.writeError("Errore di interrupt nel secondo timer dello switchEthernet");
+		}
 	}
+			
 	
 	public static void checkEthernet (String nomeDB) {
 		try {
@@ -54,11 +57,14 @@ public class ethernet {
 					try {
 						System.out.println("Ethernet switching..Attendere..");
 						Thread.sleep(1000);	
-					} catch (InterruptedException e1) {}
+					} catch (InterruptedException e1) { 
+						OutputTxt.writeError("Errore di interrupt nel timer del checkEthernet");}
 				}
 			}
 		} catch (ArrayIndexOutOfBoundsException e) { 
-			try {Thread.sleep(1000);} catch (InterruptedException e1) {}
+			try {Thread.sleep(1000);} catch (InterruptedException e1) {
+				OutputTxt.writeError("Errore di interrupt nel timer del checkEthernet");
+			}
 			System.out.println("Possibile switching ethernet..Controllo in corso..");
 			checkEthernet(nomeDB);			
 		}

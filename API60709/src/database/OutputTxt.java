@@ -54,6 +54,22 @@ public class OutputTxt {
 		}
 		return;
 	}
+	
+	public static void writeError (String check) {
+		try {			
+			logWriter = new BufferedWriter(new FileWriter("./Error", true));
+			new Orario();
+			System.out.println(Orario.getDataOra() + ": " + check);
+			logWriter.write(Orario.getDataOra() + ": " + check);
+			logWriter.newLine();			
+			logWriter.flush();
+			logWriter.close();
+		} catch (IOException e) {
+			System.out.println("Errore nel writeError");
+			e.printStackTrace();
+		}
+		return;
+	}
 	 
 	public static void writeException (String check) {
 		try {			
