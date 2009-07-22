@@ -30,7 +30,7 @@ public class scanPopular {
 						DatabaseMySql.insert("utenti", "profile", popularToCheck, "blocked", "block", "block", "block", "block");
 				temp++;
 			}
-			if (temp == 2)
+			if (temp == 30)
 				return;
 		}
 	}
