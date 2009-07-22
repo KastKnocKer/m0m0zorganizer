@@ -1,6 +1,6 @@
 package prove;
 
-import com.google.gdata.client.youtube.YouTubeService;
+//import com.google.gdata.client.youtube.YouTubeService;
 
 import database.DatabaseMySql;
 import database.OutputTxt;
