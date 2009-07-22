@@ -11,10 +11,12 @@ public class padreExec {
 		DatabaseMySql.connetti();	// Connessione al database
 		ProcessBuilder pb = null;
 
-		DatabaseMySql.eseguiAggiornamento("insert into utenti.ethernet values (\"eth\", \"false\")");
+		DatabaseMySql.eseguiAggiornamento("insert into utenti.ethernet values (\"padre\", \"false\")");
+		DatabaseMySql.eseguiAggiornamento("insert into utenti.ethernet values (\"figlio\", \"false\")");
 		boolean flagEth = true; 		    // true eth0 up eth1 down     false eth0 down eth1 up
-		//ethernet.switchTo("utenti",false); 	// Se ho true sono a eth0 up e switho a eth1 e viceversa		
-		try {
+		ethernet.switchTo("utenti",false); 	// Se ho true sono a eth0 up e switho a eth1 e viceversa	
+		DatabaseMySql.eseguiAggiornamento("update utenti.ethernet set flag ='true' where rete='figlio'");
+		try {			
 			pb = new ProcessBuilder ("/home/m0m0z/Scrivania/tesina_exec/start.sh");
 			Process starter = pb.start ();
 			BufferedReader in = new BufferedReader(	new InputStreamReader(starter.getInputStream()));
@@ -22,15 +24,15 @@ public class padreExec {
 			while ((line = in.readLine()) != null)	{
 				System.out.println(line);
 			}
-			/*	try	{
+		/*		try	{
 				starter.waitFor ();
 			}
 			catch (Exception e)	{
 				OutputTxt.writeError("Errore exception nel try start del padreExec.");
-			} */
+			} */ 
 		}
 		catch (IOException e) {
-			OutputTxt.writeError("Errore IO nel try start del figlioExec.");
+			OutputTxt.writeError("Errore IO nel try start del padreExec.");
 		}  
 		Process scanner;
 		pb.command ("/home/m0m0z/Scrivania/tesina_exec/scanPopular.sh");
@@ -48,7 +50,7 @@ public class padreExec {
 				catch (Exception e1) {
 					OutputTxt.writeError("Errore exception nel try scanPopular del padreExec.");
 				} */
-			//	ethernet.switchTo("utenti", flagEth);
+				ethernet.switchTo("utenti", flagEth);
 				flagEth = !flagEth;
 			} catch (IOException e) {
 				OutputTxt.writeError("Errore IO nel try scanPopular del padreExec.");

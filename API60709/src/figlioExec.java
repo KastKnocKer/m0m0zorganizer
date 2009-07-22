@@ -12,10 +12,6 @@ public class figlioExec {
 		DatabaseMySql.connetti();	// Connessione al database
 		ProcessBuilder pb = null;
 		try {
-			try {
-				Thread.sleep(15000);
-			} catch (InterruptedException e) {e.printStackTrace();}
-			
 			pb = new ProcessBuilder ("/home/m0m0z/Scrivania/tesina_exec/scanPopular.sh");
 			Process starter = pb.start ();
 			BufferedReader in = new BufferedReader(	new InputStreamReader(starter.getInputStream()));
