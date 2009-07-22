@@ -7,7 +7,7 @@ import database.OutputTxt;
 
 public class scanUser {
 	
-	public scanUser (YouTubeService myService) {
+	public scanUser (YouTubeService myService, String ClientID, String devKey) {
 		new DatabaseMySql();		// Definisco il database per tutto il programma
 		DatabaseMySql.connetti();	// Connessione al database
 		new OutputTxt(); 			// Definisco il FileHandler per tutto il programma
@@ -15,25 +15,25 @@ public class scanUser {
 		
 		new API();
 		
-		toCheck(myService);
+		toCheck(myService, ClientID, devKey);
 	}
 	
-	public static void toCheck(YouTubeService myService) {
+	public static void toCheck(YouTubeService myService, String ClientID , String devKey) {
 		int temp = 0;
 		String userToCheck;	
 		for (; (userToCheck = (DatabaseMySql.extract("utenti", "toCheck", "user"))[1]) != null ;) {
 			System.out.println(userToCheck);
 			if (!DatabaseMySql.contiene("utenti", "profile", userToCheck)) {  // L'ho già fatto?
-				if (API.getActivity(myService, userToCheck)) {	// Ha activityFeed?
-					if (API.getUser(myService, "active", userToCheck)) {			// E' un utente sospeso?  No --> active
-						completeScan(myService, userToCheck);	// Si attivo scansione completa senza activity
+				if (API.getActivity(myService, ClientID, devKey, userToCheck)) {	// Ha activityFeed?
+					if (API.getUser(myService, ClientID, devKey, "active", userToCheck)) {			// E' un utente sospeso?  No --> active
+						completeScan(myService, ClientID, devKey, userToCheck);	// Si attivo scansione completa senza activity
 						temp++;
 					}
 					else 		// Non è attivo lo tolgo dagli active e lo metto negli inactive
 						DatabaseMySql.insert("utenti", "profile", userToCheck, "blocked", "block", "block", "block", "block");
 					}
 				else
-					if (!API.getUser(myService, "inactive", userToCheck))
+					if (!API.getUser(myService, ClientID, devKey, "inactive", userToCheck))
 						DatabaseMySql.insert("utenti", "profile", userToCheck, "blocked", "block", "block", "block", "block");
 			}
 			if (temp == 100) {
@@ -47,13 +47,13 @@ public class scanUser {
 	}
 	
 	
-	public static void completeScan(YouTubeService myService, String user) {
+	public static void completeScan(YouTubeService myService, String ClientID, String devKey, String user) {
 		// if (Contatore.checkCompleteScan())  PENSARE SE METTERLO
-		API.getVideo(myService, user);		// Alternati in modo da limitare i flood di rete
+		API.getVideo(myService, ClientID, devKey, user);		// Alternati in modo da limitare i flood di rete
 		urlReader.userReader("subscribers", user);	
-		API.getFavorites(myService, user);
+		API.getFavorites(myService, ClientID, devKey, user);
 		urlReader.userReader("friends", user);
-		API.getSubscriptions(myService, user);
+		API.getSubscriptions(myService, ClientID, devKey, user);
 	}
 	/*
 	public static void inactive() {

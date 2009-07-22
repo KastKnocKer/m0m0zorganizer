@@ -15,9 +15,9 @@ import java.net.URL;
 	  
 	public API () {}
 	 
-	public static boolean getUser (YouTubeService myService, String status, String user){
+	public static boolean getUser (YouTubeService myService, String ClientID, String devKey, String status, String user){
 	    try {            	
-            metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/users/" + user);
+            metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/users/" + user + "?client=" + ClientID + "&key=" + devKey);
             ethernet.checkEthernet("utenti");
             Contatore.incApi();
             UserProfileEntry profileEntry = myService.getEntry(metafeedUrl, 
@@ -57,15 +57,15 @@ import java.net.URL;
 		return false;
 	}
 	
-	public static void getFavorites (YouTubeService myService, String user) {
-		getFavorites(myService, user,1, 0);
+	public static void getFavorites (YouTubeService myService, String ClientID, String devKey, String user) {
+		getFavorites(myService, ClientID, devKey, user,1, 0);
 	}
 	
-	public static void getFavorites (YouTubeService myService, String user, int count, int giriVuoto) {
+	public static void getFavorites (YouTubeService myService, String ClientID, String devKey, String user, int count, int giriVuoto) {
 		countTemp = false;
 		try {
-			metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/users/" + user + "/favorites?max-results=50" 
-			+ "&start-index=" + count);
+			metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/users/" + user + "/favorites?client=" + ClientID + "&key=" + devKey +
+					"&max-results=50&start-index=" + count );
 			ethernet.checkEthernet("utenti");
 			Contatore.incApi();
 			videoFeed = myService.getFeed(metafeedUrl, VideoFeed.class);
@@ -94,7 +94,7 @@ import java.net.URL;
 				giriVuoto++;
 			if (giriVuoto < 2 && tot >= count) {
 				System.out.println(tot);
-				getFavorites( myService, user, count, giriVuoto);
+				getFavorites(myService, ClientID, devKey, user, count, giriVuoto);
 			}
 			else 
 				return;
@@ -109,15 +109,15 @@ import java.net.URL;
         }
 	}
 	
-	public static void getVideo (YouTubeService myService, String user) {
-		getVideo(myService, user,1, 0);
+	public static void getVideo (YouTubeService myService, String ClientID, String devKey, String user) {
+		getVideo(myService, ClientID, devKey, user,1, 0);
 	}
 	
-	public static void getVideo (YouTubeService myService, String user, int count, int giriVuoto) {
+	public static void getVideo (YouTubeService myService, String ClientID, String devKey, String user, int count, int giriVuoto) {
 		countTemp = false;
 		try {
-			metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/users/" + user + "/uploads?max-results=50" 
-			+ "&start-index=" + count);
+			metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/users/" + user + "/uploads?client=" + ClientID + "&key=" + devKey +
+					"&max-results=50&start-index=" + count);
 			ethernet.checkEthernet("utenti");
 			Contatore.incApi();
 			videoFeed = myService.getFeed(metafeedUrl, VideoFeed.class);
@@ -144,7 +144,7 @@ import java.net.URL;
 				giriVuoto++;
 			if (giriVuoto < 2 && tot >= count) {
 				System.out.println(tot);
-				getVideo( myService, user, count, giriVuoto);
+				getVideo(myService, ClientID, devKey, user, count, giriVuoto);
 			}
 			else 
 				return;
@@ -159,15 +159,15 @@ import java.net.URL;
         }
 	}
 	
-	public static boolean getActivity (YouTubeService myService, String user) {
-		return getActivity(myService, user,1, 0);
+	public static boolean getActivity (YouTubeService myService, String ClientID, String devKey, String user) {
+		return getActivity(myService, ClientID, devKey, user,1, 0);
 	}
 	
-	public static boolean getActivity (YouTubeService myService, String user, int count, int giriVuoto) {
+	public static boolean getActivity (YouTubeService myService, String ClientID, String devKey, String user, int count, int giriVuoto) {
 		countTemp = false;
 		try {
 			metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/events?&max-results=50&start-index=" + count + "&author=" 
-					+ user + "&key=AI39si6Eq4oBSKdw1KHpCX9rhwVpdsxO04VqiFyB13xRa37gbQR3D0i-PBiSqLAi8vfaEya3w95AZFq8T6qbIwQwxVuyaADJsQ");
+					+ user + "?client=" + ClientID + "&key=" + devKey);
 			System.out.println(metafeedUrl);
 			ethernet.checkEthernet("utenti");
 			Contatore.incApi();
@@ -224,7 +224,7 @@ import java.net.URL;
 				giriVuoto++;
 			if (giriVuoto < 2 && tot >= count) {
 				System.out.println(tot);
-				getActivity(myService, user, count, giriVuoto);
+				getActivity(myService, ClientID, devKey, user, count, giriVuoto);
 				return true;
 			}
 		} catch (MalformedURLException e) {
@@ -241,16 +241,17 @@ import java.net.URL;
 			return true;
 		return false;
 		}
-	public static void getSubscriptions (YouTubeService myService, String user) {
-			getSubscriptions(myService, user, 1,0 );
+	
+	public static void getSubscriptions (YouTubeService myService, String ClientID, String devKey, String user) {
+			getSubscriptions(myService, ClientID, devKey, user, 1,0 );
 	}
 	
-	public static void getSubscriptions (YouTubeService myService, String user, int count, int giriVuoto) {
+	public static void getSubscriptions (YouTubeService myService, String ClientID, String devKey, String user, int count, int giriVuoto) {
 		String temp;
 		countTemp = false;
 		try {
-			metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/users/" + user + "/subscriptions?max-results=50"  
-				+ "&start-index=" + count);
+			metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/users/" + user + "/subscriptions?client=" + ClientID + "&key=" + devKey +
+					"&max-results=50&start-index=" + count);
 			System.out.println(metafeedUrl);
 			ethernet.checkEthernet("utenti");
 			Contatore.incApi();
@@ -282,7 +283,7 @@ import java.net.URL;
 				giriVuoto++;
 			if (giriVuoto < 2 && tot >= count) {
 				System.out.println(tot);
-				getSubscriptions(myService, user, count, giriVuoto);	
+				getSubscriptions(myService, ClientID, devKey, user, count, giriVuoto);	
 			}
 			else
 				return;
