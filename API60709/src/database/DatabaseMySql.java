@@ -125,8 +125,8 @@ public class DatabaseMySql {
 	}
 	
 	public static void inserToCheck (String nomeDB, String user) {
-		if(DatabaseMySql.contiene(nomeDB, "profile", user))
-			return;
+		//if(DatabaseMySql.contiene(nomeDB, "profile", user))
+		//	return;
 		inserToCheck (nomeDB, user, 0);
 	}
 	

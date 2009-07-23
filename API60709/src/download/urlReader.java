@@ -12,10 +12,10 @@ public class urlReader  {
 	public urlReader () { }
 	
 	public static void userReader (String tabella, String user) {
-		userReader (tabella, user, 0, 0);
+		userReader (tabella, user, 0);
 	}
 	
-    public static void userReader (String tabella, String user, int count, int effettivi) {
+    public static void userReader (String tabella, String user, int count) {
     	if (!tabella.equals("subscribers") && !tabella.equals("friends")) {
     		System.out.println("Errore utente: Inserire correttamente parametro tabella nel " + tabella + 
     				"Reader dell'utente" + user);
@@ -26,7 +26,7 @@ public class urlReader  {
 	    	ethernet.checkEthernet("utenti");
 	    	Contatore.incUrl();
 	    	in = new BufferedReader(new InputStreamReader(metafeedUrl.openStream()));
-	    	
+	    	System.out.println("\t\t\t\t\t\t\t\t\t\t\t\tPacchetto arrivato.");
 			while ((inputLine = in.readLine()) != null) {
 				if (count != 0 && (count == 1008 || count == tot)) {
 			    	in.close();
@@ -62,9 +62,9 @@ public class urlReader  {
 			    }
 			    else if (inputLine.equals("</html>") && count != 0 && count < tot) {
 			    	in.close();
-			    	System.out.println("Totale " + tabella + " scaricati per l'utente " + user + ": " + count + " : " + effettivi);
-			    	System.out.println("Totale " + tabella + " per l'utente: " + user);
-			    	userReader(tabella, user, count, effettivi);
+			    	System.out.println(tabella + "dell'user " + user + " scaricati fino al num: " + count + ".");
+			    	System.out.println("\t\t\t\t\tTotale " + tabella + " per l'utente: " + user);
+			    	userReader(tabella, user, count);
 			    	return;
 			    }
 				else if (inputLine.contains("is down for") || inputLine.contains("manutenzione")) {

@@ -22,7 +22,7 @@ import java.net.URL;
             Contatore.incApi();
             UserProfileEntry profileEntry = myService.getEntry(metafeedUrl, 
            			UserProfileEntry.class);
-            
+	    	System.out.println("\t\t\t\t\t\t\t\t\t\t\t\tPacchetto arrivato.");            
            	System.out.println("Profilo scaricato per l'utente: " + profileEntry.getUsername());           	
            	userStats = profileEntry.getStatistics();
            	if(userStats != null) {
@@ -69,6 +69,7 @@ import java.net.URL;
 			ethernet.checkEthernet("utenti");
 			Contatore.incApi();
 			videoFeed = myService.getFeed(metafeedUrl, VideoFeed.class);
+	    	System.out.println("\t\t\t\t\t\t\t\t\t\t\t\tPacchetto arrivato.");
 			tot = videoFeed.getTotalResults();
 			for (VideoEntry videoEntry : videoFeed.getEntries() ) {
 				countTemp = true;
@@ -87,7 +88,7 @@ import java.net.URL;
 			if (!countTemp)
 				giriVuoto++;
 			if (giriVuoto < 2 && tot >= count) {
-				System.out.println("Totale favorites per l'user " + user + ": " + tot);
+				System.out.println("\t\t\t\t\tTotale favorites per l'user " + user + ": " + tot);
 				getFavorites(myService, devKey, user, count, giriVuoto);
 			}
 			else 
@@ -115,6 +116,7 @@ import java.net.URL;
 			ethernet.checkEthernet("utenti");
 			Contatore.incApi();
 			videoFeed = myService.getFeed(metafeedUrl, VideoFeed.class);
+	    	System.out.println("\t\t\t\t\t\t\t\t\t\t\t\tPacchetto arrivato.");
 			tot = videoFeed.getTotalResults();
 			for (VideoEntry videoEntry : videoFeed.getEntries() ) {
 				countTemp = true;
@@ -132,7 +134,7 @@ import java.net.URL;
 			if (!countTemp)
 				giriVuoto++;
 			if (giriVuoto < 2 && tot >= count) {
-				System.out.println("Totale video per l'user " + user + ": " + tot);
+				System.out.println("\t\t\t\t\tTotale video per l'user " + user + ": " + tot);
 				getVideo(myService, devKey, user, count, giriVuoto);
 			}
 			else 
@@ -155,11 +157,12 @@ import java.net.URL;
 	public static boolean getActivity (YouTubeService myService, String devKey, String user, int count, int giriVuoto) {
 		countTemp = false;
 		try {
-			metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/events?max-results=50&start-index=" + count + "&author=" 
+			metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/events?v=2&max-results=50&start-index=" + count + "&author=" 
 					+ user + "&key=" + devKey);
 			ethernet.checkEthernet("utenti");
 			Contatore.incApi();
 			activityFeed = myService.getFeed(metafeedUrl, UserEventFeed.class);
+	    	System.out.println("\t\t\t\t\t\t\t\t\t\t\t\tPacchetto arrivato.");
 			if (activityFeed.getEntries().size() == 0) {
 				System.out.println("This feed contains no entries.");
 				return false;
@@ -203,7 +206,7 @@ import java.net.URL;
 			if (!countTemp)
 				giriVuoto++;
 			if (giriVuoto < 2 && tot >= count) {
-				System.out.println("Totale activity per l'user " + user + ": " + tot);
+				System.out.println("\t\t\t\t\tTotale activity per l'user " + user + ": " + tot);
 				getActivity(myService, devKey, user, count, giriVuoto);
 				return true;
 			}
@@ -234,6 +237,7 @@ import java.net.URL;
 			ethernet.checkEthernet("utenti");
 			Contatore.incApi();
 			feed = myService.getFeed(metafeedUrl, SubscriptionFeed.class);
+	    	System.out.println("\t\t\t\t\t\t\t\t\t\t\t\tPacchetto arrivato.");
 			tot = feed.getTotalResults();
 			for(SubscriptionEntry entry : feed.getEntries()) {
 				countTemp = true;
@@ -257,7 +261,7 @@ import java.net.URL;
 			if (!countTemp)
 				giriVuoto++;
 			if (giriVuoto < 2 && tot >= count) {
-				System.out.println("Totale subscription per l'user " + user + ": " + tot);
+				System.out.println("\t\t\t\t\tTotale subscription per l'user " + user + ": " + tot);
 				getSubscriptions(myService, devKey, user, count, giriVuoto);	
 			}
 			else
@@ -277,9 +281,9 @@ import java.net.URL;
     	OutputTxt.writeLog("Errore 403: Rete floodata dalle API dall'user " + user);    // DA RIFAREEEEE
     	System.out.println("Errore 403: Rete floodata dalle API dall'user " + user);
 		OutputTxt.writeLog("Richieste API: " + Contatore.getApi());
-		OutputTxt.writeLog("Totale    API: " + Contatore.getTotApi());
+		OutputTxt.writeLog("\t\t\t\t\tTotale    API: " + Contatore.getTotApi());
 		OutputTxt.writeLog("Richieste URL: " + Contatore.getUrl());
-		OutputTxt.writeLog("Totale    URL: " + Contatore.getTotUrl());
+		OutputTxt.writeLog("\t\t\t\t\tTotale    URL: " + Contatore.getTotUrl());
 		System.out.println("PAUSA di 331 secondi per flood API");
 		Contatore.setApi(0);
 		Contatore.setUrl(0);
