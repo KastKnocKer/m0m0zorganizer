@@ -62,6 +62,8 @@ public class urlReader  {
 			    }
 			    else if (inputLine.equals("</html>") && count != 0 && count < tot) {
 			    	in.close();
+			    	System.out.println("Totale " + tabella + " scaricati per l'utente " + user + ": " + count + " : " + effettivi);
+			    	System.out.println("Totale " + tabella + " per l'utente: " + user);
 			    	userReader(tabella, user, count, effettivi);
 			    	return;
 			    }
@@ -73,10 +75,8 @@ public class urlReader  {
 					return;
 				}
 				else if (inputLine.contains("Siamo spiacenti per l'interruzione"))
-					notifyUrlFlood(inputLine, user);
-				
+					notifyUrlFlood(inputLine, user);				
 			}
-			System.out.println("Totale " + tabella + " scaricati per l'utente " + user + ": " + count + " : " + effettivi);
     	}
     	catch (MalformedURLException e) { 
     		e.printStackTrace();
