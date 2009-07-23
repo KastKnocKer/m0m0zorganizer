@@ -13,18 +13,16 @@ public class Contatore {
 	
 	public static void incApi () {	// Ritorna true se ha incrementato con successo
 		Api++;
-		System.out.println("\t Richiesta Api num: " + Api);
 		totApi++;
-		System.out.println("\t Totale Api num: " + totApi);
+		System.out.println("\t Richiesta Api parziali: " + Api + "\t Totale Api num: " + totApi);
+
 
 	}
 
 	public static void incUrl () {
 		Url++;
-		System.out.println("\t Richiesta Url num: " + Url);
-		totUrl++;
-		System.out.println("\t Totale Url num: " + totUrl);
-
+		totUrl++;		
+		System.out.println("\t Richiesta Url parziali: " + Url + "\t Totale Url num: " + totUrl);
 	}
 	
 	public static String getApi () {
