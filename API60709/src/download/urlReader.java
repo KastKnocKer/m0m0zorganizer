@@ -12,6 +12,8 @@ public class urlReader  {
 	public urlReader () { }
 	
 	public static void userReader (String tabella, String user) {
+
+		System.out.println("\nAnalisi dei " + tabella + " dell' utente " + user);
 		userReader (tabella, user, 0);
 	}
 	
