@@ -21,10 +21,9 @@ public class crawlerPopular {
 		System.out.println("AVVIO NUOVO FILE");
 		System.out.println("AVVIO NUOVO FILE");
 		
-		String devKey = "AI39si58jSnL3JZGLEl65owXd86CA5G-s_LR4nSUNEWCXl1LS7-5tkbZXJkw5Ow_I58NlRg1PPSKqkf16h96r9j_cqZE3tsuqg";
-		YouTubeService myService = new YouTubeService("Tesi", devKey);
+		YouTubeService myService = new YouTubeService("Tesi");
 		
-		new scanPopular(myService, devKey);
+		new scanPopular(myService, DatabaseMySql.eseguiQuery("Select key from utenti.key where numero='dev'").get(0)[0]);
 		
 		DatabaseMySql.Disconnetti();
 	}

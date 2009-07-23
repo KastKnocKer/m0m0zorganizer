@@ -24,10 +24,9 @@ public class crawlerUser {
 		System.out.println("AVVIO NUOVO FILE");
 		OutputTxt.writeLog("Nuovo crawler user");
 		
-		String devKey = "AI39si58jSnL3JZGLEl65owXd86CA5G-s_LR4nSUNEWCXl1LS7-5tkbZXJkw5Ow_I58NlRg1PPSKqkf16h96r9j_cqZE3tsuqg";
-		YouTubeService myService = new YouTubeService("Tesi", devKey);
+		YouTubeService myService = new YouTubeService("Tesi");
 		
-		new scanUser(myService, devKey);
+		new scanUser(myService, DatabaseMySql.eseguiQuery("Select key from utenti.ethernet where rete ='dev'").get(0)[0]);
 		
 		DatabaseMySql.Disconnetti();
 	}
