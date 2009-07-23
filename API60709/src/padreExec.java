@@ -7,16 +7,18 @@ import download.ethernet;
 public class padreExec {
 
 	public static void main(String[] args) {
+		int n = 0;
 		new DatabaseMySql();		// Definisco il database per tutto il programma
 		DatabaseMySql.connetti();	// Connessione al database
 		ProcessBuilder pb = null;
 
+		String[] key = new String[4];
+		key[0] = "AI39si6Eq4oBSKdw1KHpCX9rhwVpdsxO04VqiFyB13xRa37gbQR3D0i-PBiSqLAi8vfaEya3w95AZFq8T6qbIwQwxVuyaADJsQ";
+		key[1] = "AI39si58jSnL3JZGLEl65owXd86CA5G-s_LR4nSUNEWCXl1LS7-5tkbZXJkw5Ow_I58NlRg1PPSKqkf16h96r9j_cqZE3tsuqg";
+		key[2] = "AI39si647HsBMmuW7FnWtDwb037yfACgX-FcXaHuMZXfTUH37tw8DawMPmWgbO-CeSIfoJJF5URC7ww52k94Thj_dbH9wFdxNQ";
+		key[3] = "AI39si5XLt78NO1fRB0VaLCqUIXWkZeLDNSITQMvwwo_0scaR2qwzc2FzQTAqNqYBY0mAooL1HM4rl9BNpAefC1jx4PuMYKWsQ";
 		
-		DatabaseMySql.eseguiAggiornamento("insert into utenti.key values (\"1\", \"AI39si6Eq4oBSKdw1KHpCX9rhwVpdsxO04VqiFyB13xRa37gbQR3D0i-PBiSqLAi8vfaEya3w95AZFq8T6qbIwQwxVuyaADJsQ\")");
-		DatabaseMySql.eseguiAggiornamento("insert into utenti.key values (\"2\", \"AI39si58jSnL3JZGLEl65owXd86CA5G-s_LR4nSUNEWCXl1LS7-5tkbZXJkw5Ow_I58NlRg1PPSKqkf16h96r9j_cqZE3tsuqg\")");
-		DatabaseMySql.eseguiAggiornamento("insert into utenti.key values (\"3\", \"AI39si647HsBMmuW7FnWtDwb037yfACgX-FcXaHuMZXfTUH37tw8DawMPmWgbO-CeSIfoJJF5URC7ww52k94Thj_dbH9wFdxNQ\")");
-		DatabaseMySql.eseguiAggiornamento("insert into utenti.key values (\"4\", \"AI39si5XLt78NO1fRB0VaLCqUIXWkZeLDNSITQMvwwo_0scaR2qwzc2FzQTAqNqYBY0mAooL1HM4rl9BNpAefC1jx4PuMYKWsQ\")");
-		
+		DatabaseMySql.eseguiAggiornamento("insert into utenti.key values (\"padre\", \"" + key[0] + "\")");
 		DatabaseMySql.eseguiAggiornamento("insert into utenti.ethernet values (\"padre\", \"false\")");
 		DatabaseMySql.eseguiAggiornamento("insert into utenti.ethernet values (\"figlio\", \"false\")");
 		boolean flagEth = true; 		    // true eth0 up eth1 down     false eth0 down eth1 up
@@ -30,12 +32,9 @@ public class padreExec {
 			while ((line = in.readLine()) != null)	{
 				System.out.println(line);
 			}
-		/*		try	{
-				starter.waitFor ();
-			}
-			catch (Exception e)	{
-				OutputTxt.writeError("Errore exception nel try start del padreExec.");
-			} */ 
+			if (++n == 4)
+				n = 0;
+			DatabaseMySql.eseguiAggiornamento("update from utenti.key set key='" + key[n] + "' where crawler='padre'");
 		}
 		catch (IOException e) {
 			OutputTxt.writeError("Errore IO nel try start del padreExec.");
@@ -50,12 +49,9 @@ public class padreExec {
 				while ((line = in.readLine()) != null)	{
 					System.out.println(line);
 				}
-				/*			try {
-					scanner.waitFor();
-				}
-				catch (Exception e1) {
-					OutputTxt.writeError("Errore exception nel try scanPopular del padreExec.");
-				} */
+				if (++n == 4)
+					n = 0;
+				DatabaseMySql.eseguiAggiornamento("update from utenti.key set key='" + key[n] + "' where crawler='padre'");
 				ethernet.switchTo("utenti", flagEth);
 				flagEth = !flagEth;
 			} catch (IOException e) {
@@ -71,12 +67,9 @@ public class padreExec {
 				while ((line = in.readLine()) != null)	{
 					System.out.println(line);
 				}
-				/*		try {
-					scanner.waitFor();
-				}
-				catch (Exception e1) {
-					OutputTxt.writeError("Errore exception nel try scanUser del padreExec.");
-				} */
+				if (++n == 4)
+					n = 0;
+				DatabaseMySql.eseguiAggiornamento("update from utenti.key set key='" + key[n] + "' where crawler='padre'");
 				ethernet.switchTo("utenti", flagEth);
 				flagEth = !flagEth;
 			} catch (IOException e) {
