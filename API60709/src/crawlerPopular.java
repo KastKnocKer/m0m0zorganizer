@@ -21,11 +21,10 @@ public class crawlerPopular {
 		System.out.println("AVVIO NUOVO FILE");
 		System.out.println("AVVIO NUOVO FILE");
 		
-		String ClientID = "ytapi-MattiaMonduzzi-YoutubeAPITest-pv3f0h5a-0";
-		String devKey = "AI39si6Eq4oBSKdw1KHpCX9rhwVpdsxO04VqiFyB13xRa37gbQR3D0i-PBiSqLAi8vfaEya3w95AZFq8T6qbIwQwxVuyaADJsQ";
+		String devKey = "AI39si58jSnL3JZGLEl65owXd86CA5G-s_LR4nSUNEWCXl1LS7-5tkbZXJkw5Ow_I58NlRg1PPSKqkf16h96r9j_cqZE3tsuqg";
 		YouTubeService myService = new YouTubeService("Tesi", devKey);
 		
-		new scanPopular(myService, ClientID ,devKey);
+		new scanPopular(myService, devKey);
 		
 		DatabaseMySql.Disconnetti();
 	}

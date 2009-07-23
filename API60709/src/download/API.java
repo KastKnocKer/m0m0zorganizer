@@ -15,9 +15,9 @@ import java.net.URL;
 	  
 	public API () {}
 	 
-	public static boolean getUser (YouTubeService myService, String ClientID, String devKey, String status, String user){
+	public static boolean getUser (YouTubeService myService, String devKey, String status, String user){
 	    try {            	
-            metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/users/" + user + "?v=2&client=" + ClientID + "&key=" + devKey);
+            metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/users/" + user + "?v=2&key=" + devKey);
             ethernet.checkEthernet("utenti");
             Contatore.incApi();
             UserProfileEntry profileEntry = myService.getEntry(metafeedUrl, 
@@ -57,14 +57,14 @@ import java.net.URL;
 		return false;
 	}
 	
-	public static void getFavorites (YouTubeService myService, String ClientID, String devKey, String user) {
-		getFavorites(myService, ClientID, devKey, user,1, 0);
+	public static void getFavorites (YouTubeService myService, String devKey, String user) {
+		getFavorites(myService, devKey, user,1, 0);
 	}
 	
-	public static void getFavorites (YouTubeService myService, String ClientID, String devKey, String user, int count, int giriVuoto) {
+	public static void getFavorites (YouTubeService myService, String devKey, String user, int count, int giriVuoto) {
 		countTemp = false;
 		try {
-			metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/users/" + user + "/favorites?client=" + ClientID + "&key=" + devKey +
+			metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/users/" + user + "/favorites?&key=" + devKey +
 					"&max-results=50&start-index=" + count );
 			ethernet.checkEthernet("utenti");
 			Contatore.incApi();
@@ -72,29 +72,25 @@ import java.net.URL;
 			tot = videoFeed.getTotalResults();
 			for (VideoEntry videoEntry : videoFeed.getEntries() ) {
 				countTemp = true;
-				if (videoEntry.isDraft()) {
+				if (videoEntry.isDraft())
 				 	System.out.println(count  + " : RESTRICTED");
-				}
-				else {						
-					System.out.println(count + " : Inserimento per l'utente " + user + " del favorites " +
-							videoEntry.getMediaGroup().getVideoId() + " : " + 
-							videoEntry.getPublished().toString().substring(0,19));
+				else {					
+					stringTemp =videoEntry.getMediaGroup().getUploader();
 					DatabaseMySql.insert("utenti", "favorites", user , videoEntry.getMediaGroup().getVideoId(), 
-							videoEntry.getMediaGroup().getUploader() ,
-							videoEntry.getPublished().toString().substring(0,19), tot + "");
-					System.out.println(videoEntry.getMediaGroup().getUploader());
+							stringTemp , videoEntry.getPublished().toString().substring(0,19), tot + "");
+					DatabaseMySql.inserToCheck("utenti", stringTemp);
 				}
-				if (++count == 1001) {
+				if (++count == 1001)
 					return;
-				}
 			}
+			System.out.println("Favorites dell'user " + user + " scaricati fino al num: " + count + ".");
 			if (tot > 1000)
-				tot = 1000;
+				tot = 951;
 			if (!countTemp)
 				giriVuoto++;
 			if (giriVuoto < 2 && tot >= count) {
-				System.out.println(tot);
-				getFavorites(myService, ClientID, devKey, user, count, giriVuoto);
+				System.out.println("Totale favorites per l'user " + user + ": " + tot);
+				getFavorites(myService, devKey, user, count, giriVuoto);
 			}
 			else 
 				return;
@@ -109,14 +105,14 @@ import java.net.URL;
         }
 	}
 	
-	public static void getVideo (YouTubeService myService, String ClientID, String devKey, String user) {
-		getVideo(myService, ClientID, devKey, user,1, 0);
+	public static void getVideo (YouTubeService myService, String devKey, String user) {
+		getVideo(myService, devKey, user,1, 0);
 	}
 	
-	public static void getVideo (YouTubeService myService, String ClientID, String devKey, String user, int count, int giriVuoto) {
+	public static void getVideo (YouTubeService myService, String devKey, String user, int count, int giriVuoto) {
 		countTemp = false;
 		try {
-			metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/users/" + user + "/uploads?client=" + ClientID + "&key=" + devKey +
+			metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/users/" + user + "/uploads?&key=" + devKey +
 					"&max-results=50&start-index=" + count);
 			ethernet.checkEthernet("utenti");
 			Contatore.incApi();
@@ -127,24 +123,21 @@ import java.net.URL;
 				if (videoEntry.isDraft()) {
 				 	System.out.println(count  + " : RESTRICTED");
 				}
-				else {					
-					System.out.println(count + " : Inserimento per l'utente " + user + " del video " +
-							videoEntry.getMediaGroup().getVideoId() + " : " + 
-							videoEntry.getPublished().toString().substring(0,19));
+				else					
 					DatabaseMySql.insert("utenti", "video", user , videoEntry.getMediaGroup().getVideoId(), 
 							videoEntry.getPublished().toString().substring(0,19), tot + "");
-				}
 				if (++count == 1001) {
 					return;
 				}
 			}
+			System.out.println("Video dell'user " + user + " scaricati fino al num: " + count + ".");
 			if (tot > 1000)
-				tot = 1000;
+				tot = 951;
 			if (!countTemp)
 				giriVuoto++;
 			if (giriVuoto < 2 && tot >= count) {
-				System.out.println(tot);
-				getVideo(myService, ClientID, devKey, user, count, giriVuoto);
+				System.out.println("Totale video per l'user " + user + ": " + tot);
+				getVideo(myService, devKey, user, count, giriVuoto);
 			}
 			else 
 				return;
@@ -159,15 +152,15 @@ import java.net.URL;
         }
 	}
 	
-	public static boolean getActivity (YouTubeService myService, String ClientID, String devKey, String user) {
-		return getActivity(myService, ClientID, devKey, user,1, 0);
+	public static boolean getActivity (YouTubeService myService, String devKey, String user) {
+		return getActivity(myService, devKey, user,1, 0);
 	}
 	
-	public static boolean getActivity (YouTubeService myService, String ClientID, String devKey, String user, int count, int giriVuoto) {
+	public static boolean getActivity (YouTubeService myService, String devKey, String user, int count, int giriVuoto) {
 		countTemp = false;
 		try {
-			metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/events?&max-results=50&start-index=" + count + "&author=" 
-					+ user + "&client=" + ClientID + "&key=" + devKey);
+			metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/events?max-results=50&start-index=" + count + "&author=" 
+					+ user + "&key=" + devKey);
 			System.out.println(metafeedUrl);
 			ethernet.checkEthernet("utenti");
 			Contatore.incApi();
@@ -177,54 +170,46 @@ import java.net.URL;
 				return false;
 			}
 			for (UserEventEntry entry : activityFeed.getEntries()) {
-				String userTemp = entry.getAuthors().get(0).getName();
+				stringTemp = entry.getAuthors().get(0).getName();
 				countTemp = true;
 				if(entry.getUserEventType() == UserEventEntry.Type.VIDEO_UPLOADED) {
-					DatabaseMySql.insert("utenti", "activity", userTemp, entry.getVideoId(), "uploaded", 
+					DatabaseMySql.insert("utenti", "activity", stringTemp, entry.getVideoId(), "uploaded", 
 							entry.getUpdated().toString().substring(0, 19));
-					System.out.println(count + ": " + userTemp + " uploaded a video " + entry.getVideoId());
 			    }
 			    else if(entry.getUserEventType() == UserEventEntry.Type.VIDEO_RATED) {
-			    	DatabaseMySql.insert("utenti", "activity", userTemp, entry.getVideoId(), "rated", 
+			    	DatabaseMySql.insert("utenti", "activity", stringTemp, entry.getVideoId(), "rated", 
 			    			entry.getUpdated().toString().substring(0, 19));
-			    	System.out.println(count + ": " + userTemp + " rated a video " + entry.getVideoId() +
-			          " " + entry.getRating().getValue() + " stars");
 			    }
 			    else if(entry.getUserEventType() == UserEventEntry.Type.VIDEO_FAVORITED) {
-			    	DatabaseMySql.insert("utenti", "activity", userTemp, entry.getVideoId(), "favorited", 
+			    	DatabaseMySql.insert("utenti", "activity", stringTemp, entry.getVideoId(), "favorited", 
 			    			entry.getUpdated().toString().substring(0, 19));
-			    	System.out.println(count + ": " + userTemp + " favorited a video " + entry.getVideoId());
 			    }
 			    else if(entry.getUserEventType() == UserEventEntry.Type.USER_SUBSCRIPTION_ADDED) {
-			    	DatabaseMySql.insert("utenti", "activity", userTemp, entry.getUsername(), "subscribed",
+			    	DatabaseMySql.insert("utenti", "activity", stringTemp, entry.getUsername(), "subscribed",
 			    			entry.getUpdated().toString().substring(0, 19));
-			    	System.out.println(count + ": " + userTemp + " subscribed to the channel of " +
-			    			entry.getUsername());
 			    }
 			    else if(entry.getUserEventType() == UserEventEntry.Type.FRIEND_ADDED) {
-			    	DatabaseMySql.insert("utenti", "activity", userTemp, entry.getUsername(), "friended",
+			    	DatabaseMySql.insert("utenti", "activity", stringTemp, entry.getUsername(), "friended",
 			    			entry.getUpdated().toString().substring(0, 19));
-			    	System.out.println(count + ": " + userTemp + " friended " + entry.getUsername());
 			    }
 			    else if(entry.getUserEventType() == UserEventEntry.Type.VIDEO_COMMENTED) {
-			    	DatabaseMySql.insert("utenti", "activity", userTemp, entry.getVideoId(), "commented",
+			    	DatabaseMySql.insert("utenti", "activity", stringTemp, entry.getVideoId(), "commented",
 			    			entry.getUpdated().toString().substring(0, 19));
-			    	System.out.println(count + ": " + userTemp + " commented on video " + entry.getVideoId());
 			    }
 			    else if(entry.getUserEventType() == UserEventEntry.Type.VIDEO_SHARED) {
-			    	DatabaseMySql.insert("utenti", "activity", userTemp, entry.getVideoId(), "shared", 
+			    	DatabaseMySql.insert("utenti", "activity", stringTemp, entry.getVideoId(), "shared", 
 			    			entry.getUpdated().toString().substring(0, 19));
-			    	System.out.println(count + ": " + userTemp + " shared a video " + entry.getVideoId());
 			    }
 				count++;
 			  }
+			System.out.println("Activity dell'user " + user + " scaricati fino al num: " + count + ".");
 			if ((tot = activityFeed.getTotalResults()) > 1000)
-				tot = 1000;
+				tot = 951;
 			if (!countTemp)
 				giriVuoto++;
 			if (giriVuoto < 2 && tot >= count) {
-				System.out.println(tot);
-				getActivity(myService, ClientID, devKey, user, count, giriVuoto);
+				System.out.println("Totale activity per l'user " + user + ": " + tot);
+				getActivity(myService, devKey, user, count, giriVuoto);
 				return true;
 			}
 		} catch (MalformedURLException e) {
@@ -242,15 +227,14 @@ import java.net.URL;
 		return false;
 		}
 	
-	public static void getSubscriptions (YouTubeService myService, String ClientID, String devKey, String user) {
-			getSubscriptions(myService, ClientID, devKey, user, 1,0 );
+	public static void getSubscriptions (YouTubeService myService, String devKey, String user) {
+			getSubscriptions(myService, devKey, user, 1,0 );
 	}
 	
-	public static void getSubscriptions (YouTubeService myService, String ClientID, String devKey, String user, int count, int giriVuoto) {
-		String temp;
+	public static void getSubscriptions (YouTubeService myService, String devKey, String user, int count, int giriVuoto) {
 		countTemp = false;
 		try {
-			metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/users/" + user + "/subscriptions?client=" + ClientID + "&key=" + devKey +
+			metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/users/" + user + "/subscriptions?key=" + devKey +
 					"&max-results=50&start-index=" + count);
 			System.out.println(metafeedUrl);
 			ethernet.checkEthernet("utenti");
@@ -259,31 +243,28 @@ import java.net.URL;
 			tot = feed.getTotalResults();
 			for(SubscriptionEntry entry : feed.getEntries()) {
 				countTemp = true;
-				temp = entry.getTitle().getPlainText();
-				if (temp.contains("Videos published by"))
-					temp = temp.substring(22);
-				else if (temp.contains("Favorites of"))
-					temp = temp.substring(15);
+				stringTemp = entry.getTitle().getPlainText();
+				if (stringTemp.contains("Videos published by"))
+					stringTemp = stringTemp.substring(22);
+				else if (stringTemp.contains("Favorites of"))
+					stringTemp = stringTemp.substring(15);
 				else {
 					count++;
 					continue;
 				}
-				System.out.println(count + " : Inserimento per l'utente " + user + "della subscritions a" +
-						temp + " : " + entry.getPublished().toString().substring(0,19));
-				DatabaseMySql.insert("utenti","subscriptions",user, temp, 
+				DatabaseMySql.insert("utenti","subscriptions",user, stringTemp, 
 						entry.getPublished().toString().substring(0,19), tot + "");
-				System.out.println(temp + " : " + entry.getPublished().toString().substring(0,19));
-				if(!DatabaseMySql.contiene("utenti", "profile", temp))
-					DatabaseMySql.inserToCheck("utenti", temp);
+				DatabaseMySql.inserToCheck("utenti", stringTemp);
 				count++;
 			}
+			System.out.println("Subscriptions dell'user " + user + " scaricati fino al num: " + count + ".");
 			if (tot > 1000)
-				tot = 1000;
+				tot = 951;
 			if (!countTemp)
 				giriVuoto++;
 			if (giriVuoto < 2 && tot >= count) {
-				System.out.println(tot);
-				getSubscriptions(myService, ClientID, devKey, user, count, giriVuoto);	
+				System.out.println("Totale subscription per l'user " + user + ": " + tot);
+				getSubscriptions(myService, devKey, user, count, giriVuoto);	
 			}
 			else
 				return;
@@ -328,6 +309,7 @@ import java.net.URL;
     private static URL metafeedUrl;
     private static boolean countTemp;
     private static int tot;
+    private static String stringTemp;
   }
 
   
