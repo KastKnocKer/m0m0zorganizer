@@ -62,7 +62,7 @@ public class urlReader  {
 			    }
 			    else if (inputLine.equals("</html>") && count != 0 && count < tot) {
 			    	in.close();
-			    	System.out.println(tabella + "dell'user " + user + " scaricati fino al num: " + count + ".");
+			    	System.out.println(tabella + " dell'user " + user + " scaricati fino al num: " + count + ".");
 			    	System.out.println("\t\t\t\t\tTotale " + tabella + " per l'utente: " + user);
 			    	userReader(tabella, user, count);
 			    	return;
@@ -99,7 +99,7 @@ public class urlReader  {
     	try {
     		in.close();
     	} catch (IOException e) {
-    		OutputTxt.writeError("Errire IO nella  " + tabella + " reader dell'utente " + user);
+    		OutputTxt.writeError("Errore IO nella  " + tabella + " reader dell'utente " + user);
     	}
     	System.out.println("Fine del " + tabella + " reader dell'utente " + user);
     	return;
