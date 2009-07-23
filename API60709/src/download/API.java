@@ -17,7 +17,7 @@ import java.net.URL;
 	 
 	public static boolean getUser (YouTubeService myService, String ClientID, String devKey, String status, String user){
 	    try {            	
-            metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/users/" + user + "?client=" + ClientID + "&key=" + devKey);
+            metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/users/" + user + "?v=2&client=" + ClientID + "&key=" + devKey);
             ethernet.checkEthernet("utenti");
             Contatore.incApi();
             UserProfileEntry profileEntry = myService.getEntry(metafeedUrl, 
@@ -167,7 +167,7 @@ import java.net.URL;
 		countTemp = false;
 		try {
 			metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/events?&max-results=50&start-index=" + count + "&author=" 
-					+ user + "?client=" + ClientID + "&key=" + devKey);
+					+ user + "&client=" + ClientID + "&key=" + devKey);
 			System.out.println(metafeedUrl);
 			ethernet.checkEthernet("utenti");
 			Contatore.incApi();

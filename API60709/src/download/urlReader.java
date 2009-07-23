@@ -178,7 +178,7 @@ public class urlReader  {
 				OutputTxt.writeLog("Errore 404: User not found: " + user);
 				return; 
 			}
-			else if (msg.contains("request")) {
+			else if (msg.contains("Bad Request")) {
 				OutputTxt.writeError("Errore bad request all'url: " + url);
 				System.out.println("Errore bad request all'url: " + url);
 				return;
