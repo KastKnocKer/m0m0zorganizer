@@ -32,9 +32,6 @@ public class padreExec {
 			while ((line = in.readLine()) != null)	{
 				System.out.println(line);
 			}
-			if (++n == 4)
-				n = 0;
-			DatabaseMySql.eseguiAggiornamento("update from utenti.key set key='" + key[n] + "' where crawler='padre'");
 		}
 		catch (IOException e) {
 			OutputTxt.writeError("Errore IO nel try start del padreExec.");
@@ -51,14 +48,14 @@ public class padreExec {
 				}
 				if (++n == 4)
 					n = 0;
-				DatabaseMySql.eseguiAggiornamento("update from utenti.key set key='" + key[n] + "' where crawler='padre'");
+				DatabaseMySql.eseguiAggiornamento("update utenti.key set devKey='" + key[n] + "' where crawler='padre'");
 				ethernet.switchTo("utenti", flagEth);
 				flagEth = !flagEth;
 			} catch (IOException e) {
 				OutputTxt.writeError("Errore IO nel try scanPopular del padreExec.");
 			}
-		}
-		pb.command ("/home/m0m0z/Scrivania/tesina_exec/scanUser.sh");
+		} 
+		pb.command ("/home/m0m0z/Scrivania/tesina_exec/scanUser.sh"); 
 		while (DatabaseMySql.getCount("utenti", "toCheck") != 0) {
 			try {
 				scanner = pb.start();
@@ -66,15 +63,15 @@ public class padreExec {
 				String line = null;
 				while ((line = in.readLine()) != null)	{
 					System.out.println(line);
-				}
-				if (++n == 4)
+				} 
+				if (++n == 4) 
 					n = 0;
-				DatabaseMySql.eseguiAggiornamento("update from utenti.key set key='" + key[n] + "' where crawler='padre'");
+				DatabaseMySql.eseguiAggiornamento("update utenti.key set devKey='" + key[n] + "' where crawler='padre'");
 				ethernet.switchTo("utenti", flagEth);
 				flagEth = !flagEth;
 			} catch (IOException e) {
 				OutputTxt.writeError("Errore IO nel try scanUser del padreExec.");
-			}
-		}
+			}  
+		} 
 	}
 }
