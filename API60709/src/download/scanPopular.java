@@ -17,7 +17,7 @@ public class scanPopular {
 	public static void popularScan (YouTubeService myService, String ClientID , String devKey) {
 		int temp = 0, control = 0;
 		String popularToCheck;	
-		control = (DatabaseMySql.getCount("utenti", "poptoCheck") / 2) + 1;
+		control = (DatabaseMySql.getCount("utenti", "popToCheck") / 2) + 1;
 		for (; (popularToCheck = DatabaseMySql.extract("utenti", "popToCheck", "user")[0]) != null ;) {
 			if (!DatabaseMySql.contiene("utenti", "profile", popularToCheck)) {
 				if (API.getActivity(myService, ClientID, devKey, popularToCheck)) {	// Ha activityFeed? 
