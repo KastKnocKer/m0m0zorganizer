@@ -19,7 +19,7 @@ public class proveIO {
 		//YouTubeService myService = new YouTubeService("Tesina");
 		//API.getUser(myService, "active", "momoz1987");
 		String devKey = "AI39si6Eq4oBSKdw1KHpCX9rhwVpdsxO04VqiFyB13xRa37gbQR3D0i-PBiSqLAi8vfaEya3w95AZFq8T6qbIwQwxVuyaADJsQ";
-		YouTubeService myService = new YouTubeService("Tesi", devKey);
+		YouTubeService myService = new YouTubeService("Tesi");
 		new scanUser(myService, devKey);
 		
 	}

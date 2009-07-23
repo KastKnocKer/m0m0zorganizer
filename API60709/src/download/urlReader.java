@@ -63,7 +63,7 @@ public class urlReader  {
 			    else if (inputLine.equals("</html>") && count != 0 && count < tot) {
 			    	in.close();
 			    	System.out.println(tabella + " dell'user " + user + " scaricati fino al num: " + count + ".");
-			    	System.out.println("\t\t\t\t\tTotale " + tabella + " per l'utente: " + user);
+			    	System.out.println("\t\t\tTotale " + tabella + " per l'user " + user + ": " + tot);
 			    	userReader(tabella, user, count);
 			    	return;
 			    }

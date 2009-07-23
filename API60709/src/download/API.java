@@ -88,7 +88,7 @@ import java.net.URL;
 			if (!countTemp)
 				giriVuoto++;
 			if (giriVuoto < 2 && tot >= count) {
-				System.out.println("\t\t\t\t\tTotale favorites per l'user " + user + ": " + tot);
+				System.out.println("\t\t\tTotale favorites per l'user " + user + ": " + tot);
 				getFavorites(myService, devKey, user, count, giriVuoto);
 			}
 			else 
@@ -134,7 +134,7 @@ import java.net.URL;
 			if (!countTemp)
 				giriVuoto++;
 			if (giriVuoto < 2 && tot >= count) {
-				System.out.println("\t\t\t\t\tTotale video per l'user " + user + ": " + tot);
+				System.out.println("\t\t\tTotale video per l'user " + user + ": " + tot);
 				getVideo(myService, devKey, user, count, giriVuoto);
 			}
 			else 
@@ -206,7 +206,7 @@ import java.net.URL;
 			if (!countTemp)
 				giriVuoto++;
 			if (giriVuoto < 2 && tot >= count) {
-				System.out.println("\t\t\t\t\tTotale activity per l'user " + user + ": " + tot);
+				System.out.println("\t\t\tTotale activity per l'user " + user + ": " + tot);
 				getActivity(myService, devKey, user, count, giriVuoto);
 				return true;
 			}
@@ -261,7 +261,7 @@ import java.net.URL;
 			if (!countTemp)
 				giriVuoto++;
 			if (giriVuoto < 2 && tot >= count) {
-				System.out.println("\t\t\t\t\tTotale subscription per l'user " + user + ": " + tot);
+				System.out.println("\t\t\tTotale subscription per l'user " + user + ": " + tot);
 				getSubscriptions(myService, devKey, user, count, giriVuoto);	
 			}
 			else
