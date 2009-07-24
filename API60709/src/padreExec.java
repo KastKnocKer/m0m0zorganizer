@@ -22,8 +22,8 @@ public class padreExec {
 		DatabaseMySql.eseguiAggiornamento("insert into utenti.key values (\"padre\", \"" + key[0] + "\")");
 		DatabaseMySql.eseguiAggiornamento("insert into utenti.ethernet values (\"padre\", \"false\")");
 		DatabaseMySql.eseguiAggiornamento("insert into utenti.ethernet values (\"figlio\", \"false\")");
-		boolean flagEth = true; 		    // true eth0 up eth1 down     false eth0 down eth1 up
-		ethernet.switchTo("utenti",false); 	// Se ho true sono a eth0 up e switho a eth1 e viceversa	
+		boolean flagEth = false; 		    // true eth0 up eth1 down     false eth0 down eth1 up
+		ethernet.switchTo("utenti",true); 	// Se ho true sono a eth0 up e switho a eth1 e viceversa	
 		DatabaseMySql.eseguiAggiornamento("update utenti.ethernet set flag ='true' where rete='figlio'");
 		try {			
 			pb = new ProcessBuilder ("/home/m0m0z/Scrivania/tesina_exec/start.sh");
