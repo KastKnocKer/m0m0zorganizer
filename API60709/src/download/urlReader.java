@@ -13,7 +13,7 @@ public class urlReader  {
 	
 	public static void userReader (String tabella, String user) {
 
-		System.out.println("ANALISI dei " + tabella + " dell' utente " + user);
+		System.out.println("ANALISI dei " + tabella + " dell' utente " + user + ".");
 		userReader (tabella, user, 0);
 	}
 	
@@ -22,7 +22,7 @@ public class urlReader  {
     		System.out.println("Errore utente: Inserire correttamente parametro tabella nel " + tabella + 
     				"Reader dell'utente" + user);
     		System.exit(0);
-    	}  	
+    	}
     	try {
 	    	metafeedUrl = new URL("http://www.youtube.com/profile?user=" + user + "&view=" + tabella + "&start=" + count);
 	    	ethernet.checkEthernet("utenti");

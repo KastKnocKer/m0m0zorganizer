@@ -17,7 +17,7 @@ import java.net.URL;
 	 
 	public static boolean getUser (YouTubeService myService, String devKey, String status, String user){
 	    try {   
-	    	System.out.println("\nANALISI del profilo dell' utente " + user);
+	    	System.out.println("\nANALISI del profilo dell' utente " + user + ".");
             metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/users/" + user + "?v=2&key=" + devKey);
             ethernet.checkEthernet("utenti");
             Contatore.incApi();
@@ -59,7 +59,7 @@ import java.net.URL;
 	}
 	
 	public static void getFavorites (YouTubeService myService, String devKey, String user) {
-		System.out.println("ANALISI dei favorites dell' utente " + user);
+		System.out.println("ANALISI dei favorites dell' utente " + user + ".");
 		getFavorites(myService, devKey, user,1, 0);
 	}
 	
@@ -107,7 +107,7 @@ import java.net.URL;
 	}
 	
 	public static void getVideo (YouTubeService myService, String devKey, String user) {
-		System.out.println("ANALISI dei video dell' utente " + user);
+		System.out.println("ANALISI dei video dell' utente " + user + ".");
 		getVideo(myService, devKey, user,1, 0);
 	}
 	
@@ -154,7 +154,7 @@ import java.net.URL;
 	}
 	
 	public static boolean getActivity (YouTubeService myService, String devKey, String user) {
-		System.out.println("ANALISI delle activity dell' utente " + user);
+		System.out.println("ANALISI delle activity dell' utente " + user + ".");
 		return getActivity(myService, devKey, user,1, 0);
 	}
 	
@@ -230,7 +230,7 @@ import java.net.URL;
 		}
 	
 	public static void getSubscriptions (YouTubeService myService, String devKey, String user) {
-		System.out.println("ANALISI delle subscriptions dell' utente " + user);
+		System.out.println("ANALISI delle subscriptions dell' utente " + user + ".");
 			getSubscriptions(myService, devKey, user, 1,0 );
 	}
 	
