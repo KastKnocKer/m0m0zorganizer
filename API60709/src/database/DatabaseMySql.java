@@ -153,6 +153,6 @@ public class DatabaseMySql {
 	}
 	
 	public static int getMinPriority () {
-		return Integer.parseInt((DatabaseMySql.eseguiQuery("Select priority from utenti.toCheck limit 1")).get(0)[0].toString());
+		return Integer.parseInt((DatabaseMySql.eseguiQuery("Select min(priority) from utenti.toCheck")).get(0)[0].toString());
 	}
 }
