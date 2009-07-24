@@ -89,7 +89,7 @@ public class urlReader  {
     		if(e.getMessage().contains("Server returned HTTP response code: 50")) {
 				System.out.println("Errore 500+ : servizio non disponibile al momento.. Pausa 5 minuti.");
 				OutputTxt.writeLog("Errore 500+ : servizio non disponibile al momento.");
-    			pausa(300, user);
+    			pausa(30, user);
     			return;
     		}
     	}
@@ -133,7 +133,7 @@ public class urlReader  {
     	try {
     		System.out.println("Pausa di " + sec + " secondi sull'utente " + user);
     		DatabaseMySql.delete("utenti", "profile", "user", user);
-    		DatabaseMySql.inserToCheck("utenti", user, DatabaseMySql.getMinPriority() + 3);
+    		DatabaseMySql.inserToCheck("utenti", user, DatabaseMySql.getMinPriority() + 5);
     		Thread.currentThread();
     		Thread.sleep(sec * 1000);	 // Pausa di sec secondi
     	}
@@ -158,7 +158,7 @@ public class urlReader  {
 			if (code >= 500) {
 				OutputTxt.writeLog("Errore 500+ : servizio non disponibile al momento.");
 				System.out.println("Errore 500+ : servizio non disponibile al momento.. Pausa 5 minuti.");
-				pausa(300, user);
+				pausa(30, user);
 				return;
 			// Direi di fare una pausa e di richiamare la stessa funzione
 			}				
