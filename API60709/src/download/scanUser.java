@@ -36,10 +36,6 @@ public class scanUser {
 						DatabaseMySql.insert("utenti", "profile", userToCheck, "blocked", "block", "block", "block", "block");
 			}
 			if (temp == 100) {
-				OutputTxt.writeLog("User scansionati   totale: " + DatabaseMySql.getCount("utenti", "profile"));
-				OutputTxt.writeLog("User scansionati   attivi: " + DatabaseMySql.eseguiQuery("Select count(*) from utenti.profile where status='active'").get(0)[0]);
-				OutputTxt.writeLog("User scansionati inattivi: " + DatabaseMySql.eseguiQuery("Select count(*) from utenti.profile where status='inactive'").get(0)[0]);
-				OutputTxt.writeLog("User scansionati bloccati: " + DatabaseMySql.eseguiQuery("Select count(*) from utenti.profile where status='blocked'").get(0)[0]);
 				return;
 			}
 		}
