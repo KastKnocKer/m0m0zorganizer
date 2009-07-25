@@ -12,13 +12,13 @@ import database.OutputTxt;
 
 public class popularReader {
 
-	public popularReader () {
-		popularReaderTool("t", 1);
-		popularReaderTool("w", 1);
-		popularReaderTool("m", 1);
+	public popularReader (String nomeDB) {
+		popularReaderTool(nomeDB, "t", 1);
+		popularReaderTool(nomeDB, "w", 1);
+		popularReaderTool(nomeDB, "m", 1);
 	}	
 	    
-	public static void popularReaderTool (String time, int pag) {
+	public static void popularReaderTool (String nomeDB, String time, int pag) {
 		int count = 0;
 		int tmp = 24 * (pag - 1);
 		System.out.println("\n popularReader reader del " + time);
@@ -33,15 +33,15 @@ public class popularReader {
 					inputLine = in.readLine();
 					inputLine = inputLine.substring(19, inputLine.indexOf("\" title"));
 					System.out.println(++tmp +" : " + ++count + " Inserimento del popular da controllare: " + inputLine);
-					DatabaseMySql.insert("utenti", "popToCheck" , inputLine);	
-					DatabaseMySql.insert("utenti", "popular" , inputLine, Orario.getDataOra(), time);
+					DatabaseMySql.insert(nomeDB, "popToCheck" , inputLine);	
+					DatabaseMySql.insert(nomeDB, "popular" , inputLine, Orario.getDataOra(), time);
 				} 	
 				else if (inputLine.equals("</html>")){
 					if (++pag <= 5) { 
 						if (count < 24)
 							pag--;
 						in.close();
-						popularReaderTool (time, pag);
+						popularReaderTool (nomeDB, time, pag);
 						return;
 					}
 					else {
@@ -50,7 +50,7 @@ public class popularReader {
 					}
 				}
 				else if (inputLine.contains("Siamo spiacenti per l'interruzione"))
-					urlReader.notifyUrlFlood(inputLine, "");  // GESTIRE ANCHE SE E' DIFFICILE CHE SI VERIFICHI 
+					urlReader.notifyUrlFlood(nomeDB, inputLine, "");  // GESTIRE ANCHE SE E' DIFFICILE CHE SI VERIFICHI 
 			}
 			in.close();
 		}
@@ -61,7 +61,7 @@ public class popularReader {
 		} 						
 		catch (IOException e) { 
 			OutputTxt.writeLog("Errore nel download dei canali più popolari del " + time);
-			urlReader.getErrorCode("activity", metafeedUrl, "utenti");
+			urlReader.getErrorCode(nomeDB, "popularReader", metafeedUrl, "utenti");
 		}
 		try {
 			in.close();

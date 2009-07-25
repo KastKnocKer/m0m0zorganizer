@@ -11,13 +11,13 @@ public class urlReader  {
 	
 	public urlReader () { }
 	
-	public static void userReader (String tabella, String user) {
+	public static void userReader (String nomeDB, String tabella, String user) {
 
-		System.out.println("ANALISI dei " + tabella + " dell' utente " + user + ".");
-		userReader (tabella, user, 0);
+		System.out.println("ANALISI per il DB: "+ nomeDB + "  dei " + tabella + " dell' utente " + user + ".");
+		userReader (nomeDB, tabella, user, 0);
 	}
 	
-    public static void userReader (String tabella, String user, int count) {
+    public static void userReader (String nomeDB, String tabella, String user, int count) {
     	if (!tabella.equals("subscribers") && !tabella.equals("friends")) {
     		System.out.println("Errore utente: Inserire correttamente parametro tabella nel " + tabella + 
     				"Reader dell'utente" + user);
@@ -25,7 +25,7 @@ public class urlReader  {
     	}
     	try {
 	    	metafeedUrl = new URL("http://www.youtube.com/profile?user=" + user + "&view=" + tabella + "&start=" + count);
-	    	ethernet.checkEthernet("utenti");
+	    	ethernet.checkEthernet(nomeDB);
 	    	Contatore.incUrl();
 	    	in = new BufferedReader(new InputStreamReader(metafeedUrl.openStream()));
 	    	System.out.println("\t\t\t\t\t\t\t\t\t\t\t\tPacchetto arrivato.");
@@ -43,8 +43,8 @@ public class urlReader  {
 			    	inputLine = in.readLine();
 			    	inputLine = inputLine.substring(15, inputLine.indexOf("\" onmousedown"));
 			    	count++;
-			    	DatabaseMySql.insert("utenti", tabella , user, inputLine, tot  + "");
-			    	DatabaseMySql.inserToCheck("utenti", inputLine);
+			    	DatabaseMySql.insert(nomeDB, tabella , user, inputLine, tot  + "");
+			    	DatabaseMySql.inserToCheck(nomeDB, inputLine);
 				}
 				else if (inputLine.contains("non ha") && count <= 1) {
 					in.close();
@@ -54,7 +54,7 @@ public class urlReader  {
 			    else if (inputLine.contains("Non è")) {
 					in.close();
 			    	OutputTxt.writeLog("Errore 403: Informazione non pubblica: " + tabella + " dell' user " + user);
-			    	DatabaseMySql.insert("utenti", "infoReserved", user, tabella);
+			    	DatabaseMySql.insert(nomeDB, "infoReserved", user, tabella);
 			    	return;
 			    }
 			    else if (inputLine.contains("Questo account è stato")) {
@@ -66,18 +66,18 @@ public class urlReader  {
 			    	in.close();
 			    	System.out.println(tabella + " dell'user " + user + " scaricati fino al num: " + count + ".");
 			    	System.out.println("\t\t\tTotale " + tabella + " per l'user " + user + ": " + tot);
-			    	userReader(tabella, user, count);
+			    	userReader(nomeDB, tabella, user, count);
 			    	return;
 			    }
 				else if (inputLine.contains("is down for") || inputLine.contains("manutenzione")) {
 					in.close();
 					OutputTxt.writeLog("Youtube down per manutenzione o non al 100%");
-					System.out.println("Youtube down per manutenzione o non al 100%. Pausa 1 minuto.");  
-					pausa(60, user);
+					System.out.println("Youtube down per manutenzione o non al 100%. pausa(nomeDB,  1 minuto.");  
+					pausa(nomeDB, 60, user);
 					return;
 				}
 				else if (inputLine.contains("Siamo spiacenti per l'interruzione"))
-					notifyUrlFlood(inputLine, user);				
+					notifyUrlFlood(nomeDB, inputLine, user);				
 			}
     	}
     	catch (MalformedURLException e) { 
@@ -87,9 +87,9 @@ public class urlReader  {
     	}
     	catch (IOException e) {  
     		if(e.getMessage().contains("Server returned HTTP response code: 50")) {
-				System.out.println("Errore 500+ : servizio non disponibile al momento.. Pausa 5 minuti.");
+				System.out.println("Errore 500+ : servizio non disponibile al momento.. pausa(nomeDB,  5 minuti.");
 				OutputTxt.writeLog("Errore 500+ : servizio non disponibile al momento.");
-    			pausa(30, user);
+    			pausa(nomeDB, 30, user);
     			return;
     		}
     	}
@@ -107,20 +107,20 @@ public class urlReader  {
     	return;
     }
 	
-    public static void notifyUrlFlood (String inputLine, String user) {
+    public static void notifyUrlFlood (String nomeDB, String inputLine, String user) {
 			OutputTxt.writeLog("Rete floodata dalle URL.");    // DA RIFAREEEEE
 			OutputTxt.writeLog("Richieste API: " + Contatore.getApi());
 			OutputTxt.writeLog("Richieste URL: " + Contatore.getUrl());
 			Contatore.setApi(0);
 			Contatore.setUrl(0);
 			System.out.println("Rete floodata dalle URL.");
-			System.out.println("PAUSA di 30 minuti per flood URL");
+			System.out.println("pausa(nomeDB, (nomeDB,  di 30 minuti per flood URL");
 			try {
-				DatabaseMySql.delete("utenti", "profile", "user", user);
-	    		DatabaseMySql.delete("utenti", "toCheck", "user", user);
-				DatabaseMySql.inserToCheck("utenti", user, -9999);
+				DatabaseMySql.delete(nomeDB, "profile", "user", user);
+	    		DatabaseMySql.delete(nomeDB, "toCheck", "user", user);
+				DatabaseMySql.inserToCheck(nomeDB, user, -9999);
 				Thread.currentThread();
-				Thread.sleep(1800000);	 // Pausa
+				Thread.sleep(1800000);	 // pausa(nomeDB, (nomeDB, 
 			}
 			catch (InterruptedException e) { 
 				e.printStackTrace();
@@ -130,31 +130,31 @@ public class urlReader  {
 			return;
     }
     
-    public static void pausa(int sec, String user) {
+    public static void pausa(String nomeDB, int sec, String user) {
     	try {
-    		System.out.println("Pausa di " + sec + " secondi sull'utente " + user);
-    		DatabaseMySql.delete("utenti", "profile", "user", user);
-    		DatabaseMySql.delete("utenti", "toCheck", "user", user);
+    		System.out.println("Pausa per il DB: " + nomeDB + " di " + sec + " secondi sull'utente " + user);
+    		DatabaseMySql.delete(nomeDB, "profile", "user", user);
+    		DatabaseMySql.delete(nomeDB, "toCheck", "user", user);
     		tot = DatabaseMySql.getMinPriority() + 5;
     		System.out.println("Priorità selezionata per l'utente " + user + ": " + tot);
-    		DatabaseMySql.inserToCheck("utenti", user, tot);
+    		DatabaseMySql.inserToCheck(nomeDB, user, tot);
     		Thread.currentThread();
-    		Thread.sleep(sec * 1000);	 // Pausa di sec secondi
+    		Thread.sleep(sec * 1000);	 // pausa(nomeDB, (nomeDB,  di sec secondi
     	}
     	catch (InterruptedException e) { 
     		e.printStackTrace();
     		OutputTxt.writeException(e.getLocalizedMessage());
-    		OutputTxt.writeException("Errore nella funzione pausa.");	
+    		OutputTxt.writeException("Errore nella funzione pausa(nomeDB, (nomeDB, .");	
     	}
     }
     
-    public static void getErrorCode (String tabella ,URL url ,String user) {
+    public static void getErrorCode (String nomeDB, String tabella ,URL url ,String user) {
     	String msg;
     	int code;
     	System.out.println("GetErrorCode sui " + tabella  + " dell'utente " + user);
 		HttpURLConnection connection;
 		try {		
-			ethernet.checkEthernet("utenti");
+			ethernet.checkEthernet(nomeDB);
 			Contatore.incApi();
 			connection = (HttpURLConnection) url.openConnection();
 			System.out.println((code = connection.getResponseCode()));
@@ -162,19 +162,19 @@ public class urlReader  {
 			if (code >= 500) {
 				OutputTxt.writeLog("Errore 500+ : servizio non disponibile al momento.");
 				System.out.println("Errore 500+ : servizio non disponibile al momento..");
-				pausa(30, user);
+				pausa(nomeDB, 30, user);
 				return;
-			// Direi di fare una pausa e di richiamare la stessa funzione
+			// Direi di fare una pausa(nomeDB,  e di richiamare la stessa funzione
 			}				
 			else if (msg.contains("Forbidden") ||
 					connection.getResponseMessage().contains("are not public")) {
-				DatabaseMySql.insert("utenti", "infoReserved", user, tabella);
+				DatabaseMySql.insert(nomeDB, "infoReserved", user, tabella);
 				System.out.println("Errore 403: Informazione non pubblica: " + tabella + " dell' user " + user);
 				OutputTxt.writeLog("Errore 403: Informazione non pubblica: " + tabella + " dell' user " + user);
 				return;
 			}
 			else if (msg.contains("many")) {
-				API.notifyApiFlood(tabella, user);
+				API.notifyApiFlood(nomeDB, tabella, user);
 				return;
 			}	
 			else if (code == 404) {

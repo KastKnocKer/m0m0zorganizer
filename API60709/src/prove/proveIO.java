@@ -24,6 +24,6 @@ public class proveIO {
 		//new scanUser(myService, devKey);
 		//System.out.println(devKey.length());
 		DatabaseMySql.extract("utenti", "toCheck", "user");
-		urlReader.pausa(5, "nonna");
+		urlReader.pausa("utentu", 5, "nonna");
 	}
 }
