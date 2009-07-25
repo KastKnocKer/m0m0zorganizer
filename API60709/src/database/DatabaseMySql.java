@@ -109,8 +109,7 @@ public class DatabaseMySql {
 	public static String[] extract (String nomeDB, String lista, String col) {
 		String[] user; 		
 		try {
-			user =  (DatabaseMySql.eseguiQuery("Select * from " + nomeDB + "." + lista + 
-						" limit 1")).get(0);
+			user =  (DatabaseMySql.eseguiQuery("Select * from " + nomeDB + "." + lista + " limit 1")).get(0);
 			if (lista.equals("toCheck"))
 				DatabaseMySql.delete (nomeDB, lista, col, user[1]);
 			else
@@ -125,8 +124,6 @@ public class DatabaseMySql {
 	}
 	
 	public static void inserToCheck (String nomeDB, String user) {
-		//if(DatabaseMySql.contiene(nomeDB, "profile", user))
-		//	return;
 		inserToCheck (nomeDB, user, 0);
 	}
 	

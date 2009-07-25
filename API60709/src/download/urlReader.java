@@ -117,9 +117,10 @@ public class urlReader  {
 			System.out.println("PAUSA di 30 minuti per flood URL");
 			try {
 				DatabaseMySql.delete("utenti", "profile", "user", user);
+	    		DatabaseMySql.delete("utenti", "toCheck", "user", user);
 				DatabaseMySql.inserToCheck("utenti", user, -9999);
 				Thread.currentThread();
-				Thread.sleep(1800000);	 // Pausa di 3 minuti e mezzo
+				Thread.sleep(1800000);	 // Pausa
 			}
 			catch (InterruptedException e) { 
 				e.printStackTrace();
@@ -133,7 +134,10 @@ public class urlReader  {
     	try {
     		System.out.println("Pausa di " + sec + " secondi sull'utente " + user);
     		DatabaseMySql.delete("utenti", "profile", "user", user);
-    		DatabaseMySql.inserToCheck("utenti", user, DatabaseMySql.getMinPriority() + 5);
+    		DatabaseMySql.delete("utenti", "toCheck", "user", user);
+    		tot = DatabaseMySql.getMinPriority() + 5;
+    		System.out.println("Priorità selezionata per l'utente " + user + ": " + tot);
+    		DatabaseMySql.inserToCheck("utenti", user, tot);
     		Thread.currentThread();
     		Thread.sleep(sec * 1000);	 // Pausa di sec secondi
     	}
@@ -157,7 +161,7 @@ public class urlReader  {
 			System.out.println(msg = connection.getResponseMessage());
 			if (code >= 500) {
 				OutputTxt.writeLog("Errore 500+ : servizio non disponibile al momento.");
-				System.out.println("Errore 500+ : servizio non disponibile al momento.. Pausa 5 minuti.");
+				System.out.println("Errore 500+ : servizio non disponibile al momento..");
 				pausa(30, user);
 				return;
 			// Direi di fare una pausa e di richiamare la stessa funzione

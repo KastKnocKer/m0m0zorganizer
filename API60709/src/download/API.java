@@ -60,10 +60,10 @@ import java.net.URL;
 	
 	public static void getFavorites (YouTubeService myService, String devKey, String user) {
 		System.out.println("ANALISI dei favorites dell' utente " + user + ".");
-		getFavorites(myService, devKey, user,1, 0);
+		getFavorites(myService, devKey, user,1, 0, 0);
 	}
 	
-	public static void getFavorites (YouTubeService myService, String devKey, String user, int count, int giriVuoto) {
+	public static void getFavorites (YouTubeService myService, String devKey, String user, int count, int giriVuoto, int maxCount) {
 		countTemp = false;
 		try {
 			metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/users/" + user + "/favorites?&key=" + devKey +
@@ -87,11 +87,16 @@ import java.net.URL;
 			System.out.println("Favorites dell'user " + user + " scaricati fino al num: " + count + ".");
 			if (tot > 1000)
 				tot = 951;
+			if (count > 951) {
+				count= 951;
+				maxCount++;
+			}				
 			if (!countTemp)
 				giriVuoto++;
-			if (giriVuoto < 2 && tot >= count) {
+			if (giriVuoto < 2 && maxCount < 2 && tot >= count) {
+
 				System.out.println("\t\t\tTotale favorites per l'user " + user + ": " + tot);
-				getFavorites(myService, devKey, user, count, giriVuoto);
+				getFavorites(myService, devKey, user, count, giriVuoto, maxCount);
 			}
 			else 
 				return;
@@ -108,10 +113,10 @@ import java.net.URL;
 	
 	public static void getVideo (YouTubeService myService, String devKey, String user) {
 		System.out.println("ANALISI dei video dell' utente " + user + ".");
-		getVideo(myService, devKey, user,1, 0);
+		getVideo(myService, devKey, user,1, 0, 0);
 	}
 	
-	public static void getVideo (YouTubeService myService, String devKey, String user, int count, int giriVuoto) {
+	public static void getVideo (YouTubeService myService, String devKey, String user, int count, int giriVuoto, int maxCount) {
 		countTemp = false;
 		try {
 			metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/users/" + user + "/uploads?&key=" + devKey +
@@ -134,11 +139,16 @@ import java.net.URL;
 			System.out.println("Video dell'user " + user + " scaricati fino al num: " + count + ".");
 			if (tot > 1000)
 				tot = 951;
+			if (count > 951) {
+				count= 951;
+				maxCount++;
+			}				
 			if (!countTemp)
 				giriVuoto++;
-			if (giriVuoto < 2 && tot >= count) {
+			if (giriVuoto < 2 && maxCount < 2 && tot >= count) {
+
 				System.out.println("\t\t\tTotale video per l'user " + user + ": " + tot);
-				getVideo(myService, devKey, user, count, giriVuoto);
+				getVideo(myService, devKey, user, count, giriVuoto, maxCount);
 			}
 			else 
 				return;
@@ -231,10 +241,10 @@ import java.net.URL;
 	
 	public static void getSubscriptions (YouTubeService myService, String devKey, String user) {
 		System.out.println("ANALISI delle subscriptions dell' utente " + user + ".");
-			getSubscriptions(myService, devKey, user, 1,0 );
+			getSubscriptions(myService, devKey, user, 1, 0, 0);
 	}
 	
-	public static void getSubscriptions (YouTubeService myService, String devKey, String user, int count, int giriVuoto) {
+	public static void getSubscriptions (YouTubeService myService, String devKey, String user, int count, int giriVuoto, int maxCount) {
 		countTemp = false;
 		try {
 			metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/users/" + user + "/subscriptions?key=" + devKey +
@@ -263,11 +273,16 @@ import java.net.URL;
 			System.out.println("Subscriptions dell'user " + user + " scaricati fino al num: " + count + ".");
 			if (tot > 1000)
 				tot = 951;
+			if (count > 951) {
+				count= 951;
+				maxCount++;
+			}				
 			if (!countTemp)
 				giriVuoto++;
-			if (giriVuoto < 2 && tot >= count) {
-				System.out.println("\t\t\tTotale subscription per l'user " + user + ": " + tot);
-				getSubscriptions(myService, devKey, user, count, giriVuoto);	
+			if (giriVuoto < 2 && maxCount < 2 && tot >= count) {
+
+				System.out.println("\t\t\tTotale subscriptions per l'user " + user + ": " + tot);
+				getSubscriptions(myService, devKey, user, count, giriVuoto, maxCount);
 			}
 			else
 				return;
@@ -294,6 +309,7 @@ import java.net.URL;
 		Contatore.setUrl(0);
 		try {
 			DatabaseMySql.delete("utenti", "profile", "user", user);
+    		DatabaseMySql.delete("utenti", "toCheck", "user", user);
 			DatabaseMySql.inserToCheck("utenti", user, -9999);
 			Thread.currentThread();
 			Thread.sleep(331000);	 // Pausa di 3 minuti e mezzo

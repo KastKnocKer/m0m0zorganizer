@@ -8,6 +8,7 @@ import database.DatabaseMySql;
 import database.OutputTxt;
 import download.API;
 import download.scanUser;
+import download.urlReader;
 
 public class proveIO {
 
@@ -21,6 +22,8 @@ public class proveIO {
 		String devKey = "AI39si5XLt78NO1fRB0VaLCqUIXWkZeLDNSITQMvwwo_0scaR2qwzc2FzQTAqNqYBY0mAooL1HM4rl9BNpAefC1jx4PuMYKWsQ";
 		//YouTubeService myService = new YouTubeService("Tesi");
 		//new scanUser(myService, devKey);
-		System.out.println(devKey.length());
+		//System.out.println(devKey.length());
+		DatabaseMySql.extract("utenti", "toCheck", "user");
+		urlReader.pausa(5, "nonna");
 	}
 }
