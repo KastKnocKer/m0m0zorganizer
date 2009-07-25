@@ -2,7 +2,6 @@ import com.google.gdata.client.youtube.YouTubeService;
 
 import database.DatabaseMySql;
 import database.OutputTxt;
-import download.Contatore;
 import download.scanUser;
 
 
@@ -25,7 +24,7 @@ public class crawlerUser {
 		
 		YouTubeService myService = new YouTubeService("Tesi");
 		
-		new scanUser(myService, DatabaseMySql.eseguiQuery("Select devKey from utenti.key where crawler='padre'").get(0)[0], "utenti");
+		new scanUser(myService, DatabaseMySql.eseguiQuery("Select devKey from utenti.key where crawler='"+ args[0] + "'").get(0)[0], "utenti");
 		
 		DatabaseMySql.Disconnetti();
 	}

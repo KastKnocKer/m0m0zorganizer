@@ -3,7 +3,6 @@ package download;
 import com.google.gdata.client.youtube.YouTubeService;
 
 import database.DatabaseMySql;
-import database.Orario;
 import database.OutputTxt;
 
 public class scanUser {
@@ -13,8 +12,6 @@ public class scanUser {
 		DatabaseMySql.connetti();	// Connessione al database
 		new OutputTxt(); 			// Definisco il FileHandler per tutto il programma
 		new Contatore ();
-		
-		new API();
 		
 		toCheck(myService, devKey, nomeDB);
 	}

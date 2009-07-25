@@ -2,7 +2,6 @@ package download;
 
 import com.google.gdata.client.youtube.YouTubeService;
 import database.DatabaseMySql;
-import database.Orario;
 import database.OutputTxt;
 
 public class scanPopular {

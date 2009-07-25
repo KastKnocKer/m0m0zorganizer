@@ -22,7 +22,7 @@ public class crawlerPopular {
 		
 		YouTubeService myService = new YouTubeService("Tesi");
 		
-		new scanPopular(myService, DatabaseMySql.eseguiQuery("Select devKey from utenti.key where crawler='padre'").get(0)[0], "utenti");
+		new scanPopular(myService, DatabaseMySql.eseguiQuery("Select devKey from utenti.key where crawler='"+ args[0] + "'").get(0)[0], "utenti");
 		
 		DatabaseMySql.Disconnetti();
 	}
