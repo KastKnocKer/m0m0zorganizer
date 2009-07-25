@@ -2,6 +2,7 @@ package download;
 
 import com.google.gdata.client.youtube.YouTubeService;
 import database.DatabaseMySql;
+import database.Orario;
 import database.OutputTxt;
 
 public class scanPopular {
@@ -25,11 +26,11 @@ public class scanPopular {
 					if (API.getUser(myService, devKey, "active", nomeDB, popularToCheck))		// E' un utente sospeso?  No --> active
 						completeScan(myService, devKey, nomeDB, popularToCheck);	// Si attivo scansione completa senza activity
 					else 		// Non è attivo lo tolgo dagli active e lo metto negli inactive
-						DatabaseMySql.insert("utenti", "profile", popularToCheck, "blocked", "block", "block", "block", "block");
+						DatabaseMySql.insert("utenti", "profile", "", popularToCheck, "blocked", "block", "block", "block", "block");
 				}
 				else
 					if (!API.getUser(myService, devKey, "inactive", nomeDB, popularToCheck))
-						DatabaseMySql.insert("utenti", "profile", popularToCheck, "blocked", "block", "block", "block", "block");
+						DatabaseMySql.insert("utenti", "profile", "", popularToCheck, "blocked", "block", "block", "block", "block");
 				temp++;
 			}
 			if (temp == control) {

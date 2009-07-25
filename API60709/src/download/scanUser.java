@@ -3,6 +3,7 @@ package download;
 import com.google.gdata.client.youtube.YouTubeService;
 
 import database.DatabaseMySql;
+import database.Orario;
 import database.OutputTxt;
 
 public class scanUser {
@@ -29,11 +30,11 @@ public class scanUser {
 						temp++;
 					}
 					else 		// Non è attivo lo tolgo dagli active e lo metto negli inactive
-						DatabaseMySql.insert("utenti", "profile", userToCheck, "blocked", "block", "block", "block", "block");
+						DatabaseMySql.insert("utenti", "profile", "", userToCheck, "blocked", "block", "block", "block", "block");
 					}
 				else
 					if (!API.getUser(myService, devKey, "inactive", nomeDB, userToCheck))
-						DatabaseMySql.insert("utenti", "profile", userToCheck, "blocked", "block", "block", "block", "block");
+						DatabaseMySql.insert("utenti", "profile", "" , userToCheck, "blocked", "block", "block", "block", "block");
 			}
 			if (temp == 30) {
 				return;

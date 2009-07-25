@@ -6,6 +6,7 @@ import com.google.gdata.util.AuthenticationException;
 import com.google.gdata.util.ResourceNotFoundException;
 import com.google.gdata.util.ServiceException;
 import database.DatabaseMySql;
+import database.Orario;
 import database.OutputTxt;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -27,7 +28,8 @@ import java.net.URL;
            	System.out.println("Profilo scaricato per l'utente: " + profileEntry.getUsername());           	
            	userStats = profileEntry.getStatistics();
            	if(userStats != null) {
-           		DatabaseMySql.insert(nomeDB, "profile", user, status, userStats.getSubscriberCount() + "",
+           		new Orario();
+           		DatabaseMySql.insert(nomeDB, "profile", user, status, Orario.getDataOra(), userStats.getSubscriberCount() + "",
            				userStats.getViewCount() + "", userStats.getVideoWatchCount() + "",
            				userStats.getLastWebAccess().toString().substring(0, 19));
            		return true;
