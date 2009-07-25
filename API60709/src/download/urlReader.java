@@ -13,7 +13,7 @@ public class urlReader  {
 	
 	public static void userReader (String nomeDB, String tabella, String user) {
 
-		System.out.println("ANALISI per il DB: "+ nomeDB + "  dei " + tabella + " dell' utente " + user + ".");
+		System.out.println("ANALISI per il DB: "+ nomeDB + " dei " + tabella + " dell' utente " + user + ".");
 		userReader (nomeDB, tabella, user, 0);
 	}
 	
@@ -114,13 +114,13 @@ public class urlReader  {
 			Contatore.setApi(0);
 			Contatore.setUrl(0);
 			System.out.println("Rete floodata dalle URL.");
-			System.out.println("pausa(nomeDB, (nomeDB,  di 30 minuti per flood URL");
+			System.out.println("pausa di 30 minuti per flood URL");
 			try {
 				DatabaseMySql.delete(nomeDB, "profile", "user", user);
 	    		DatabaseMySql.delete(nomeDB, "toCheck", "user", user);
 				DatabaseMySql.inserToCheck(nomeDB, user, -9999);
 				Thread.currentThread();
-				Thread.sleep(1800000);	 // pausa(nomeDB, (nomeDB, 
+				Thread.sleep(1800000);	 // pausa 
 			}
 			catch (InterruptedException e) { 
 				e.printStackTrace();
@@ -151,7 +151,7 @@ public class urlReader  {
     public static void getErrorCode (String nomeDB, String tabella ,URL url ,String user) {
     	String msg;
     	int code;
-    	System.out.println("GetErrorCode sui " + tabella  + " dell'utente " + user);
+    	System.out.println("GetErrorCode per il DB: "+ nomeDB + " sui " + tabella  + " dell'utente " + user);
 		HttpURLConnection connection;
 		try {		
 			ethernet.checkEthernet(nomeDB);
@@ -160,8 +160,8 @@ public class urlReader  {
 			System.out.println((code = connection.getResponseCode()));
 			System.out.println(msg = connection.getResponseMessage());
 			if (code >= 500) {
-				OutputTxt.writeLog("Errore 500+ : servizio non disponibile al momento.");
-				System.out.println("Errore 500+ : servizio non disponibile al momento..");
+				OutputTxt.writeLog("Errore 500+ : servizio non disponibile al momento. Analisi per il DB: "+ nomeDB);
+				System.out.println("Errore 500+ : servizio non disponibile al momento. Analisi per il DB: "+ nomeDB);
 				pausa(nomeDB, 30, user);
 				return;
 			// Direi di fare una pausa(nomeDB,  e di richiamare la stessa funzione
@@ -169,8 +169,8 @@ public class urlReader  {
 			else if (msg.contains("Forbidden") ||
 					connection.getResponseMessage().contains("are not public")) {
 				DatabaseMySql.insert(nomeDB, "infoReserved", user, tabella);
-				System.out.println("Errore 403: Informazione non pubblica: " + tabella + " dell' user " + user);
-				OutputTxt.writeLog("Errore 403: Informazione non pubblica: " + tabella + " dell' user " + user);
+				System.out.println("Errore 403: Informazione per il DB: "+ nomeDB + " non pubblica: " + tabella + " dell' user " + user);
+				OutputTxt.writeLog("Errore 403: Informazione per il DB: "+ nomeDB + " non pubblica: " + tabella + " dell' user " + user);
 				return;
 			}
 			else if (msg.contains("many")) {
@@ -179,11 +179,11 @@ public class urlReader  {
 			}	
 			else if (code == 404) {
 				System.out.println("Errore 404: User not found: " + user);
-				OutputTxt.writeLog("Errore 404: User not found: " + user);
+				OutputTxt.writeLog("Errore 404: per il DB: "+ nomeDB + " User not found: " + user);
 				return; 
 			}
 			else if (msg.contains("Bad Request")) {
-				OutputTxt.writeError("Errore bad request all'url: " + url);
+				OutputTxt.writeError("Errore per il DB: "+ nomeDB + " bad request all'url: " + url);
 				System.out.println("Errore bad request all'url: " + url);
 				return;
 			}	

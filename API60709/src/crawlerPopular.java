@@ -10,7 +10,6 @@ public class crawlerPopular {
 		new DatabaseMySql();		// Definisco il database per tutto il programma
 		DatabaseMySql.connetti();	// Connessione al database
 		new OutputTxt(); 			// Definisco il FileHandler per tutto il programma
-		new Contatore ();
 		
 		System.out.println("AVVIO NUOVO FILE");
 		System.out.println("AVVIO NUOVO FILE");
@@ -23,7 +22,7 @@ public class crawlerPopular {
 		
 		YouTubeService myService = new YouTubeService("Tesi");
 		
-		new scanPopular(myService, "utenti", DatabaseMySql.eseguiQuery("Select devKey from utenti.key where crawler='padre'").get(0)[0]);
+		new scanPopular(myService, DatabaseMySql.eseguiQuery("Select devKey from utenti.key where crawler='padre'").get(0)[0], "utenti");
 		
 		DatabaseMySql.Disconnetti();
 	}

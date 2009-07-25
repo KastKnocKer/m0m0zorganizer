@@ -10,6 +10,7 @@ public class scanPopular {
 		new DatabaseMySql();		// Definisco il database per tutto il programma
 		DatabaseMySql.connetti();	// Connessione al database
 		new OutputTxt();
+		new Contatore ();
 		
 		popularScan(myService, devKey, nomeDB);
 	}
@@ -21,13 +22,13 @@ public class scanPopular {
 		for (; (popularToCheck = DatabaseMySql.extract("utenti", "popToCheck", "user")[0]) != null ;) {
 			if (!DatabaseMySql.contiene("utenti", "profile", popularToCheck)) {
 				if (API.getActivity(myService, devKey, nomeDB, popularToCheck)) {	// Ha activityFeed? 
-					if (API.getUser(myService, devKey, nomeDB, "active", popularToCheck))		// E' un utente sospeso?  No --> active
+					if (API.getUser(myService, devKey, "active", nomeDB, popularToCheck))		// E' un utente sospeso?  No --> active
 						completeScan(myService, devKey, nomeDB, popularToCheck);	// Si attivo scansione completa senza activity
 					else 		// Non è attivo lo tolgo dagli active e lo metto negli inactive
 						DatabaseMySql.insert("utenti", "profile", popularToCheck, "blocked", "block", "block", "block", "block");
 				}
 				else
-					if (!API.getUser(myService, devKey, nomeDB, "inactive", popularToCheck))
+					if (!API.getUser(myService, devKey, "inactive", nomeDB, popularToCheck))
 						DatabaseMySql.insert("utenti", "profile", popularToCheck, "blocked", "block", "block", "block", "block");
 				temp++;
 			}

@@ -24,7 +24,7 @@ public class scanUser {
 		for (; (userToCheck = (DatabaseMySql.extract("utenti", "toCheck", "user"))[1]) != null ;) {
 			if (!DatabaseMySql.contiene("utenti", "profile", userToCheck)) {  // L'ho già fatto?
 				if (API.getActivity(myService, devKey, nomeDB, userToCheck)) {	// Ha activityFeed?
-					if (API.getUser(myService, devKey, nomeDB, "active", userToCheck)) {			// E' un utente sospeso?  No --> active
+					if (API.getUser(myService, devKey, "active", nomeDB, userToCheck)) {			// E' un utente sospeso?  No --> active
 						completeScan(myService, devKey, nomeDB, userToCheck);	// Si attivo scansione completa senza activity
 						temp++;
 					}
@@ -32,7 +32,7 @@ public class scanUser {
 						DatabaseMySql.insert("utenti", "profile", userToCheck, "blocked", "block", "block", "block", "block");
 					}
 				else
-					if (!API.getUser(myService, devKey, nomeDB, "inactive", userToCheck))
+					if (!API.getUser(myService, devKey, "inactive", nomeDB, userToCheck))
 						DatabaseMySql.insert("utenti", "profile", userToCheck, "blocked", "block", "block", "block", "block");
 			}
 			if (temp == 30) {

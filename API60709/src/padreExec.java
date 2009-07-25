@@ -2,6 +2,7 @@
 import java.io.*;
 import database.DatabaseMySql;
 import database.OutputTxt;
+import download.Contatore;
 import download.ethernet;
 import download.popularReader;
 
@@ -9,7 +10,7 @@ public class padreExec {
 
 	public static void main(String[] args) {
 		int n = 0;
-		new DatabaseMySql();		// Definisco il database per tutto il programma
+		new DatabaseMySql();
 		DatabaseMySql.connetti();	// Connessione al database
 		ProcessBuilder pb = null;
 		Process scanner;
@@ -34,11 +35,14 @@ public class padreExec {
 		
 		new popularReader(nomeDB);
 		
+		//temporaneo per le prove a casa
+		DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".ethernet set flag ='true' where rete='padre'");
 		DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".ethernet set flag ='true' where rete='figlio'");
 		
 		pb = new ProcessBuilder ("/home/m0m0z/Scrivania/tesina_exec/scanPopular.sh");
 		while (DatabaseMySql.getCount(nomeDB, "popToCheck") != 0) {
 			try {			
+				OutputTxt.writeLog("Padre: processo scanPopular per il DB: DA CONFIGURARE");
 				scanner = pb.start ();
 				BufferedReader in = new BufferedReader(	new InputStreamReader(scanner.getInputStream()));
 				String line = null;
@@ -52,6 +56,8 @@ public class padreExec {
 				flagEth = !flagEth;
 				OutputTxt.writeLog("Padre: Popular scansionati   totale: " + DatabaseMySql.getCount(nomeDB, "profile"));
 				OutputTxt.writeLog("Padre: Popular scansionati   attivi: " + DatabaseMySql.eseguiQuery("Select count(*) from " + nomeDB + ".profile where status='active'").get(0)[0]);
+				OutputTxt.writeLog("Padre: Richieste API per il processo: " + Contatore.getTotApi());
+				OutputTxt.writeLog("Padre: Richieste URL per il processo: " + Contatore.getTotUrl());
 			}
 			catch (IOException e) {
 				OutputTxt.writeError("Errore IO nel try start del padreExec.");
@@ -60,6 +66,7 @@ public class padreExec {
 		pb.command ("/home/m0m0z/Scrivania/tesina_exec/scanUser.sh"); 
 		while (DatabaseMySql.getCount(nomeDB, "toCheck") != 0) {
 			try {
+				OutputTxt.writeLog("Padre: processo scanUser per il DB: DA CONFIGURARE");
 				scanner = pb.start();
 				BufferedReader in = new BufferedReader(	new InputStreamReader(scanner.getInputStream()));
 				String line = null;
@@ -73,9 +80,11 @@ public class padreExec {
 				flagEth = !flagEth;
 				OutputTxt.writeLog("Padre: Popular scansionati   totale: " + DatabaseMySql.getCount(nomeDB, "profile"));
 				OutputTxt.writeLog("Padre: Popular scansionati   attivi: " + DatabaseMySql.eseguiQuery("Select count(*) from " + nomeDB + ".profile where status='active'").get(0)[0]);
+				OutputTxt.writeLog("Padre: Richieste API per il processo: " + Contatore.getTotApi());
+				OutputTxt.writeLog("Padre: Richieste URL per il processo: " + Contatore.getTotUrl());
 			} catch (IOException e) {
 				OutputTxt.writeError("Errore IO nel try scanUser del padreExec.");
 			}  
-		} 
+		}  
 	}
 }

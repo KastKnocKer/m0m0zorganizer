@@ -59,7 +59,7 @@ import java.net.URL;
 	}
 	
 	public static void getFavorites (YouTubeService myService, String devKey, String nomeDB, String user) {
-		System.out.println("ANALISI per il DB: "+ nomeDB + "  per il DB: "+ nomeDB + " dei favorites dell' utente " + user + ".");
+		System.out.println("ANALISI per il DB: "+ nomeDB + " dei favorites dell' utente " + user + ".");
 		getFavorites(myService, devKey, nomeDB, user,1, 0, 0);
 	}
 	
@@ -298,8 +298,8 @@ import java.net.URL;
 	}
 	
     public static void notifyApiFlood (String nomeDB, String tabella, String user) {
-    	OutputTxt.writeLog("Errore 403: Rete floodata dalle API dall'user " + user);    // DA RIFAREEEEE
-    	System.out.println("Errore 403: Rete floodata dalle API dall'user " + user);
+    	OutputTxt.writeLog("Errore 403: Rete floodata dalle API per il DB: "+ nomeDB + " dall'user " + user);    // DA RIFAREEEEE
+    	System.out.println("Errore 403: Rete floodata dalle API per il DB: "+ nomeDB + " dall'user " + user);
 		OutputTxt.writeLog("Richieste API: " + Contatore.getApi());
 		OutputTxt.writeLog("\t\t\t\t\tTotale    API: " + Contatore.getTotApi());
 		OutputTxt.writeLog("Richieste URL: " + Contatore.getUrl());
