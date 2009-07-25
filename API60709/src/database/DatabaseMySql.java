@@ -10,10 +10,10 @@ public class DatabaseMySql {
 	
 	private static Database db = null;
 	
-	public DatabaseMySql(){
+	public DatabaseMySql(String nomeDB){
 		//db = new Database("Nome DB","Utente DB","Pass DB");
 		//db.setPublicHost("db4free.net:3306");
-		db = new Database("utenti","root","dumdadum");
+		db = new Database(nomeDB ,"root","dumdadum");
 		db.setPublicHost("localhost:3306");
 	}
 	

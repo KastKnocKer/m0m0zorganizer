@@ -10,7 +10,7 @@ public class padreExec {
 
 	public static void main(String[] args) {
 		int n = 0;
-		new DatabaseMySql();
+		new DatabaseMySql("utenti"); // DA CONFIGURARE
 		DatabaseMySql.connetti();	// Connessione al database
 		ProcessBuilder pb = null;
 		Process scanner;
@@ -31,7 +31,7 @@ public class padreExec {
 		DatabaseMySql.eseguiAggiornamento("insert into " + nomeDB + ".ethernet values (\"padre\", \"false\")");
 		DatabaseMySql.eseguiAggiornamento("insert into " + nomeDB + ".ethernet values (\"figlio\", \"false\")");
 		boolean flagEth = false; 		    // true eth0 up eth1 down     false eth0 down eth1 up
-		ethernet.switchTo(nomeDB,true); 	// Se ho true sono a eth0 up e switho a eth1 e viceversa
+		ethernet.switchTo(nomeDB, true); 	// Se ho true sono a eth0 up e switho a eth1 e viceversa
 		
 		new popularReader(nomeDB);
 		

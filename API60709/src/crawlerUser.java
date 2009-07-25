@@ -9,7 +9,7 @@ import download.scanUser;
 public class crawlerUser {
 	
 	public static void main(String[] args) {		
-		new DatabaseMySql();		// Definisco il database per tutto il programma
+		new DatabaseMySql("utenti");		// Definisco il database per tutto il programma
 		DatabaseMySql.connetti();	// Connessione al database
 		new OutputTxt(); 			// Definisco il FileHandler per tutto il programma
 		
@@ -25,7 +25,7 @@ public class crawlerUser {
 		
 		YouTubeService myService = new YouTubeService("Tesi");
 		
-		new scanUser(myService, DatabaseMySql.eseguiQuery("Select devKey from utenti.key where crawler='padre'").get(0)[0], "utenti");
+		new scanUser(myService, DatabaseMySql.eseguiQuery("Select devKey from configurazioni.key where crawler='padre'").get(0)[0], "utenti");
 		
 		DatabaseMySql.Disconnetti();
 	}

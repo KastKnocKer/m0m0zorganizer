@@ -8,7 +8,7 @@ import database.OutputTxt;
 public class scanUser {
 	
 	public scanUser (YouTubeService myService, String devKey, String nomeDB) {
-		new DatabaseMySql();		// Definisco il database per tutto il programma
+		new DatabaseMySql(nomeDB);		// Definisco il database per tutto il programma
 		DatabaseMySql.connetti();	// Connessione al database
 		new OutputTxt(); 			// Definisco il FileHandler per tutto il programma
 		new Contatore ();
