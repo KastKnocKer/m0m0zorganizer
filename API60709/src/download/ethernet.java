@@ -15,8 +15,8 @@ public class ethernet {
 	public static void switchTo (String nomeDB, boolean flag) {		
 		try {
 			System.out.println("Avvio switching ethernet..Attendere..");
-			DatabaseMySql.eseguiAggiornamento("update configurazioni.ethernet set flag ='false' where rete='padre'");
-			while (DatabaseMySql.eseguiQuery("Select flag from configurazioni.ethernet where rete='figlio'").get(0)[0].contains("true")) { 
+			DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".ethernet set flag ='false' where rete='padre'");
+			while (DatabaseMySql.eseguiQuery("Select flag from " + nomeDB + ".ethernet where rete='figlio'").get(0)[0].contains("true")) { 
 				try {	
 					System.out.println("Attesa segnale dal processo figlio..Attendere..");
 					Thread.sleep(1000);	
@@ -44,7 +44,7 @@ public class ethernet {
 		}
 		try {
 			Thread.sleep(3500);  // Sistemare se sono a casa 7500 se sono in uni 3500
-			DatabaseMySql.eseguiAggiornamento("update configurazioni.ethernet set flag ='true' where rete='padre'");
+			DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".ethernet set flag ='true' where rete='padre'");
 		} catch (InterruptedException e1) {
 			OutputTxt.writeError("Errore di interrupt nel secondo timer dello switchEthernet");
 		}
@@ -53,18 +53,18 @@ public class ethernet {
 	
 	public static void checkEthernet (String nomeDB) {
 		try {
-			if (DatabaseMySql.eseguiQuery("Select flag from configurazioni.ethernet where rete='padre'").get(0)[0].contains("true"))
+			if (DatabaseMySql.eseguiQuery("Select flag from " + nomeDB + ".ethernet where rete='padre'").get(0)[0].contains("true"))
 				return;
 			else {
-				DatabaseMySql.eseguiAggiornamento("update configurazioni.ethernet set flag ='false' where rete='figlio'");
-				while (DatabaseMySql.eseguiQuery("Select flag from configurazioni.ethernet where rete='padre'").get(0)[0].contains("false")) {
+				DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".ethernet set flag ='false' where rete='figlio'");
+				while (DatabaseMySql.eseguiQuery("Select flag from " + nomeDB + ".ethernet where rete='padre'").get(0)[0].contains("false")) {
 					try {
 						System.out.println("Ethernet switching..Attendere..");
 						Thread.sleep(1000);	
 					} catch (InterruptedException e1) { 
 						OutputTxt.writeError("Errore di interrupt nel timer del checkEthernet");}
 				}
-				DatabaseMySql.eseguiAggiornamento("update configurazioni.ethernet set flag ='true' where rete='figlio'");
+				DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".ethernet set flag ='true' where rete='figlio'");
 			} 
 		} catch (ArrayIndexOutOfBoundsException e) { 
 			try {Thread.sleep(1000);} catch (InterruptedException e1) {

@@ -25,7 +25,7 @@ public class crawlerUser {
 		
 		YouTubeService myService = new YouTubeService("Tesi");
 		
-		new scanUser(myService, DatabaseMySql.eseguiQuery("Select devKey from configurazioni.key where crawler='padre'").get(0)[0], "utenti");
+		new scanUser(myService, DatabaseMySql.eseguiQuery("Select devKey from utenti.key where crawler='padre'").get(0)[0], "utenti");
 		
 		DatabaseMySql.Disconnetti();
 	}

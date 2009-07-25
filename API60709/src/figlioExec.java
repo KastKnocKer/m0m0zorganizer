@@ -15,6 +15,7 @@ public class figlioExec {
 		Process scanner;
 		int n = 0;
 		
+		String nomeDB = "utenti";
 		final String[] key = new String[6];
 		key[0] = "AI39si7ApF_l2ABpTplTnaS_sjxreCpkkQQi4vLAWYxxb1VHsHpeh1HJKlx9t5vi_ngxvSpuIqXQShsNXMWhDNGBjBtNlSIxkg";
 		key[1] = "AI39si5XLt78NO1fRB0VaLCqUIXWkZeLDNSITQMvwwo_0scaR2qwzc2FzQTAqNqYBY0mAooL1HM4rl9BNpAefC1jx4PuMYKWsQ";
@@ -23,14 +24,14 @@ public class figlioExec {
 		key[4] = "AI39si7e_IYXZqXB764Zgqll4sJlxizsHT02LAx1yo6CHG-8eaayATP-OGG330hhLj1HUHmjzwU62X7s8WHSe8JpiqpfrfGoGw";
 		key[5] = "AI39si64j5tSsH0ZIWV181HS2TS0Fzybri75KOBcQrm6baZ9TtfyZ7IiGPIEZPfuVZS-HK0LDTsNGDHk6Vu_bqObw0nm68VMog";
 		
-		DatabaseMySql.eseguiAggiornamento("insert into utenti.key values (\"figlio\", \"" + key[0] + "\")");
+		DatabaseMySql.eseguiAggiornamento("insert into " + nomeDB + ".key values (\"figlio\", \"" + key[0] + "\")");
 		
-		while (DatabaseMySql.eseguiQuery("Select flag from utenti.ethernet where crawler='figlio'").get(0)[0].equals("false")) {
+		while (DatabaseMySql.eseguiQuery("Select flag from " + nomeDB + ".ethernet where crawler='figlio'").get(0)[0].equals("false")) {
 			try {Thread.sleep(5000); System.out.println("In attesa della fine di popularReader.");} catch (InterruptedException e1) {}
 			}
 		
 		pb = new ProcessBuilder ("/home/m0m0z/Scrivania/tesina_exec/scanPopular.sh");
-		while (DatabaseMySql.getCount("utenti", "popToCheck") != 0) {
+		while (DatabaseMySql.getCount("" + nomeDB + "", "popToCheck") != 0) {
 			try {			
 				OutputTxt.writeLog("Figlio: processo scanPopular per il DB: DA CONFIGURARE");
 				scanner = pb.start ();
@@ -41,9 +42,9 @@ public class figlioExec {
 				}
 				if (++n == 6)
 					n = 0;
-				DatabaseMySql.eseguiAggiornamento("update utenti.key set devKey='" + key[n] + "' where crawler='figlio'");
-				OutputTxt.writeLog("Figlio: Popular scansionati   totale: " + DatabaseMySql.getCount("utenti", "profile"));
-				OutputTxt.writeLog("Figlio: Popular scansionati   attivi: " + DatabaseMySql.eseguiQuery("Select count(*) from utenti.profile where status='active'").get(0)[0]);
+				DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".key set devKey='" + key[n] + "' where crawler='figlio'");
+				OutputTxt.writeLog("Figlio: Popular scansionati   totale: " + DatabaseMySql.getCount("" + nomeDB + "", "profile"));
+				OutputTxt.writeLog("Figlio: Popular scansionati   attivi: " + DatabaseMySql.eseguiQuery("Select count(*) from " + nomeDB + ".profile where status='active'").get(0)[0]);
 				OutputTxt.writeLog("Figlio: Richieste API per il processo: " + Contatore.getTotApi());
 				OutputTxt.writeLog("Figlio: Richieste URL per il processo: " + Contatore.getTotUrl());
 			}
@@ -52,7 +53,7 @@ public class figlioExec {
 			}  
 		}
 		pb.command ("/home/m0m0z/Scrivania/tesina_exec/scanUser.sh"); 
-		while (DatabaseMySql.getCount("utenti", "toCheck") != 0) {
+		while (DatabaseMySql.getCount("" + nomeDB + "", "toCheck") != 0) {
 			try {
 				OutputTxt.writeLog("Figlio: processo scanUser per il DB: DA CONFIGURARE");
 				scanner = pb.start();
@@ -63,9 +64,9 @@ public class figlioExec {
 				} 
 				if (++n == 6) 
 					n = 0;
-				DatabaseMySql.eseguiAggiornamento("update utenti.key set devKey='" + key[n] + "' where crawler='figlio'");
-				OutputTxt.writeLog("Figlio: Popular scansionati   totale: " + DatabaseMySql.getCount("utenti", "profile"));
-				OutputTxt.writeLog("Figlio: Popular scansionati   attivi: " + DatabaseMySql.eseguiQuery("Select count(*) from utenti.profile where status='active'").get(0)[0]);
+				DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".key set devKey='" + key[n] + "' where crawler='figlio'");
+				OutputTxt.writeLog("Figlio: Popular scansionati   totale: " + DatabaseMySql.getCount("" + nomeDB + "", "profile"));
+				OutputTxt.writeLog("Figlio: Popular scansionati   attivi: " + DatabaseMySql.eseguiQuery("Select count(*) from " + nomeDB + ".profile where status='active'").get(0)[0]);
 				OutputTxt.writeLog("Figlio: Richieste API per il processo: " + Contatore.getTotApi());
 				OutputTxt.writeLog("Figlio: Richieste URL per il processo: " + Contatore.getTotUrl());
 			} catch (IOException e) {
