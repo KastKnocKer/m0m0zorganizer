@@ -148,6 +148,23 @@ public class urlReader  {
     	}
     }
     
+    public static String getFavoritesFeed (String nomeDB, String tabella, String user, String videoId) {
+		try {
+			metafeedUrl = new URL ("http://gdata.youtube.com/feeds/api/videos/" + videoId);
+			in = new BufferedReader(new InputStreamReader(metafeedUrl.openStream()));
+	    	System.out.println("\t\t\t\t\t\t\t\t\t\t\t\tPacchetto arrivato.");
+			while ((inputLine = in.readLine()) != null) {
+				if (inputLine.contains("<author>")) {
+					return inputLine = inputLine.substring(inputLine.indexOf("<name>") + 6, inputLine.indexOf("</name>"));
+				}
+			}
+		} catch (MalformedURLException e) {
+		} catch (IOException e) {
+			getErrorCode(nomeDB, tabella , metafeedUrl, user);
+		}
+		return videoId;
+    }
+    
     public static void getErrorCode (String nomeDB, String tabella ,URL url ,String user) {
     	String msg;
     	int code;

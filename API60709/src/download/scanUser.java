@@ -33,7 +33,7 @@ public class scanUser {
 					if (!API.getUser(myService, devKey, "inactive", nomeDB, userToCheck))
 						DatabaseMySql.insert("utenti", "profile", "" , userToCheck, "blocked", "block", "block", "block", "block");
 			}
-			if (temp == 30) {
+			if (temp == 25) {
 				return;
 			}
 		}

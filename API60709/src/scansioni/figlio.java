@@ -49,7 +49,7 @@ public class figlio {
 			}  
 		}
 		pb.command ("/home/m0m0z/Scrivania/tesina_exec/scanUser.sh figlio"); 
-		while (DatabaseMySql.getCount("" + nomeDB + "", "toCheck") != 0) {
+		while (DatabaseMySql.getCount("" + nomeDB + "", "toCheck") != 0) { // && getCount(nomeDB, "profile*ACTIVE*) < CAP)
 			try {
 				OutputTxt.writeLog("Figlio: processo scanUser per il DB: DA CONFIGURARE");
 				scanner = pb.start();
@@ -70,6 +70,7 @@ public class figlio {
 			}  
 		} 
 	}	
+	
 	private static ProcessBuilder pb = null;
 	private static Process scanner;
 	private static int n;

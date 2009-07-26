@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 
 import database.DatabaseMySql;
 import database.OutputTxt;
+import download.API;
 import download.Contatore;
 import download.ethernet;
 import download.popularReader;
@@ -25,6 +26,7 @@ public class padre {
 		key[5] = "AI39si647HsBMmuW7FnWtDwb037yfACgX-FcXaHuMZXfTUH37tw8DawMPmWgbO-CeSIfoJJF5URC7ww52k94Thj_dbH9wFdxNQ";
 		
 		DatabaseMySql.eseguiAggiornamento("insert into " + nomeDB + ".key values (\"padre\", \"" + key[0] + "\")");
+		
 		DatabaseMySql.eseguiAggiornamento("insert into " + nomeDB + ".ethernet values (\"padre\", \"false\")");
 		DatabaseMySql.eseguiAggiornamento("insert into " + nomeDB + ".ethernet values (\"figlio\", \"false\")");
 		flagEth = false; 		    // true eth0 up eth1 down     false eth0 down eth1 up
@@ -34,8 +36,8 @@ public class padre {
 		
 		//temporaneo per le prove a casa
 		DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".ethernet set flag ='true' where rete='padre'");
-		DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".ethernet set flag ='true' where rete='figlio'");
 		
+		DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".ethernet set flag ='true' where rete='figlio'");
 		pb = new ProcessBuilder ("/home/m0m0z/Scrivania/tesina_exec/scanPopular.sh padre");
 		while (DatabaseMySql.getCount(nomeDB, "popToCheck") != 0) {
 			try {			
@@ -83,6 +85,20 @@ public class padre {
 				OutputTxt.writeError("Errore IO nel try scanUser del padreExec.");
 			}  
 		}  
+	}
+	
+	public static void scansioneVeloce (String nomeDB, String data, int n) {
+		String [] users = new String[20];
+		String userTemp = "";
+		int i = 0;
+		while (DatabaseMySql.getCount(nomeDB, "active") != 0) {
+			users[i] = DatabaseMySql.extract(nomeDB, "active", "user")[0];
+		if (i == 0)
+			userTemp = users[0];
+		else 
+			userTemp = userTemp + "," + users[i];
+		}
+		// API.getActivity(myService, devKey, nomeDB, userTemp, 0, 0, data, N);
 	}
 	
 	private static ProcessBuilder pb = null;

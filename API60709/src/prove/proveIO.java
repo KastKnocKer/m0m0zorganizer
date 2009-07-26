@@ -1,8 +1,11 @@
 package prove;
 
 //import com.google.gdata.client.youtube.YouTubeService;
+import com.google.gdata.client.youtube.YouTubeService;
+
 import database.DatabaseMySql;
 import database.OutputTxt;
+import download.API;
 import download.Contatore;
 import download.popularReader;
 
@@ -17,9 +20,9 @@ public class proveIO {
 		//YouTubeService myService = new YouTubeService("Tesina");
 		//API.getUser(myService, "active", "momoz1987");
 		String devKey = "AI39si5XLt78NO1fRB0VaLCqUIXWkZeLDNSITQMvwwo_0scaR2qwzc2FzQTAqNqYBY0mAooL1HM4rl9BNpAefC1jx4PuMYKWsQ";
-		//YouTubeService myService = new YouTubeService("Tesi");
+		YouTubeService myService = new YouTubeService("Tesi");
 		//new scanUser(myService, devKey);
 		//System.out.println(devKey.length());
-		new popularReader("utenti");
+		API.getActivity(myService, devKey, "utenti", "momoz1987");
 	}
 }
