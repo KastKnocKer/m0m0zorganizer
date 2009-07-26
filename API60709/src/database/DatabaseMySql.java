@@ -149,6 +149,14 @@ public class DatabaseMySql {
 		}
 	}
 	
+	public static void copyAttivi (String nomeDB) {
+		Vector<String[]> v = null;
+		v = DatabaseMySql.eseguiQuery("Select user from " + nomeDB + ".profile where status ='active'");
+		for (int i = 0; i < v.size(); i++) {
+			DatabaseMySql.insert(nomeDB, "activeList", v.elementAt(i)[0]);
+		}
+	}
+	
 	public static int getMinPriority () {
 		return Integer.parseInt((DatabaseMySql.eseguiQuery("Select min(priority) from utenti.toCheck")).get(0)[0].toString());
 	}

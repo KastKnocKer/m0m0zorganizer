@@ -22,7 +22,7 @@ public class crawlerUser {
 		System.out.println("AVVIO NUOVO FILE");
 		OutputTxt.writeLog("Nuovo crawler user");
 		
-		YouTubeService myService = new YouTubeService("Tesi");
+		YouTubeService myService = new YouTubeService("Tesi", DatabaseMySql.eseguiQuery("Select devKey from utenti.key where crawler='"+ args[0] + "'").get(0)[0]);
 		
 		new scanUser(myService, DatabaseMySql.eseguiQuery("Select devKey from utenti.key where crawler='"+ args[0] + "'").get(0)[0], "utenti");
 		

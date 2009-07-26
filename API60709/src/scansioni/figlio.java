@@ -12,7 +12,7 @@ public class figlio {
 	
 	public static void scansioneCompleta (String nomeDB) {
 		new Contatore();
-		final String[] key = new String[6];
+		key = new String[6];
 		key[0] = "AI39si7ApF_l2ABpTplTnaS_sjxreCpkkQQi4vLAWYxxb1VHsHpeh1HJKlx9t5vi_ngxvSpuIqXQShsNXMWhDNGBjBtNlSIxkg";
 		key[1] = "AI39si5XLt78NO1fRB0VaLCqUIXWkZeLDNSITQMvwwo_0scaR2qwzc2FzQTAqNqYBY0mAooL1HM4rl9BNpAefC1jx4PuMYKWsQ";
 		key[2] = "AI39si647HsBMmuW7FnWtDwb037yfACgX-FcXaHuMZXfTUH37tw8DawMPmWgbO-CeSIfoJJF5URC7ww52k94Thj_dbH9wFdxNQ";
@@ -71,8 +71,40 @@ public class figlio {
 		} 
 	}	
 	
+	public static void scansioneVeloce (int scansioneN, String nomeDB, String data, int n) {
+		key = new String[6];
+		key[0] = "AI39si7ApF_l2ABpTplTnaS_sjxreCpkkQQi4vLAWYxxb1VHsHpeh1HJKlx9t5vi_ngxvSpuIqXQShsNXMWhDNGBjBtNlSIxkg";
+		key[1] = "AI39si5XLt78NO1fRB0VaLCqUIXWkZeLDNSITQMvwwo_0scaR2qwzc2FzQTAqNqYBY0mAooL1HM4rl9BNpAefC1jx4PuMYKWsQ";
+		key[2] = "AI39si647HsBMmuW7FnWtDwb037yfACgX-FcXaHuMZXfTUH37tw8DawMPmWgbO-CeSIfoJJF5URC7ww52k94Thj_dbH9wFdxNQ";
+		key[3] = "AI39si4fzIi01PLvZIYjyHDVpyEKyvUHJAUvG4N9US4g1SYHmmcojgJ-joGo4q3ajF6eLPom3lmUoFw7IpYStDWUoOm29jadMA";
+		key[4] = "AI39si7e_IYXZqXB764Zgqll4sJlxizsHT02LAx1yo6CHG-8eaayATP-OGG330hhLj1HUHmjzwU62X7s8WHSe8JpiqpfrfGoGw";
+		key[5] = "AI39si64j5tSsH0ZIWV181HS2TS0Fzybri75KOBcQrm6baZ9TtfyZ7IiGPIEZPfuVZS-HK0LDTsNGDHk6Vu_bqObw0nm68VMog";
+		
+		pb = new ProcessBuilder ("/home/m0m0z/Scrivania/tesina_exec/scanActivity.sh figlio " + data + ".000Z " + scansioneN);
+		while (DatabaseMySql.getCount(nomeDB, "activeList") != 0) {
+			try {			
+				OutputTxt.writeLog("Figlio: processo scanActivity per il DB: DA CONFIGURARE");
+				scanner = pb.start ();
+				BufferedReader in = new BufferedReader(new InputStreamReader(scanner.getInputStream()));
+				String line = null;
+				while ((line = in.readLine()) != null)	{
+					System.out.println(line);
+				}
+				if (++n == 6)
+					n = 0;
+				DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".key set devKey='" + key[n] + "' where crawler='figlio'");
+				OutputTxt.writeLog("Figlio: Attivi   scansionati   totale: " + DatabaseMySql.getCount(nomeDB, "active" + scansioneN));
+				OutputTxt.writeLog("Figlio: Inattivi scansionati   totale: " + DatabaseMySql.getCount(nomeDB, "inactive" + scansioneN));
+				OutputTxt.writeLog("Figlio: Richieste API per il processo: " + Contatore.getTotApi());
+			}
+			catch (IOException e) {
+				OutputTxt.writeError("Errore IO nel try start del padreExec.");
+			}  
+		}		
+	}
+	
 	private static ProcessBuilder pb = null;
 	private static Process scanner;
+	private static String[] key;
 	private static int n;
-
 }

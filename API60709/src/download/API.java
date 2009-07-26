@@ -8,10 +8,7 @@ import com.google.gdata.util.ServiceException;
 import database.DatabaseMySql;
 import database.Orario;
 import database.OutputTxt;
-
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -256,10 +253,10 @@ import java.net.URL;
 	    	System.out.println("\t\t\t\t\t\t\t\t\t\t\t\tPacchetto arrivato.");
 			if (activityFeed.getEntries().size() == 0) {
 				System.out.println("Tutti questi: " + user);
-				return false;
 			}
 			for (UserEventEntry entry : activityFeed.getEntries()) {
 				stringTemp = entry.getAuthors().get(0).getName();
+				DatabaseMySql.insert(nomeDB, "active" + N, stringTemp, data);
 				countTemp = true;
 				if(entry.getUserEventType() == UserEventEntry.Type.VIDEO_UPLOADED) {
 					DatabaseMySql.insert(nomeDB, "activity" + N, stringTemp, entry.getVideoId(), "uploaded", 
@@ -316,10 +313,8 @@ import java.net.URL;
 			urlReader.getErrorCode(nomeDB, "activity" + N, metafeedUrl, user);
         	return false;
         }
-		if (countTemp)
-			return true;
-		return false;
-		}
+		return true;
+	}
 	
 	
 	public static void getSubscriptions (YouTubeService myService, String devKey, String nomeDB, String user) {

@@ -2,9 +2,9 @@ import com.google.gdata.client.youtube.YouTubeService;
 
 import database.DatabaseMySql;
 import database.OutputTxt;
-import download.*;
+import download.scanActivity;
 
-public class crawlerPopular {
+public class crawlerActivity {
 
 	public static void main(String[] args) {		
 		new DatabaseMySql("utenti");		// Definisco il database per tutto il programma
@@ -19,10 +19,12 @@ public class crawlerPopular {
 		System.out.println("AVVIO NUOVO FILE");
 		System.out.println("AVVIO NUOVO FILE");
 		System.out.println("AVVIO NUOVO FILE");
+		OutputTxt.writeLog("Nuovo crawler Activity");
 		
 		YouTubeService myService = new YouTubeService("Tesi", DatabaseMySql.eseguiQuery("Select devKey from utenti.key where crawler='"+ args[0] + "'").get(0)[0]);
 		
-		new scanPopular(myService, DatabaseMySql.eseguiQuery("Select devKey from utenti.key where crawler='"+ args[0] + "'").get(0)[0], "utenti");
+		new scanActivity(myService, DatabaseMySql.eseguiQuery("Select devKey from utenti.key where crawler='"+ args[0] + "'").get(0)[0],
+				"utenti", args[1] , Integer.parseInt(args[2]));
 		
 		DatabaseMySql.Disconnetti();
 	}
