@@ -22,8 +22,8 @@ public class scanPopular {
 		for (; (popularToCheck = DatabaseMySql.extract("utenti", "popToCheck", "user")[0]) != null ;) {
 			if (!DatabaseMySql.contiene("utenti", "profile", popularToCheck)) {
 				if (API.getActivity(myService, devKey, nomeDB, popularToCheck)) {	// Ha activityFeed? 
-					if (API.getUser(myService, devKey, "active", nomeDB, popularToCheck))		// E' un utente sospeso?  No --> active
-						completeScan(myService, devKey, nomeDB, popularToCheck);	// Si attivo scansione completa senza activity
+					if (API.getUser(myService, devKey, "active", nomeDB, popularToCheck)) {}	// E' un utente sospeso?  No --> active
+					//	completeScan(myService, devKey, nomeDB, popularToCheck);	// Si attivo scansione completa senza activity
 					else 		// Non è attivo lo tolgo dagli active e lo metto negli inactive
 						DatabaseMySql.insert("utenti", "profile", "", popularToCheck, "blocked", "block", "block", "block", "block");
 				}

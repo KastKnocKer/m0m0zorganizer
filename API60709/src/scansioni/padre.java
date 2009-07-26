@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import database.DatabaseMySql;
+import database.Orario;
 import database.OutputTxt;
 import download.Contatore;
 import download.ethernet;
@@ -80,7 +81,9 @@ public class padre {
 			}  
 		}  
 		// Copia degli utenti attivi per avere una lista per le scansioni veloci
-		DatabaseMySql.copyAttivi(nomeDB);
+		new Orario();
+		DatabaseMySql.copyAttivi(nomeDB, Orario.getData());
+		// flag per dire al figlio se partire o no
 	}
 	
 	public static void scansioneVeloce (int scansioneN, String nomeDB, String data) {
@@ -105,6 +108,8 @@ public class padre {
 				if (++n == 6)
 					n = 0;
 				DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".key set devKey='" + key[n] + "' where crawler='padre'");
+				// Messo perchè non penso di utilizzare il figlio nelle scansioni veloci
+				DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".key set devKey='" + key[n] + "' where crawler='figlio'");
 				ethernet.switchTo(nomeDB, flagEth);
 				flagEth = !flagEth;
 				OutputTxt.writeLog("Padre: Attivi   scansionati   totale: " + DatabaseMySql.getCount(nomeDB, "active" + scansioneN));

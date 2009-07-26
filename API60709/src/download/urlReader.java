@@ -148,7 +148,7 @@ public class urlReader  {
     	}
     }
     
-    public static String getFavoritesFeed (String nomeDB, String tabella, String user, String videoId) {
+    public static String getFavoritesFeed (String nomeDB, String tabella, String user, String videoId, int N) {
 		try {
 			metafeedUrl = new URL ("http://gdata.youtube.com/feeds/api/videos/" + videoId);
 			in = new BufferedReader(new InputStreamReader(metafeedUrl.openStream()));
@@ -160,7 +160,7 @@ public class urlReader  {
 			}
 		} catch (MalformedURLException e) {
 		} catch (IOException e) {
-			getErrorCode(nomeDB, tabella , metafeedUrl, user);
+			API.activityGetErrorCode(nomeDB, "activity" + N, metafeedUrl, user);
 		}
 		return videoId;
     }

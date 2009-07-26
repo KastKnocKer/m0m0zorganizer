@@ -1,6 +1,8 @@
 package prove;
 
 //import com.google.gdata.client.youtube.YouTubeService;
+import scansioni.padre;
+
 import com.google.gdata.client.youtube.YouTubeService;
 
 import database.DatabaseMySql;
@@ -8,6 +10,8 @@ import database.OutputTxt;
 import download.API;
 import download.Contatore;
 import download.popularReader;
+import download.scanActivity;
+import download.scanPopular;
 
 public class proveIO {
 
@@ -23,6 +27,8 @@ public class proveIO {
 		YouTubeService myService = new YouTubeService("Tesi");
 		//new scanUser(myService, devKey);
 		//System.out.println(devKey.length());
-		API.getActivity(myService, devKey, "utenti", "momoz1987");
+		DatabaseMySql.eseguiAggiornamento("insert into utenti.ethernet values (\"padre\", \"true\")");
+		DatabaseMySql.eseguiAggiornamento("insert into utenti.ethernet values (\"figlio\", \"true\")");
+		new scanActivity (myService, devKey, "utenti", "2009-07-10T09:39:22", 1);
 	}
 }

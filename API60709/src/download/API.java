@@ -9,6 +9,7 @@ import database.DatabaseMySql;
 import database.Orario;
 import database.OutputTxt;
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -246,7 +247,8 @@ import java.net.URL;
 		countTemp = false;
 		try {
 			metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/events?v=2&published-min=" + data + 
-					".000Z&max-results=50&start-index=" + count + "&author=" + user + "&key=" + devKey);
+					".000Z&max-results=50&start-index=" + (count + 1) + "&author=" + user + "&key=" + devKey);
+			System.out.println(metafeedUrl);
 			ethernet.checkEthernet(nomeDB);
 			Contatore.incApi();
 			activityFeed = myService.getFeed(metafeedUrl, UserEventFeed.class);
@@ -255,14 +257,16 @@ import java.net.URL;
 				System.out.println("Tutti questi: " + user);
 			}
 			for (UserEventEntry entry : activityFeed.getEntries()) {
+				count++;
 				stringTemp = entry.getAuthors().get(0).getName();
 				DatabaseMySql.insert(nomeDB, "active" + N, stringTemp, data);
+				System.out.println(count + ": Attività riscontrata per l'utente " + stringTemp);
 				countTemp = true;
 				if(entry.getUserEventType() == UserEventEntry.Type.VIDEO_UPLOADED) {
 					DatabaseMySql.insert(nomeDB, "activity" + N, stringTemp, entry.getVideoId(), "uploaded", 
 							entry.getUpdated().toString().substring(0, 19));
-					DatabaseMySql.insert(nomeDB, "video" + N, stringTemp, entry.getVideoId(), "" , 
-							entry.getUpdated().toString().substring(0, 19));
+					DatabaseMySql.insert(nomeDB, "video" + N, stringTemp, entry.getVideoId(),  
+							entry.getUpdated().toString().substring(0, 19), " ");
 			    }
 			    else if(entry.getUserEventType() == UserEventEntry.Type.VIDEO_RATED) {
 			    	DatabaseMySql.insert(nomeDB, "activity" + N, stringTemp, entry.getVideoId(), "rated", 
@@ -271,17 +275,20 @@ import java.net.URL;
 			    else if(entry.getUserEventType() == UserEventEntry.Type.VIDEO_FAVORITED) {
 			    	DatabaseMySql.insert(nomeDB, "activity" + N, stringTemp, entry.getVideoId(), "favorited", 
 			    			entry.getUpdated().toString().substring(0, 19));
-				    	DatabaseMySql.insert(nomeDB, "favorites" + N, stringTemp, entry.getVideoId(), urlReader.getFavoritesFeed(nomeDB, "favorites" + N, user, entry.getVideoId()));
+				    	DatabaseMySql.insert(nomeDB, "favorites" + N, stringTemp, entry.getVideoId(), 
+				    			urlReader.getFavoritesFeed(nomeDB, "favorites" + N, user, entry.getVideoId(), N),
+				    			entry.getUpdated().toString().substring(0, 19), " ");
 			    }
 			    else if(entry.getUserEventType() == UserEventEntry.Type.USER_SUBSCRIPTION_ADDED) {
 			    	DatabaseMySql.insert(nomeDB, "activity" + N, stringTemp, entry.getUsername(), "subscribed",
 			    			entry.getUpdated().toString().substring(0, 19));
-			    	DatabaseMySql.insert(nomeDB, "subscriptions" + N, stringTemp, entry.getUsername(), entry.getUpdated().toString().substring(0, 19), "");
+			    	DatabaseMySql.insert(nomeDB, "subscriptions" + N, stringTemp, entry.getUsername(), 
+			    			entry.getUpdated().toString().substring(0, 19), " ");
 			    }
 			    else if(entry.getUserEventType() == UserEventEntry.Type.FRIEND_ADDED) {
 			    	DatabaseMySql.insert(nomeDB, "activity" + N, stringTemp, entry.getUsername(), "friended",
 			    			entry.getUpdated().toString().substring(0, 19));
-			     	DatabaseMySql.insert(nomeDB, "friends" + N, stringTemp, entry.getUsername() , "");
+			     	DatabaseMySql.insert(nomeDB, "friends" + N, stringTemp, entry.getUsername() , " ");
 			    }
 			    else if(entry.getUserEventType() == UserEventEntry.Type.VIDEO_COMMENTED) {
 			    	DatabaseMySql.insert(nomeDB, "activity" + N, stringTemp, entry.getVideoId(), "commented",
@@ -291,15 +298,14 @@ import java.net.URL;
 			    	DatabaseMySql.insert(nomeDB, "activity" + N, stringTemp, entry.getVideoId(), "shared", 
 			    			entry.getUpdated().toString().substring(0, 19));
 			    }
-				count++;
 			  }
 			System.out.println("Activity dell'user " + user + " scaricati fino al num: " + count + ".");
 			if ((tot = activityFeed.getTotalResults()) > 1000)
 				tot = 951;
 			if (!countTemp)
 				giriVuoto++;
-			if (giriVuoto < 2 && tot >= count) {
-				System.out.println("\t\t\tTotale activity gliuser " + user + ": " + tot);
+			if (giriVuoto < 2 && tot > count) {
+				System.out.println("\t\t\tTotale activity degli user " + user + ": " + tot);
 				getActivity(myService, devKey, nomeDB, user, count, giriVuoto, data, N);
 				return true;
 			}
@@ -307,10 +313,10 @@ import java.net.URL;
 			e.printStackTrace();
         	return false;
 		} catch (IOException e) {
-			urlReader.getErrorCode(nomeDB, "activity" + N, metafeedUrl, user);
+			activityGetErrorCode(nomeDB, "activity" + N, metafeedUrl, user);
 			return false;
 		} catch(ServiceException e) {
-			urlReader.getErrorCode(nomeDB, "activity" + N, metafeedUrl, user);
+			activityGetErrorCode(nomeDB, "activity" + N, metafeedUrl, user);
         	return false;
         }
 		return true;
@@ -398,6 +404,54 @@ import java.net.URL;
             OutputTxt.writeException("Errore nel notifyFlood dell'utente.");
 		}
     }
+    
+    public static void activityGetErrorCode (String nomeDB, String tabella ,URL url ,String user) {
+    	String msg;
+    	int code;
+    	System.out.println("ActivityGetErrorCode per il DB: "+ nomeDB + " sui " + tabella  + " dell'utente " + user);
+		HttpURLConnection connection;
+		try {		
+			ethernet.checkEthernet(nomeDB);
+			Contatore.incApi();
+			connection = (HttpURLConnection) url.openConnection();
+			System.out.println((code = connection.getResponseCode()));
+			System.out.println(msg = connection.getResponseMessage());
+			if (code >= 500) {
+				OutputTxt.writeLog("Errore 500+ : servizio non disponibile al momento. Analisi activity per il DB: "+ nomeDB);
+				System.out.println("Errore 500+ : servizio non disponibile al momento. Analisi activity per il DB: "+ nomeDB);
+				try {Thread.sleep(30000);} catch (InterruptedException e) {}
+				return;
+			}				
+			else if (msg.contains("many")) {
+		    	OutputTxt.writeLog("Errore 403: Rete floodata dalle SOLE activity per il DB: "+ nomeDB + " dall'user " + user);    // DA RIFAREEEEE
+		    	System.out.println("Errore 403: Rete floodata dalle SOLE activity per il DB: "+ nomeDB + " dall'user " + user);
+				OutputTxt.writeLog("Richieste API: " + Contatore.getApi());
+				OutputTxt.writeLog("\t\t\t\t\tTotale    API: " + Contatore.getTotApi());
+				OutputTxt.writeLog("Richieste URL: " + Contatore.getUrl());
+				OutputTxt.writeLog("\t\t\t\t\tTotale    URL: " + Contatore.getTotUrl());
+				System.out.println("PAUSA di 331 secondi per flood API");
+				Contatore.setApi(0);
+				Contatore.setUrl(0);
+				try {Thread.currentThread();Thread.sleep(331000);}
+				catch (InterruptedException e) { 
+					e.printStackTrace();
+		            OutputTxt.writeException(e.getLocalizedMessage());
+		            OutputTxt.writeException("Errore nel activityNotifyFlood dell'utente.");
+				}
+				return;
+			}	
+			else if (msg.contains("Bad Request")) {
+				OutputTxt.writeError("Errore per il DB: "+ nomeDB + " bad request all'url: " + url);
+				System.out.println("Errore bad request all'url: " + url);
+				return;
+			}	
+		} catch (IOException e) { 
+			e.printStackTrace();
+			OutputTxt.writeException(e.getLocalizedMessage());
+	        OutputTxt.writeException("Errore nel activityGetErrorCode dell'utente: " + user);	
+		}
+		return;
+	}
 	
     private static YtUserProfileStatistics userStats;
     private static VideoFeed videoFeed;

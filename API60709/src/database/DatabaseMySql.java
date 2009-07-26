@@ -110,7 +110,7 @@ public class DatabaseMySql {
 		String[] user; 		
 		try {
 			user =  (DatabaseMySql.eseguiQuery("Select * from " + nomeDB + "." + lista + " limit 1")).get(0);
-			if (lista.equals("toCheck"))
+			if (lista.equals("toCheck") || lista.equals("activeList"))
 				DatabaseMySql.delete (nomeDB, lista, col, user[1]);
 			else
 				DatabaseMySql.delete (nomeDB, lista, col, user[0]);
@@ -149,11 +149,11 @@ public class DatabaseMySql {
 		}
 	}
 	
-	public static void copyAttivi (String nomeDB) {
+	public static void copyAttivi (String nomeDB, String data) {
 		Vector<String[]> v = null;
 		v = DatabaseMySql.eseguiQuery("Select user from " + nomeDB + ".profile where status ='active'");
 		for (int i = 0; i < v.size(); i++) {
-			DatabaseMySql.insert(nomeDB, "activeList", v.elementAt(i)[0]);
+			DatabaseMySql.insert(nomeDB, "activeList", "0" , v.elementAt(i)[0], data);
 		}
 	}
 	

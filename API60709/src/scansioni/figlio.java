@@ -71,6 +71,7 @@ public class figlio {
 		} 
 	}	
 	
+	/*
 	public static void scansioneVeloce (int scansioneN, String nomeDB, String data, int n) {
 		key = new String[6];
 		key[0] = "AI39si7ApF_l2ABpTplTnaS_sjxreCpkkQQi4vLAWYxxb1VHsHpeh1HJKlx9t5vi_ngxvSpuIqXQShsNXMWhDNGBjBtNlSIxkg";
@@ -101,7 +102,7 @@ public class figlio {
 				OutputTxt.writeError("Errore IO nel try start del padreExec.");
 			}  
 		}		
-	}
+	} */
 	
 	private static ProcessBuilder pb = null;
 	private static Process scanner;
