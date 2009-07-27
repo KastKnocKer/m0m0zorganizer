@@ -20,7 +20,7 @@ public class scanPopular {
 		String popularToCheck;	
 		control = Integer.parseInt((DatabaseMySql.eseguiQuery("Select count(DISTINCT user) from utenti.popular")).get(0)[0]) / 4 + 1;
 		for (; (popularToCheck = DatabaseMySql.extract("utenti", "popToCheck", "user")[0]) != null ;) {
-			if (!DatabaseMySql.contiene("utenti", "profile", popularToCheck)) {
+			if (!DatabaseMySql.contiene("utenti", "profile", "user", popularToCheck)) {
 				if (API.getActivity(myService, devKey, nomeDB, popularToCheck)) {	// Ha activityFeed? 
 					if (API.getUser(myService, devKey, "active", nomeDB, popularToCheck)) {}	// E' un utente sospeso?  No --> active
 					//	completeScan(myService, devKey, nomeDB, popularToCheck);	// Si attivo scansione completa senza activity

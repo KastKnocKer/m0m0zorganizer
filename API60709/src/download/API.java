@@ -75,13 +75,17 @@ import java.net.URL;
 			Contatore.incApi();
 			videoFeed = myService.getFeed(metafeedUrl, VideoFeed.class);
 	    	System.out.println("\t\t\t\t\t\t\t\t\t\t\t\tPacchetto arrivato.");
-			tot = videoFeed.getTotalResults();
+			if (count == 1 ) {
+				tot = videoFeed.getTotalResults();
+				new Orario();
+				DatabaseMySql.insert(nomeDB, "numFavorites", user, tot + "", Orario.getDataOra());
+			}
 			for (VideoEntry videoEntry : videoFeed.getEntries() ) {
 				countTemp = true;
 				if (!videoEntry.isDraft()) {		
 					stringTemp =videoEntry.getMediaGroup().getUploader();
 					DatabaseMySql.insert(nomeDB, "favorites", user , videoEntry.getMediaGroup().getVideoId(), 
-							stringTemp , videoEntry.getPublished().toString().substring(0,19), tot + "");
+							stringTemp , videoEntry.getPublished().toString().substring(0,19));
 					DatabaseMySql.inserToCheck(nomeDB, stringTemp);
 				}
 				if (++count == 1001)
@@ -113,13 +117,35 @@ import java.net.URL;
         	urlReader.getErrorCode(nomeDB, "favorites", metafeedUrl, user);
         }
 	}
-	
+		
 	public static void getVideo (YouTubeService myService, String devKey, String nomeDB, String user) {
-		System.out.println("ANALISI per il DB: "+ nomeDB + "  dei video dell' utente " + user + ".");
-		getVideo(myService, devKey, nomeDB, user, 1, 0, 0);
+		countTemp = false;
+		try {
+			metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/users/" + user + "/uploads?&key=" + devKey);
+			ethernet.checkEthernet(nomeDB);
+			Contatore.incApi();
+			videoFeed = myService.getFeed(metafeedUrl, VideoFeed.class);
+	    	System.out.println("\t\t\t\t\t\t\t\t\t\t\t\tPacchetto arrivato.");
+			tot = videoFeed.getTotalResults();
+			new Orario();
+			DatabaseMySql.insert(nomeDB, "numVideo", user, tot + "", Orario.getDataOra());
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}  catch(ResourceNotFoundException e){
+			OutputTxt.writeLog("Errore 404: User not found: " + user);
+        } catch (IOException e) {
+			urlReader.getErrorCode(nomeDB, "video", metafeedUrl, user);	
+		} catch(ServiceException e) {
+			urlReader.getErrorCode(nomeDB, "video", metafeedUrl, user);
+        }
 	}
 	
-	public static void getVideo (YouTubeService myService, String devKey, String nomeDB, String user, int count, int giriVuoto, int maxCount) {
+	public static void getCompleteVideo (YouTubeService myService, String devKey, String nomeDB, String user) {
+		System.out.println("ANALISI per il DB: "+ nomeDB + "  dei video dell' utente " + user + ".");
+		getCompleteVideo(myService, devKey, nomeDB, user, 1, 0, 0);
+	}
+	
+	public static void getCompleteVideo (YouTubeService myService, String devKey, String nomeDB, String user, int count, int giriVuoto, int maxCount) {
 		countTemp = false;
 		try {
 			metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/users/" + user + "/uploads?&key=" + devKey +
@@ -151,7 +177,7 @@ import java.net.URL;
 			if (giriVuoto < 2 && maxCount < 2 && tot >= count) {
 
 				System.out.println("\t\t\tTotale video per l'user " + user + ": " + tot);
-				getVideo(myService, devKey, nomeDB, user, count, giriVuoto, maxCount);
+				getCompleteVideo(myService, devKey, nomeDB, user, count, giriVuoto, maxCount);
 			}
 			else 
 				return;
@@ -190,14 +216,19 @@ import java.net.URL;
 				if(entry.getUserEventType() == UserEventEntry.Type.VIDEO_UPLOADED) {
 					DatabaseMySql.insert(nomeDB, "activity", stringTemp, entry.getVideoId(), "uploaded", 
 							entry.getUpdated().toString().substring(0, 19));
+					urlReader.getVideoUploader(nomeDB, entry.getVideoId(), 0);
 			    }
 			    else if(entry.getUserEventType() == UserEventEntry.Type.VIDEO_RATED) {
 			    	DatabaseMySql.insert(nomeDB, "activity", stringTemp, entry.getVideoId(), "rated", 
 			    			entry.getUpdated().toString().substring(0, 19));
+			    	if (!DatabaseMySql.contiene(nomeDB, "videoUploadedBy", "id" , entry.getVideoId()))
+			    		urlReader.getVideoUploader(nomeDB, entry.getVideoId(), 0);
 			    }
 			    else if(entry.getUserEventType() == UserEventEntry.Type.VIDEO_FAVORITED) {
 			    	DatabaseMySql.insert(nomeDB, "activity", stringTemp, entry.getVideoId(), "favorited", 
 			    			entry.getUpdated().toString().substring(0, 19));
+			    	if (!DatabaseMySql.contiene(nomeDB, "videoUploadedBy", "id" , entry.getVideoId()))
+			    		urlReader.getVideoUploader(nomeDB, entry.getVideoId(), 0);
 			    }
 			    else if(entry.getUserEventType() == UserEventEntry.Type.USER_SUBSCRIPTION_ADDED) {
 			    	DatabaseMySql.insert(nomeDB, "activity", stringTemp, entry.getUsername(), "subscribed",
@@ -210,10 +241,14 @@ import java.net.URL;
 			    else if(entry.getUserEventType() == UserEventEntry.Type.VIDEO_COMMENTED) {
 			    	DatabaseMySql.insert(nomeDB, "activity", stringTemp, entry.getVideoId(), "commented",
 			    			entry.getUpdated().toString().substring(0, 19));
+			    	if (!DatabaseMySql.contiene(nomeDB, "videoUploadedBy", "id" , entry.getVideoId()))
+			    		urlReader.getVideoUploader(nomeDB, entry.getVideoId(), 0);
 			    }
 			    else if(entry.getUserEventType() == UserEventEntry.Type.VIDEO_SHARED) {
 			    	DatabaseMySql.insert(nomeDB, "activity", stringTemp, entry.getVideoId(), "shared", 
 			    			entry.getUpdated().toString().substring(0, 19));
+			    	if (!DatabaseMySql.contiene(nomeDB, "videoUploadedBy", "id" , entry.getVideoId()))
+			    		urlReader.getVideoUploader(nomeDB, entry.getVideoId(), 0);
 			    }
 				count++;
 			  }
@@ -243,7 +278,7 @@ import java.net.URL;
 		}
 	
 	public static boolean getActivity (YouTubeService myService, String devKey, String nomeDB, String user, int count, int giriVuoto, String data, int N) {
-		System.out.println("ANALISI per il DB: "+ nomeDB + "  delle activity dell' utente " + user + ".");
+		System.out.println("ANALISI numero " + N + " per il DB: "+ nomeDB + "  delle activity dell' utente " + user + ".");
 		countTemp = false;
 		try {
 			metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/events?v=2&published-min=" + data + 
@@ -265,41 +300,43 @@ import java.net.URL;
 				if(entry.getUserEventType() == UserEventEntry.Type.VIDEO_UPLOADED) {
 					DatabaseMySql.insert(nomeDB, "activity" + N, stringTemp, entry.getVideoId(), "uploaded", 
 							entry.getUpdated().toString().substring(0, 19));
-					DatabaseMySql.insert(nomeDB, "video" + N, stringTemp, entry.getVideoId(),  
-							entry.getUpdated().toString().substring(0, 19), " ");
+			    	if (!DatabaseMySql.contiene(nomeDB, "videoUploadedBy", "id" , entry.getVideoId()))
+			    		urlReader.getVideoUploader(nomeDB, entry.getVideoId(), 0);
 			    }
 			    else if(entry.getUserEventType() == UserEventEntry.Type.VIDEO_RATED) {
 			    	DatabaseMySql.insert(nomeDB, "activity" + N, stringTemp, entry.getVideoId(), "rated", 
 			    			entry.getUpdated().toString().substring(0, 19));
+			    	if (!DatabaseMySql.contiene(nomeDB, "videoUploadedBy", "id" , entry.getVideoId()))
+			    		urlReader.getVideoUploader(nomeDB, entry.getVideoId(), 0);
 			    }
 			    else if(entry.getUserEventType() == UserEventEntry.Type.VIDEO_FAVORITED) {
 			    	DatabaseMySql.insert(nomeDB, "activity" + N, stringTemp, entry.getVideoId(), "favorited", 
 			    			entry.getUpdated().toString().substring(0, 19));
-				    	DatabaseMySql.insert(nomeDB, "favorites" + N, stringTemp, entry.getVideoId(), 
-				    			urlReader.getFavoritesFeed(nomeDB, "favorites" + N, user, entry.getVideoId(), N),
-				    			entry.getUpdated().toString().substring(0, 19), " ");
+			    	if (!DatabaseMySql.contiene(nomeDB, "videoUploadedBy", "id" , entry.getVideoId()))
+			    		urlReader.getVideoUploader(nomeDB, entry.getVideoId(), 0);
 			    }
 			    else if(entry.getUserEventType() == UserEventEntry.Type.USER_SUBSCRIPTION_ADDED) {
 			    	DatabaseMySql.insert(nomeDB, "activity" + N, stringTemp, entry.getUsername(), "subscribed",
 			    			entry.getUpdated().toString().substring(0, 19));
-			    	DatabaseMySql.insert(nomeDB, "subscriptions" + N, stringTemp, entry.getUsername(), 
-			    			entry.getUpdated().toString().substring(0, 19), " ");
 			    }
 			    else if(entry.getUserEventType() == UserEventEntry.Type.FRIEND_ADDED) {
 			    	DatabaseMySql.insert(nomeDB, "activity" + N, stringTemp, entry.getUsername(), "friended",
 			    			entry.getUpdated().toString().substring(0, 19));
-			     	DatabaseMySql.insert(nomeDB, "friends" + N, stringTemp, entry.getUsername() , " ");
 			    }
 			    else if(entry.getUserEventType() == UserEventEntry.Type.VIDEO_COMMENTED) {
 			    	DatabaseMySql.insert(nomeDB, "activity" + N, stringTemp, entry.getVideoId(), "commented",
 			    			entry.getUpdated().toString().substring(0, 19));
+			    	if (!DatabaseMySql.contiene(nomeDB, "videoUploadedBy", "id" , entry.getVideoId()))
+			    		urlReader.getVideoUploader(nomeDB, entry.getVideoId(), 0);
 			    }
 			    else if(entry.getUserEventType() == UserEventEntry.Type.VIDEO_SHARED) {
 			    	DatabaseMySql.insert(nomeDB, "activity" + N, stringTemp, entry.getVideoId(), "shared", 
 			    			entry.getUpdated().toString().substring(0, 19));
+			    	if (!DatabaseMySql.contiene(nomeDB, "videoUploadedBy", "id" , entry.getVideoId()))
+			    		urlReader.getVideoUploader(nomeDB, entry.getVideoId(), 0);
 			    }
 			  }
-			System.out.println("Activity dell'user " + user + " scaricati fino al num: " + count + ".");
+			System.out.println("Activity " + N + " dell'user " + user + " scaricati fino al num: " + count + ".");
 			if ((tot = activityFeed.getTotalResults()) > 1000)
 				tot = 951;
 			if (!countTemp)

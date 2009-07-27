@@ -139,10 +139,10 @@ public class DatabaseMySql {
 			DatabaseMySql.insert(nomeDB, to, userTemp[0], userTemp[1], userTemp[2], userTemp[3], userTemp[4]);
 	}
 		
-	public static boolean contiene (String nomeDB, String lista, String user ) {
+	public static boolean contiene (String nomeDB, String lista, String colonna, String id ) {
 		try {
 			(db.eseguiQuery("select * from " + nomeDB + "." + lista + 
-				" where user = '" + user + "'")).get(0);
+				" where " + colonna + "= '" + id + "'")).get(0);
 			return true;
 		} catch (ArrayIndexOutOfBoundsException e) {
 			return false;

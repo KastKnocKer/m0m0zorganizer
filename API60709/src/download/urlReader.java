@@ -148,21 +148,33 @@ public class urlReader  {
     	}
     }
     
-    public static String getFavoritesFeed (String nomeDB, String tabella, String user, String videoId, int N) {
+    public static void getVideoUploader (String nomeDB, String videoId, int N) {
 		try {
 			metafeedUrl = new URL ("http://gdata.youtube.com/feeds/api/videos/" + videoId);
 			in = new BufferedReader(new InputStreamReader(metafeedUrl.openStream()));
 	    	System.out.println("\t\t\t\t\t\t\t\t\t\t\t\tPacchetto arrivato.");
 			while ((inputLine = in.readLine()) != null) {
-				if (inputLine.contains("<author>")) {
-					return inputLine = inputLine.substring(inputLine.indexOf("<name>") + 6, inputLine.indexOf("</name>"));
-				}
+				if (inputLine.contains("<published>"))
+					temp1 = inputLine.substring(inputLine.indexOf("<published>") + 11, inputLine.indexOf("</published>"));
+				if (inputLine.contains("<name>"))
+					temp2 = inputLine.substring(inputLine.indexOf("<name>") + 6, inputLine.indexOf("</name>"));
+				if (inputLine.contains("numRaters="))
+					temp3 = inputLine.substring(inputLine.indexOf("numRaters=") + 11, inputLine.indexOf("rel") - 2);
+				if (inputLine.contains("favoriteCount="))
+					temp4 = inputLine.substring(inputLine.indexOf("favoriteCount=") + 15, inputLine.indexOf("viewCount") - 2);
 			}
+			DatabaseMySql.insert(nomeDB, "videoUploadedBy", temp2, videoId, temp1, temp3, temp4);
+			temp1 = "";
+			temp2 = "";
+			temp3 = "";
+			temp4 = "";
 		} catch (MalformedURLException e) {
+			if (!DatabaseMySql.contiene(nomeDB, "videoUploadedBy", "id", videoId))
+				DatabaseMySql.insert(nomeDB, "videoToCheck", videoId);
 		} catch (IOException e) {
-			API.activityGetErrorCode(nomeDB, "activity" + N, metafeedUrl, user);
+			if (!DatabaseMySql.contiene(nomeDB, "videoUploadedBy", "id", videoId))
+				DatabaseMySql.insert(nomeDB, "videoToCheck", videoId);
 		}
-		return videoId;
     }
     
     public static void getErrorCode (String nomeDB, String tabella ,URL url ,String user) {
@@ -217,5 +229,5 @@ public class urlReader  {
     private static URL metafeedUrl;
     private static BufferedReader in;
     private static int tot;
-    private static String inputLine;  
+    private static String inputLine, temp1 , temp2, temp3, temp4;  
 }

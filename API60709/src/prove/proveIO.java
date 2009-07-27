@@ -1,17 +1,14 @@
-package prove;
+
+	package prove;
 
 //import com.google.gdata.client.youtube.YouTubeService;
-import scansioni.padre;
 
 import com.google.gdata.client.youtube.YouTubeService;
 
 import database.DatabaseMySql;
 import database.OutputTxt;
-import download.API;
 import download.Contatore;
-import download.popularReader;
 import download.scanActivity;
-import download.scanPopular;
 
 public class proveIO {
 

@@ -23,7 +23,7 @@ public class scanActivity {
 			System.out.println("Scansione activity degli utenti " + users);
 			if (API.getActivity(myService, devKey, nomeDB, userTemp, 0, 0, data, scansioneN)) {
 				for (i = 0; i < n; i++) {
-					if(!DatabaseMySql.contiene(nomeDB, "active" + scansioneN, users[i])) 
+					if(!DatabaseMySql.contiene(nomeDB, "active" + scansioneN, "user", users[i])) 
 						DatabaseMySql.insert(nomeDB, "inactive" + scansioneN, users[i], data);
 				}
 			}
@@ -36,7 +36,6 @@ public class scanActivity {
 	}
 			
 	private static String [] users;
-	private static String [] usersOld;
 	private static String userTemp;
 	private static int n, i, temp;
 }
