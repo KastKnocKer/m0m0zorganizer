@@ -31,8 +31,8 @@ public class padre {
 		ethernet.switchTo(nomeDB, false); 	// Se ho true sono a eth0 up e switho a eth1 e viceversa
 		
 		new popularReader(nomeDB);
-		
-		DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".ethernet set flag ='true' where rete='figlio'");
+		//Omesso perchè senza figlio
+		//DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".ethernet set flag ='true' where rete='figlio'");
 		pb = new ProcessBuilder ("/home/m0m0z/Scrivania/tesina_exec/scanPopular.sh" , "padre", nomeDB);
 		while (DatabaseMySql.getCount(nomeDB, "popToCheck") != 0) {
 			try {			

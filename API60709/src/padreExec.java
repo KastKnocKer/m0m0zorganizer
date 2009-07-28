@@ -12,9 +12,6 @@ public class padreExec {
 		String nomeDB;
 		nomeDB = "utenti";  // Momentaneo		
 		
-		// Messo perchè non penso di utilizzare il figlio nelle scansioni veloci.
-		DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".ethernet set flag ='false' where rete='figlio'");
-		
 		padre.scansioneCompleta(nomeDB);
 	}
 }
