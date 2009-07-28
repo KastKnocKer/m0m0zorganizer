@@ -7,8 +7,10 @@ import com.google.gdata.client.youtube.YouTubeService;
 
 import database.DatabaseMySql;
 import database.OutputTxt;
+import download.API;
 import download.Contatore;
 import download.scanActivity;
+import download.urlReader;
 
 public class proveIO {
 
@@ -26,6 +28,15 @@ public class proveIO {
 		//System.out.println(devKey.length());
 		DatabaseMySql.eseguiAggiornamento("insert into utenti.ethernet values (\"padre\", \"true\")");
 		DatabaseMySql.eseguiAggiornamento("insert into utenti.ethernet values (\"figlio\", \"true\")");
-		new scanActivity (myService, devKey, "utenti", "2009-07-10T09:39:22", 1);
+		if (API.getActivity(myService, devKey, "utenti", "TheLowLifeGang")) {
+			API.getUser(myService, devKey, "active", "utenti", "TheLowLifeGang");
+			API.getVideo(myService, devKey, "utenti", "TheLowLifeGang");		// Alternati in modo da limitare i flood di rete
+			urlReader.userReader("utenti", "subscribers", "TheLowLifeGang");	
+			API.getFavorites(myService, devKey, "utenti", "TheLowLifeGang");
+			urlReader.userReader("utenti", "friends", "TheLowLifeGang");
+			API.getSubscriptions(myService, devKey, "utenti", "TheLowLifeGang");
+		}
+		else 
+			System.out.println("LOL");
 	}
 }

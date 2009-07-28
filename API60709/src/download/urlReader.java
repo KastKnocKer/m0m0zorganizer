@@ -135,7 +135,7 @@ public class urlReader  {
     		System.out.println("Pausa per il DB: " + nomeDB + " di " + sec + " secondi sull'utente " + user);
     		DatabaseMySql.delete(nomeDB, "profile", "user", user);
     		DatabaseMySql.delete(nomeDB, "toCheck", "user", user);
-    		tot = DatabaseMySql.getMinPriority() + 5;
+    		tot = DatabaseMySql.getMinPriority() + (tot / 10) + 1;
     		System.out.println("Priorità selezionata per l'utente " + user + ": " + tot);
     		DatabaseMySql.inserToCheck(nomeDB, user, tot);
     		Thread.currentThread();
@@ -191,6 +191,7 @@ public class urlReader  {
 			if (code >= 500) {
 				OutputTxt.writeLog("Errore 500+ : servizio non disponibile al momento. Analisi per il DB: "+ nomeDB);
 				System.out.println("Errore 500+ : servizio non disponibile al momento. Analisi per il DB: "+ nomeDB);
+				DatabaseMySql.insertError(nomeDB, user);
 				pausa(nomeDB, 30, user);
 				return;
 			// Direi di fare una pausa(nomeDB,  e di richiamare la stessa funzione

@@ -27,11 +27,11 @@ public class scanUser {
 						temp++;
 					}
 					else 		// Non è attivo lo tolgo dagli active e lo metto negli inactive
-						DatabaseMySql.insert("utenti", "profile", "", userToCheck, "blocked", "block", "block", "block", "block");
+						DatabaseMySql.insert("utenti", "profile", userToCheck, "blocked", "block", "block", "block", "block", "block");
 					}
 				else
 					if (!API.getUser(myService, devKey, "inactive", nomeDB, userToCheck))
-						DatabaseMySql.insert("utenti", "profile", "" , userToCheck, "blocked", "block", "block", "block", "block");
+						DatabaseMySql.insert("utenti", "profile", userToCheck, "blocked", "block", "block", "block", "block", "block");
 			}
 			if (temp == 25) {
 				return;

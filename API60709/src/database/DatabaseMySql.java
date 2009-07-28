@@ -160,4 +160,13 @@ public class DatabaseMySql {
 	public static int getMinPriority () {
 		return Integer.parseInt((DatabaseMySql.eseguiQuery("Select min(priority) from utenti.toCheck")).get(0)[0].toString());
 	}
+
+	public static void insertError(String nomeDB, String user) {
+		DatabaseMySql.eseguiAggiornamento("Insert into " + nomeDB + ".error values (\"" + user + "\" , \"0\") " +
+				"on duplicate key update error = error + 1");		
+		if (DatabaseMySql.eseguiQuery("Select error from "+ nomeDB + ".error where user='" + user + "'").equals("5")) {
+			new Orario();
+			DatabaseMySql.insert("utenti", "profile", user, "blocked", Orario.getDataOra(), "error500+", "error500+", "error500+", "error500+");
+		}
+	}
 }
