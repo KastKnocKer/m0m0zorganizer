@@ -9,6 +9,7 @@ import database.DatabaseMySql;
 import database.OutputTxt;
 import download.API;
 import download.Contatore;
+import download.popularReader;
 
 public class proveIO {
 
@@ -26,6 +27,6 @@ public class proveIO {
 		//System.out.println(devKey.length());
 		DatabaseMySql.eseguiAggiornamento("insert into utenti.ethernet values (\"padre\", \"true\")");
 		DatabaseMySql.eseguiAggiornamento("insert into utenti.ethernet values (\"figlio\", \"true\")");
-		
+		new popularReader("utenti");
 	}
 }

@@ -26,7 +26,7 @@ public class figlio {
 			try {Thread.sleep(5000); System.out.println("In attesa della fine di popularReader.");} catch (InterruptedException e1) {}
 			}
 		
-		pb = new ProcessBuilder ("/home/m0m0z/Scrivania/tesina_exec/scanPopular.sh figlio");
+		pb = new ProcessBuilder ("/home/m0m0z/Scrivania/tesina_exec/scanPopular.sh" , "figlio");
 		while (DatabaseMySql.getCount("" + nomeDB + "", "popToCheck") != 0) {
 			try {			
 				OutputTxt.writeLog("Figlio: processo scanPopular per il DB: DA CONFIGURARE");
@@ -48,7 +48,7 @@ public class figlio {
 				OutputTxt.writeError("Errore IO nel try start del figlioExec.");
 			}  
 		}
-		pb.command ("/home/m0m0z/Scrivania/tesina_exec/scanUser.sh figlio"); 
+		pb.command ("/home/m0m0z/Scrivania/tesina_exec/scanUser.sh" , "figlio"); 
 		while (DatabaseMySql.getCount("" + nomeDB + "", "toCheck") != 0) { // && getCount(nomeDB, "profile*ACTIVE*) < CAP)
 			try {
 				OutputTxt.writeLog("Figlio: processo scanUser per il DB: DA CONFIGURARE");
@@ -81,7 +81,7 @@ public class figlio {
 		key[4] = "AI39si7e_IYXZqXB764Zgqll4sJlxizsHT02LAx1yo6CHG-8eaayATP-OGG330hhLj1HUHmjzwU62X7s8WHSe8JpiqpfrfGoGw";
 		key[5] = "AI39si64j5tSsH0ZIWV181HS2TS0Fzybri75KOBcQrm6baZ9TtfyZ7IiGPIEZPfuVZS-HK0LDTsNGDHk6Vu_bqObw0nm68VMog";
 		
-		pb = new ProcessBuilder ("/home/m0m0z/Scrivania/tesina_exec/scanActivity.sh figlio " + data + ".000Z " + scansioneN);
+		pb = new ProcessBuilder ("/home/m0m0z/Scrivania/tesina_exec/scanActivity.sh" , "padre" , data + ".000Z", scansioneN + "");
 		while (DatabaseMySql.getCount(nomeDB, "activeList") != 0) {
 			try {			
 				OutputTxt.writeLog("Figlio: processo scanActivity per il DB: DA CONFIGURARE");
