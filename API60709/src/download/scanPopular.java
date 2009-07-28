@@ -28,11 +28,11 @@ public class scanPopular {
 								DatabaseMySql.clearUser(nomeDB, popularToCheck);	
 						}
 						else 		// Non è attivo lo tolgo dagli active e lo metto negli inactive
-							DatabaseMySql.insert("utenti", "profile", popularToCheck, "blocked", "block", "block", "block", "block", "block");
+							DatabaseMySql.insert("utenti", "profile", popularToCheck, "blocked", "block", 0, 0, 0, "block");
 					}
 					else
 						if (!API.getUser(myService, devKey, "inactive", nomeDB, popularToCheck))
-							DatabaseMySql.insert("utenti", "profile", popularToCheck, "blocked", "block", "block", "block", "block", "block");
+							DatabaseMySql.insert("utenti", "profile", popularToCheck, "blocked", "block", 0, 0, 0, "block");
 					temp++;
 				}
 				if (temp == control) {

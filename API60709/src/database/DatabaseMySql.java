@@ -80,6 +80,18 @@ public class DatabaseMySql {
 				" values (\"" + values1 + "\" , \"" + values2 + "\" , \"" + values3 + "\")");
 	}
 	
+	public static boolean insert (String nomeDB, String lista, String values1, int values2,
+			String values3) {
+		return db.eseguiAggiornamento("insert into " + nomeDB + "." + lista + 
+				" values (\"" + values1 + "\" , " + values2 + " , \"" + values3 + "\")");
+	}
+	
+	public static boolean insert (String nomeDB, String lista, String values1, String values2,
+			int values3) {
+		return db.eseguiAggiornamento("insert into " + nomeDB + "." + lista + 
+				" values (\"" + values1 + "\" , \"" + values2 + "\" , " + values3 + ")");
+	}
+	
 	public static boolean insert (String nomeDB, String lista, String values1, String values2,
 			String values3, String values4) {
 		return db.eseguiAggiornamento("insert into " + nomeDB + "." + lista + 
@@ -88,17 +100,31 @@ public class DatabaseMySql {
 	}
 	
 	public static boolean insert (String nomeDB, String lista, String values1, String values2,
+			String values3, int values4) {
+		return db.eseguiAggiornamento("insert into " + nomeDB + "." + lista + 
+				" values (\"" + values1 + "\" , \"" + values2 + "\" , \"" + values3 + "\" , " 
+				+ values4 + ")");
+	}
+		
+	public static boolean insert (String nomeDB, String lista, String values1, String values2,
 			String values3, String values4, String values5) {
 		return db.eseguiAggiornamento("insert into " + nomeDB + "." + lista + 
 				" values (\"" + values1 + "\" , \"" + values2 + "\" , \"" + values3 + "\" , \""
 				+ values4 + "\" , \"" + values5 + "\")");
 	}
-	
+	/*
 	public static boolean insert (String nomeDB, String lista, String values1, String values2, String values3,
 			String values4, String values5 , String values6, String values7) {
 		return db.eseguiAggiornamento("insert into " + nomeDB + "." + lista + 
 				" values (\"" + values1 + "\" , \"" + values2 + "\" , \"" + values3 + "\" ," +
 				"\"" + values4 + "\" , \"" + values5 + "\" , \"" + values6 + "\" , \"" + values7 + "\")");
+	} */
+	
+	public static boolean insert (String nomeDB, String lista, String values1, String values2, String values3,
+			long values4, long values5 , long values6, String values7) {
+		return db.eseguiAggiornamento("insert into " + nomeDB + "." + lista + 
+				" values (\"" + values1 + "\" , \"" + values2 + "\" , \"" + values3 + "\" ," +
+				"" + values4 + " , " + values5 + " , " + values6 + " , \"" + values7 + "\")");
 	}
 	
 	public static boolean delete (String nomeDB, String lista, String col, String values) {
@@ -171,7 +197,7 @@ public class DatabaseMySql {
 		if (DatabaseMySql.eseguiQuery("Select error from "+ nomeDB + ".error where user='" + user + "'").get(0)[0].equals("5")) {
     		new Orario();
     		DatabaseMySql.clearUser(nomeDB, user);
-			DatabaseMySql.insert("utenti", "profile", user, "blocked", Orario.getDataOra(), "error500+", "error500+", "error500+", "error500+");
+			DatabaseMySql.insert("utenti", "profile", user, "blocked", Orario.getDataOra(), 500, 500, 500, "error500+");
 			return false;
 		}	
 		return true;	

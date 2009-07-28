@@ -42,7 +42,7 @@ public class urlReader  {
 			    	inputLine = in.readLine();
 			    	inputLine = inputLine.substring(15, inputLine.indexOf("\" onmousedown"));
 			    	count++;
-			    	DatabaseMySql.insert(nomeDB, tabella , user, inputLine, tot  + "");
+			    	DatabaseMySql.insert(nomeDB, tabella , user, inputLine, tot);
 			    	DatabaseMySql.inserToCheck(nomeDB, inputLine);
 				}
 				else if (inputLine.contains("non ha") && count <= 1) {

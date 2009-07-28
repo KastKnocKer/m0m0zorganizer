@@ -30,8 +30,8 @@ import java.net.URL;
            	userStats = profileEntry.getStatistics();
            	if(userStats != null) {
            		new Orario();
-           		DatabaseMySql.insert(nomeDB, "profile", user, status, Orario.getDataOra(), userStats.getSubscriberCount() + "",
-           				userStats.getViewCount() + "", userStats.getVideoWatchCount() + "",
+           		DatabaseMySql.insert(nomeDB, "profile", user, status, Orario.getDataOra(), userStats.getSubscriberCount(),
+           				userStats.getViewCount(), userStats.getVideoWatchCount(),
            				userStats.getLastWebAccess().toString().substring(0, 19));
            		return true;
            	}
@@ -78,7 +78,7 @@ import java.net.URL;
 			if (count == 1 ) {
 				tot = videoFeed.getTotalResults();
 				new Orario();
-				DatabaseMySql.insert(nomeDB, "numFavorites", user, tot + "", Orario.getDataOra());
+				DatabaseMySql.insert(nomeDB, "numFavorites", user, tot , Orario.getDataOra());
 			}
 			for (VideoEntry videoEntry : videoFeed.getEntries() ) {
 				countTemp = true;
@@ -89,20 +89,21 @@ import java.net.URL;
 					DatabaseMySql.inserToCheck(nomeDB, stringTemp);
 					DatabaseMySql.insert(nomeDB,"videoUploadedBy", stringTemp, videoEntry.getMediaGroup().getVideoId());
 				}
-				if (++count == 1001)
-					return true;
+				count++;
 			}
 			System.out.println("Favorites dell'user " + user + " scaricati fino al num: " + count + ".");
+			if (count > 951 && count < tot) {
+				count= 950;
+				maxCount++;
+			}					
 			if (tot > 1000)
 				tot = 951;
-			if (count > 951) {
-				count= 951;
-				maxCount++;
-			}				
 			if (!countTemp)
 				giriVuoto++;
-			if (giriVuoto < 2 && maxCount < 2 && tot >= count) {
+			if (giriVuoto < 2 && maxCount < 2 && tot > count) {
 				System.out.println("\t\t\tTotale favorites per l'user " + user + ": " + tot);
+				if (tot == 951 && count == 950)
+					count++;
 				getFavorites(myService, devKey, nomeDB, user, count, giriVuoto, maxCount);
 				return true;
 			}
@@ -132,7 +133,7 @@ import java.net.URL;
 	    	System.out.println("\t\t\t\t\t\t\t\t\t\t\t\tPacchetto arrivato.");
 			tot = videoFeed.getTotalResults();
 			new Orario();
-			DatabaseMySql.insert(nomeDB, "numVideo", user, tot + "", Orario.getDataOra());
+			DatabaseMySql.insert(nomeDB, "numVideo", user, tot, Orario.getDataOra());
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}  catch(ResourceNotFoundException e){
@@ -150,7 +151,7 @@ import java.net.URL;
 		System.out.println("ANALISI per il DB: "+ nomeDB + "  dei video dell' utente " + user + ".");
 		getCompleteVideo(myService, devKey, nomeDB, user, 1, 0, 0);
 	}
-	
+	// SISTEMARE MAX COUNT COME NEGLI ALTRI
 	public static void getCompleteVideo (YouTubeService myService, String devKey, String nomeDB, String user, int count, int giriVuoto, int maxCount) {
 		countTemp = false;
 		try {
@@ -181,7 +182,6 @@ import java.net.URL;
 			if (!countTemp)
 				giriVuoto++;
 			if (giriVuoto < 2 && maxCount < 2 && tot >= count) {
-
 				System.out.println("\t\t\tTotale video per l'user " + user + ": " + tot);
 				getCompleteVideo(myService, devKey, nomeDB, user, count, giriVuoto, maxCount);
 			}
@@ -200,10 +200,10 @@ import java.net.URL;
 	
 	public static boolean getActivity (YouTubeService myService, String devKey, String nomeDB, String user) {
 		System.out.println("ANALISI per il DB: "+ nomeDB + "  delle activity dell' utente " + user + ".");
-		return getActivity(myService, devKey, nomeDB, user, 1, 0);
+		return getActivity(myService, devKey, nomeDB, user, 1, 0, 0);
 	}
 	
-	public static boolean getActivity (YouTubeService myService, String devKey,String nomeDB, String user, int count, int giriVuoto) {
+	public static boolean getActivity (YouTubeService myService, String devKey,String nomeDB, String user, int count, int giriVuoto, int maxCount) {
 		countTemp = false;
 		try {
 			metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/events?v=2&max-results=50&start-index=" + count + "&author=" 
@@ -255,13 +255,20 @@ import java.net.URL;
 				count++;
 			  }
 			System.out.println("Activity dell'user " + user + " scaricati fino al num: " + count + ".");
-			if ((tot = activityFeed.getTotalResults()) > 1000)
+			tot = activityFeed.getTotalResults();
+			if (count > 951 && count < tot) {
+				count= 950;
+				maxCount++;
+			}					
+			if (tot > 1000)
 				tot = 951;
 			if (!countTemp)
 				giriVuoto++;
-			if (giriVuoto < 2 && tot >= count) {
+			if (giriVuoto < 2 && maxCount < 2 && tot > count) {
 				System.out.println("\t\t\tTotale activity per l'user " + user + ": " + tot);
-				getActivity(myService, devKey, nomeDB, user, count, giriVuoto);
+				if (tot == 951 && count == 950)
+					count++;
+				getActivity(myService, devKey, nomeDB, user, count, giriVuoto, maxCount);
 				return true;
 			}
 		} catch (MalformedURLException e) {
@@ -280,6 +287,10 @@ import java.net.URL;
 		}
 	
 	public static boolean getActivity (YouTubeService myService, String devKey, String nomeDB, String user, int count, int giriVuoto, String data, int N) {
+		return getActivity (myService, devKey, nomeDB, user, count, giriVuoto, data, N, 0);
+	}
+	
+	public static boolean getActivity (YouTubeService myService, String devKey, String nomeDB, String user, int count, int giriVuoto, String data, int N, int maxCount) {
 		System.out.println("ANALISI numero " + N + " per il DB: "+ nomeDB + "  delle activity dell' utente " + user + ".");
 		countTemp = false;
 		try {
@@ -296,6 +307,7 @@ import java.net.URL;
 			for (UserEventEntry entry : activityFeed.getEntries()) {
 				count++;
 				stringTemp = entry.getAuthors().get(0).getName();
+				System.out.println("INSERIMENTO UTENTE ATTIVO!");
 				DatabaseMySql.insert(nomeDB, "active" + N, stringTemp, data);
 				System.out.println(count + ": Attività riscontrata per l'utente " + stringTemp);
 				countTemp = true;
@@ -334,13 +346,20 @@ import java.net.URL;
 			    }
 			  }
 			System.out.println("Activity " + N + " dell'user " + user + " scaricati fino al num: " + count + ".");
-			if ((tot = activityFeed.getTotalResults()) > 1000)
+			tot = activityFeed.getTotalResults();
+			if (count > 951 && count < tot) {
+				count= 950;
+				maxCount++;
+			}					
+			if (tot > 1000)
 				tot = 951;
 			if (!countTemp)
 				giriVuoto++;
-			if (giriVuoto < 2 && tot > count) {
-				System.out.println("\t\t\tTotale activity degli user " + user + ": " + tot);
-				getActivity(myService, devKey, nomeDB, user, count, giriVuoto, data, N);
+			if (giriVuoto < 2 && maxCount < 2 && tot > count) {
+				System.out.println("\t\t\tTotale activity per l'user " + user + ": " + tot);
+				if (tot == 951 && count == 950)
+					count++;
+				getActivity(myService, devKey, nomeDB, user, count, giriVuoto, maxCount);
 				return true;
 			}
 		} catch (MalformedURLException e) {
@@ -380,27 +399,27 @@ import java.net.URL;
 				else if (stringTemp.contains("Favorites of"))
 					stringTemp = stringTemp.substring(15);
 				else {
-					if (++count == tot)
-						return true;
+					count++;
 					continue;
 				}
 				DatabaseMySql.insert(nomeDB,"subscriptions",user, stringTemp, 
-						entry.getPublished().toString().substring(0,19), tot + "");
+						entry.getPublished().toString().substring(0,19), tot);
 				DatabaseMySql.inserToCheck(nomeDB, stringTemp);
-				if (++count == tot)
-					return true;
+				count++;
 			}
 			System.out.println("Subscriptions dell'user " + user + " scaricati fino al num: " + count + ".");
+			if (count > 951 && count < tot) {
+				count= 950;
+				maxCount++;
+			}					
 			if (tot > 1000)
 				tot = 951;
-			if (count > 951) {
-				count= 951;
-				maxCount++;
-			}				
 			if (!countTemp)
 				giriVuoto++;
-			if (giriVuoto < 2 && maxCount < 2 && tot >= count) {
+			if (giriVuoto < 2 && maxCount < 2 && tot > count) {
 				System.out.println("\t\t\tTotale subscriptions per l'user " + user + ": " + tot);
+				if (tot == 951 && count == 950)
+					count++;
 				getSubscriptions(myService, devKey, nomeDB, user, count, giriVuoto, maxCount);
 			}
 			else
