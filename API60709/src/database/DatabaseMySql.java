@@ -178,7 +178,8 @@ public class DatabaseMySql {
 	}
 	
 	public static void inserToCheck (String nomeDB, String user, int num) {
-		DatabaseMySql.eseguiAggiornamento("insert into " + nomeDB + ".toCheck values (" + num + " , \"" + user + "\") on duplicate key update priority = priority - 1");
+		DatabaseMySql.eseguiAggiornamento("insert into " + nomeDB + ".toCheck values (" + num + " , \"" + user + "\")" +
+				" on duplicate key update priority = priority - 1");
 		return;
 	}
 	
@@ -191,8 +192,8 @@ public class DatabaseMySql {
 		
 	public static boolean contiene (String nomeDB, String lista, String colonna, String id ) {
 		try {
-			(db.eseguiQuery("select * from " + nomeDB + "." + lista + 
-				" where " + colonna + "= '" + id + "'")).get(0);
+			(db.eseguiQuery("select " + colonna + " from " + nomeDB + "." + lista + 
+				" where " + colonna + "='" + id + "'")).get(0);
 			return true;
 		} catch (ArrayIndexOutOfBoundsException e) {
 			return false;
@@ -216,6 +217,15 @@ public class DatabaseMySql {
 		DatabaseMySql.delete(nomeDB, "toCheck", "user", user);
 		DatabaseMySql.eseguiAggiornamento("Insert into " + nomeDB + ".error values (\"" + user + "\" , \"0\") " +
 				"on duplicate key update error = error + 1");	
+		System.out.println("LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOL");
+		System.out.println("LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOL");
+		System.out.println("LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOL");
+		System.out.println("LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOL");
+		System.out.println("LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOL");
+		System.out.println("LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOL");
+		System.out.println("LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOL");
+		System.out.println("LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOL");
+		System.out.println(DatabaseMySql.eseguiQuery("Select error from "+ nomeDB + ".error where user='" + user + "'").get(0)[0]);
 		if (Integer.parseInt(DatabaseMySql.eseguiQuery("Select error from "+ nomeDB + ".error where user='" + user + "'").get(0)[0]) >= 5) {
 			DatabaseMySql.clearUser(nomeDB, user);
 			new Orario();

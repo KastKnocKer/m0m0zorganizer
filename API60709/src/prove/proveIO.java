@@ -13,6 +13,7 @@ import download.Contatore;
 import download.popularReader;
 import download.scanActivity;
 import download.scanPopular;
+import download.scanUser;
 
 public class proveIO {
 
@@ -30,8 +31,10 @@ public class proveIO {
 		//System.out.println(devKey.length());
 		DatabaseMySql.eseguiAggiornamento("insert into utenti.ethernet values (\"padre\", \"true\")");
 		DatabaseMySql.eseguiAggiornamento("insert into utenti.ethernet values (\"figlio\", \"true\")");
-		//new popularReader("utenti");
-		//new scanPopular(myService, devKey, "utenti");
+	//	new popularReader("utenti");
+	//	new scanPopular(myService, devKey, "utenti");
+		new scanUser(myService, devKey, "utenti");
 		//DatabaseMySql.insertError("utenti", "robyb70");
+		System.out.println(DatabaseMySql.contiene("utenti", "profile", "user", "lanicosun"));
 	}
 }

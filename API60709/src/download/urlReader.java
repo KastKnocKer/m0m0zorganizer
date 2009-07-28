@@ -205,8 +205,8 @@ public class urlReader  {
 			System.out.println((code = connection.getResponseCode()));
 			System.out.println(msg = connection.getResponseMessage());
 			if (code >= 500) {
-				OutputTxt.writeLog("Errore 500+ : servizio non disponibile al momento. Analisi per il DB: "+ nomeDB);
-				System.out.println("Errore 500+ : servizio non disponibile al momento. Analisi per il DB: "+ nomeDB);
+				OutputTxt.writeLog("Errore 500+ : servizio non disponibile al momento. Analisi per il DB: "+ nomeDB + "dell'utente " + user);
+				System.out.println("Errore 500+ : servizio non disponibile al momento. Analisi per il DB: "+ nomeDB + "dell'utente " + user);
 				if (DatabaseMySql.insertError(nomeDB, user)) { // se ritorna true l'utente non viene ancora bloccato
 					if (DatabaseMySql.contiene(nomeDB, "popular", "user", user))
 		    			tot = DatabaseMySql.getMinPriority() + 3;
@@ -215,10 +215,10 @@ public class urlReader  {
 						tot = tot + ((-tot) / 10) + 1;
 					}
 					System.out.println("Priorità selezionata per l'utente " + user + ": " + tot);
-					DatabaseMySql.inserToCheck(nomeDB, user, tot);		    		
+					DatabaseMySql.inserToCheck(nomeDB, user, tot);	
+					return false;
 				}
 				return false;
-			// Direi di fare una pausa(nomeDB,  e di richiamare la stessa funzione
 			}				
 			else if (msg.contains("Forbidden") ||
 					connection.getResponseMessage().contains("are not public")) {
