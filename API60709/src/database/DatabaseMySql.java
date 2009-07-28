@@ -114,10 +114,12 @@ public class DatabaseMySql {
 				DatabaseMySql.delete (nomeDB, lista, col, user[1]);
 			else
 				DatabaseMySql.delete (nomeDB, lista, col, user[0]);
-		}
-		catch (ArrayIndexOutOfBoundsException e) {
+		} catch (ArrayIndexOutOfBoundsException e) {
 			OutputTxt.writeException(e.getLocalizedMessage());
 			OutputTxt.writeLog("Lista analizzata conclusa.");
+			return null;
+		}  catch (NullPointerException e) {
+			System.out.println("LOL");
 			return null;
 		}
 		return user;

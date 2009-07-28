@@ -18,27 +18,29 @@ public class scanUser {
 	
 	public static void toCheck(YouTubeService myService, String devKey, String nomeDB) {
 		int temp = 0;
-		String userToCheck;	
-		for (; (userToCheck = (DatabaseMySql.extract("utenti", "toCheck", "user"))[1]) != null ;) {
-			if (!DatabaseMySql.contiene("utenti", "profile", "user", userToCheck)) {  // L'ho già fatto?
-				if (API.getActivity(myService, devKey, nomeDB, userToCheck)) {	// Ha activityFeed?
-					if (API.getUser(myService, devKey, "active", nomeDB, userToCheck)) {			// E' un utente sospeso?  No --> active
-						if(completeScan(myService, devKey, nomeDB, userToCheck))	// Si attivo scansione completa senza activity
-							temp++;
-						else
-							DatabaseMySql.clearUser(nomeDB, userToCheck);
-					}
-					else 		// Non è attivo lo tolgo dagli active e lo metto negli inactive
-						DatabaseMySql.insert("utenti", "profile", userToCheck, "blocked", "block", "block", "block", "block", "block");
-					}
-				else
-					if (!API.getUser(myService, devKey, "inactive", nomeDB, userToCheck))
-						DatabaseMySql.insert("utenti", "profile", userToCheck, "blocked", "block", "block", "block", "block", "block");
+		String userToCheck;
+		try {
+			for (; (userToCheck = (DatabaseMySql.extract("utenti", "toCheck", "user"))[1]) != null ;) {
+				if (!DatabaseMySql.contiene("utenti", "profile", "user", userToCheck)) {  // L'ho già fatto?
+					if (API.getActivity(myService, devKey, nomeDB, userToCheck)) {	// Ha activityFeed?
+						if (API.getUser(myService, devKey, "active", nomeDB, userToCheck)) {			// E' un utente sospeso?  No --> active
+							if(completeScan(myService, devKey, nomeDB, userToCheck))	// Si attivo scansione completa senza activity
+								temp++;
+							else
+								DatabaseMySql.clearUser(nomeDB, userToCheck);
+						}
+						else 		// Non è attivo lo tolgo dagli active e lo metto negli inactive
+							DatabaseMySql.insert("utenti", "profile", userToCheck, "blocked", "block", "block", "block", "block", "block");
+						}
+					else
+						if (!API.getUser(myService, devKey, "inactive", nomeDB, userToCheck))
+							DatabaseMySql.insert("utenti", "profile", userToCheck, "blocked", "block", "block", "block", "block", "block");
+				}
+				if (temp == 25) {
+					return;
+				}
 			}
-			if (temp == 25) {
-				return;
-			}
-		}
+		} catch (NullPointerException e) {System.out.println("Lista toCheck terminata.");}
 	}
 	
 	
