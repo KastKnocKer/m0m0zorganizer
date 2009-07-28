@@ -91,6 +91,14 @@ public class urlReader  {
 				System.out.println("Errore 500+ : servizio non disponibile al momento.");
 				OutputTxt.writeLog("Errore 500+ : servizio non disponibile al momento.");
 				DatabaseMySql.insertError(nomeDB, user);
+				if (DatabaseMySql.contiene(nomeDB, "popular", "user", user))
+	    			tot = DatabaseMySql.getMinPriority() + 1;
+				else {
+					tot = DatabaseMySql.getMinPriority();
+					tot = tot + ((-tot) / 10) + 1;
+				}
+				System.out.println("Priorità selezionata per l'utente " + user + ": " + tot);
+				DatabaseMySql.inserToCheck(nomeDB, user, tot); 
     			return false;
     		}
     	}
@@ -138,8 +146,12 @@ public class urlReader  {
     		System.out.println("Pausa per il DB: " + nomeDB + " di " + sec + " secondi sull'utente " + user);
     		DatabaseMySql.delete(nomeDB, "profile", "user", user);
     		DatabaseMySql.delete(nomeDB, "toCheck", "user", user);
-    		tot = DatabaseMySql.getMinPriority();
-    		tot = tot + ((-tot) / 10) + 1;
+    		if (DatabaseMySql.contiene(nomeDB, "popular", "user", user))
+    			tot = DatabaseMySql.getMinPriority() + 1;
+    		else {
+    			tot = DatabaseMySql.getMinPriority();
+    			tot = tot + ((-tot) / 10) + 1;
+    		}
     		System.out.println("Priorità selezionata per l'utente " + user + ": " + tot);
     		DatabaseMySql.inserToCheck(nomeDB, user, tot);
     		Thread.currentThread();
@@ -196,10 +208,14 @@ public class urlReader  {
 				OutputTxt.writeLog("Errore 500+ : servizio non disponibile al momento. Analisi per il DB: "+ nomeDB);
 				System.out.println("Errore 500+ : servizio non disponibile al momento. Analisi per il DB: "+ nomeDB);
 				if (DatabaseMySql.insertError(nomeDB, user)) { // se ritorna true l'utente non viene ancora bloccato
-					tot = DatabaseMySql.getMinPriority(); // con false l'utente viene inserito in .profile come utente bloccato
-		    		tot = tot + ((-tot) / 10) + 1;
-		    		System.out.println("Priorità selezionata per l'utente " + user + ": " + tot); 
-		    		DatabaseMySql.inserToCheck(nomeDB, user, tot);
+					if (DatabaseMySql.contiene(nomeDB, "popular", "user", user))
+		    			tot = DatabaseMySql.getMinPriority() + 1;
+					else {
+						tot = DatabaseMySql.getMinPriority(); // con false l'utente viene inserito in .profile come utente bloccato
+						tot = tot + ((-tot) / 10) + 1;
+					}
+					System.out.println("Priorità selezionata per l'utente " + user + ": " + tot);
+					DatabaseMySql.inserToCheck(nomeDB, user, tot);		    		
 				}
 				return false;
 			// Direi di fare una pausa(nomeDB,  e di richiamare la stessa funzione

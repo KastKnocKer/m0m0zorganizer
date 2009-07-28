@@ -63,7 +63,7 @@ import java.net.URL;
 	
 	public static boolean getFavorites (YouTubeService myService, String devKey, String nomeDB, String user) {
 		System.out.println("ANALISI per il DB: "+ nomeDB + " dei favorites dell' utente " + user + ".");
-		return getFavorites(myService, devKey, nomeDB, user,1, 0, 0);
+		return getFavorites( myService, devKey, nomeDB, user,1, 0, 0);
 	}
 	
 	public static boolean getFavorites (YouTubeService myService, String devKey, String nomeDB, String user, int count, int giriVuoto, int maxCount) {
@@ -104,7 +104,7 @@ import java.net.URL;
 				System.out.println("\t\t\tTotale favorites per l'user " + user + ": " + tot);
 				if (tot == 951 && count == 950)
 					count++;
-				getFavorites(myService, devKey, nomeDB, user, count, giriVuoto, maxCount);
+				getFavorites( myService, devKey, nomeDB, user, count, giriVuoto, maxCount);
 				return true;
 			}
 			else 
@@ -149,7 +149,7 @@ import java.net.URL;
 	
 	public static void getCompleteVideo (YouTubeService myService, String devKey, String nomeDB, String user) {
 		System.out.println("ANALISI per il DB: "+ nomeDB + "  dei video dell' utente " + user + ".");
-		getCompleteVideo(myService, devKey, nomeDB, user, 1, 0, 0);
+		getCompleteVideo( myService, devKey, nomeDB, user, 1, 0, 0);
 	}
 	// SISTEMARE MAX COUNT COME NEGLI ALTRI
 	public static void getCompleteVideo (YouTubeService myService, String devKey, String nomeDB, String user, int count, int giriVuoto, int maxCount) {
@@ -183,7 +183,7 @@ import java.net.URL;
 				giriVuoto++;
 			if (giriVuoto < 2 && maxCount < 2 && tot >= count) {
 				System.out.println("\t\t\tTotale video per l'user " + user + ": " + tot);
-				getCompleteVideo(myService, devKey, nomeDB, user, count, giriVuoto, maxCount);
+				getCompleteVideo( myService, devKey, nomeDB, user, count, giriVuoto, maxCount);
 			}
 			else 
 				return;
@@ -200,7 +200,7 @@ import java.net.URL;
 	
 	public static boolean getActivity (YouTubeService myService, String devKey, String nomeDB, String user) {
 		System.out.println("ANALISI per il DB: "+ nomeDB + "  delle activity dell' utente " + user + ".");
-		return getActivity(myService, devKey, nomeDB, user, 1, 0, 0);
+		return getActivity( myService, devKey, nomeDB, user, 1, 0, 0);
 	}
 	
 	public static boolean getActivity (YouTubeService myService, String devKey,String nomeDB, String user, int count, int giriVuoto, int maxCount) {
@@ -268,7 +268,7 @@ import java.net.URL;
 				System.out.println("\t\t\tTotale activity per l'user " + user + ": " + tot);
 				if (tot == 951 && count == 950)
 					count++;
-				getActivity(myService, devKey, nomeDB, user, count, giriVuoto, maxCount);
+				getActivity( myService, devKey, nomeDB, user, count, giriVuoto, maxCount);
 				return true;
 			}
 		} catch (MalformedURLException e) {
@@ -287,7 +287,7 @@ import java.net.URL;
 		}
 	
 	public static boolean getActivity (YouTubeService myService, String devKey, String nomeDB, String user, int count, int giriVuoto, String data, int N) {
-		return getActivity (myService, devKey, nomeDB, user, count, giriVuoto, data, N, 0);
+		return getActivity ( myService, devKey, nomeDB, user, count, giriVuoto, data, N, 0);
 	}
 	
 	public static boolean getActivity (YouTubeService myService, String devKey, String nomeDB, String user, int count, int giriVuoto, String data, int N, int maxCount) {
@@ -362,7 +362,7 @@ import java.net.URL;
 				if (tot == 951 && count == 950)
 					count++;
 				System.out.println(count);
-				getActivity (myService, devKey, nomeDB, user, count, giriVuoto, data, N, 0);
+				getActivity ( myService, devKey, nomeDB, user, count, giriVuoto, data, N, 0);
 				return true;
 			}
 		} catch (MalformedURLException e) {
