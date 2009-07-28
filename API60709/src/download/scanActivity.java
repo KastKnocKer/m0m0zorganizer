@@ -39,7 +39,7 @@ public class scanActivity {
 					} catch (InterruptedException e) {e.printStackTrace();}
 					OutputTxt.writeError("ERRORE 500 per users" + userTemp);
 				}
-				if (++temp == 9)
+				if (++temp == 100)
 					return;
 			}
 		} catch (NullPointerException e) {System.out.println("Lista activeList terminata.");}
