@@ -27,8 +27,8 @@ public class padre {
 		
 		DatabaseMySql.eseguiAggiornamento("insert into " + nomeDB + ".ethernet values (\"padre\", \"false\")");
 		DatabaseMySql.eseguiAggiornamento("insert into " + nomeDB + ".ethernet values (\"figlio\", \"false\")");
-		flagEth = false; 		    // true eth0 up eth1 down     false eth0 down eth1 up
-		ethernet.switchTo(nomeDB, true); 	// Se ho true sono a eth0 up e switho a eth1 e viceversa
+		flagEth = true; 		    // true eth0 up eth1 down     false eth0 down eth1 up
+		ethernet.switchTo(nomeDB, false); 	// Se ho true sono a eth0 up e switho a eth1 e viceversa
 		
 		new popularReader(nomeDB);
 		
