@@ -38,11 +38,17 @@ public class scanPopular {
 		}
 	}
 	
-	public static void completeScan (YouTubeService myService, String devKey, String nomeDB, String user) {
-		API.getVideo(myService, devKey, nomeDB, user);		// Alternati in modo da limitare i flood di rete
-		urlReader.userReader(nomeDB, "subscribers", user);
-		API.getFavorites(myService, devKey, nomeDB, user);
-		urlReader.userReader(nomeDB, "friends", user);
-		API.getSubscriptions(myService, devKey, nomeDB, user);
+	public static boolean  completeScan (YouTubeService myService, String devKey, String nomeDB, String user) {
+		if(!API.getVideo(myService, devKey, nomeDB, user))
+			return false;
+		if(!urlReader.userReader(nomeDB, "subscribers", user))
+			return false;	
+		if(!API.getFavorites(myService, devKey, nomeDB, user))
+			return false;
+		if(!urlReader.userReader(nomeDB, "friends", user))
+			return false;
+		if(!API.getSubscriptions(myService, devKey, nomeDB, user))
+			return false;
+		return true;
 	}
 }

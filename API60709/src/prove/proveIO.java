@@ -27,6 +27,6 @@ public class proveIO {
 		//System.out.println(devKey.length());
 		DatabaseMySql.eseguiAggiornamento("insert into utenti.ethernet values (\"padre\", \"true\")");
 		DatabaseMySql.eseguiAggiornamento("insert into utenti.ethernet values (\"figlio\", \"true\")");
-		new popularReader("utenti");
+		DatabaseMySql.clearUser("utenti", "AcademyRiservaForum");
 	}
 }

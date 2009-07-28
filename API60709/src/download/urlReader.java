@@ -10,14 +10,13 @@ import database.*;
 public class urlReader  {
 	
 	public urlReader () { }
-	
-	public static void userReader (String nomeDB, String tabella, String user) {
-
+		
+	public static boolean userReader (String nomeDB, String tabella, String user) {
 		System.out.println("ANALISI per il DB: "+ nomeDB + " dei " + tabella + " dell' utente " + user + ".");
-		userReader (nomeDB, tabella, user, 0);
+		return userReader (nomeDB, tabella, user, 0);
 	}
 	
-    public static void userReader (String nomeDB, String tabella, String user, int count) {
+    public static boolean userReader (String nomeDB, String tabella, String user, int count) {
     	if (!tabella.equals("subscribers") && !tabella.equals("friends")) {
     		System.out.println("Errore utente: Inserire correttamente parametro tabella nel " + tabella + 
     				"Reader dell'utente" + user);
@@ -33,7 +32,7 @@ public class urlReader  {
 				if (count != 0 && (count == 1008 || count == tot)) {
 			    	in.close();
 			    	System.out.println("Cap dei " + tabella + " raggiunto per l'utente " + user + ".");
-			    	return;
+			    	return true;
 			    }
 				if (inputLine.contains("channel-box-item-count")) {
 			    	 inputLine = inputLine.substring(inputLine.indexOf(">") + 1, inputLine.indexOf("</span>"));
@@ -49,35 +48,37 @@ public class urlReader  {
 				else if (inputLine.contains("non ha") && count <= 1) {
 					in.close();
 			    	OutputTxt.writeLog("Errore: L' utente " + user + " non ha aggiunto " + tabella + ".");
-			    	return;
+			    	return true;
 			    }
 			    else if (inputLine.contains("Non è")) {
 					in.close();
 			    	OutputTxt.writeLog("Errore 403: Informazione non pubblica: " + tabella + " dell' user " + user);
 			    	DatabaseMySql.insert(nomeDB, "infoReserved", user, tabella);
-			    	return;
+			    	return true;
 			    }
 			    else if (inputLine.contains("Questo account è stato")) {
 					in.close();
 			    	OutputTxt.writeLog("Errore 404: User not found: " + user);
-			    	return;
+			    	return false;
 			    }
 			    else if (inputLine.equals("</html>") && count != 0 && count < tot) {
 			    	in.close();
 			    	System.out.println(tabella + " dell'user " + user + " scaricati fino al num: " + count + ".");
 			    	System.out.println("\t\t\tTotale " + tabella + " per l'user " + user + ": " + tot);
 			    	userReader(nomeDB, tabella, user, count);
-			    	return;
+			    	return true;
 			    }
 				else if (inputLine.contains("is down for") || inputLine.contains("manutenzione")) {
 					in.close();
 					OutputTxt.writeLog("Youtube down per manutenzione o non al 100%");
-					System.out.println("Youtube down per manutenzione o non al 100%. pausa(nomeDB,  1 minuto.");  
-					pausa(nomeDB, 60, user);
-					return;
+					System.out.println("Youtube down per manutenzione o non al 100%. Pausa di  45 secondi.");  
+					pausa(nomeDB, 45, user);
+					return false;
 				}
-				else if (inputLine.contains("Siamo spiacenti per l'interruzione"))
-					notifyUrlFlood(nomeDB, inputLine, user);				
+				else if (inputLine.contains("Siamo spiacenti per l'interruzione")) {
+					notifyUrlFlood(nomeDB, inputLine, user);	
+					return false;
+				}
 			}
     	}
     	catch (MalformedURLException e) { 
@@ -87,25 +88,26 @@ public class urlReader  {
     	}
     	catch (IOException e) {  
     		if(e.getMessage().contains("Server returned HTTP response code: 50")) {
-				System.out.println("Errore 500+ : servizio non disponibile al momento.. pausa(nomeDB,  5 minuti.");
+				System.out.println("Errore 500+ : servizio non disponibile al momento.");
 				OutputTxt.writeLog("Errore 500+ : servizio non disponibile al momento.");
 				DatabaseMySql.insertError(nomeDB, user);
-    			pausa(nomeDB, 30, user);
-    			return;
+    			return false;
     		}
     	}
     	catch (StringIndexOutOfBoundsException e) {
     		OutputTxt.writeException(e.getLocalizedMessage());
     		OutputTxt.writeException("Errore CONOSCIUTO E CONTROLLATO " + tabella + "Reader dell'utente: " + user);	
+    		return true;
     		// Pensare come gestire: farei controllo se ci sono amici/subscribers nel db o se no segnalo no amici/sub
     	}
     	try {
     		in.close();
     	} catch (IOException e) {
     		OutputTxt.writeError("Errore IO nella  " + tabella + " reader dell'utente " + user);
+    		return true;
     	}
     	System.out.println("Fine del " + tabella + " reader dell'utente " + user);
-    	return;
+    	return true;
     }
 	
     public static void notifyUrlFlood (String nomeDB, String inputLine, String user) {
@@ -179,7 +181,7 @@ public class urlReader  {
 		}
     }
     
-    public static void getErrorCode (String nomeDB, String tabella ,URL url ,String user) {
+    public static boolean getErrorCode (String nomeDB, String tabella ,URL url ,String user) {
     	String msg;
     	int code;
     	System.out.println("GetErrorCode per il DB: "+ nomeDB + " sui " + tabella  + " dell'utente " + user);
@@ -191,8 +193,6 @@ public class urlReader  {
 			System.out.println((code = connection.getResponseCode()));
 			System.out.println(msg = connection.getResponseMessage());
 			if (code >= 500) {
-				DatabaseMySql.delete(nomeDB, "profile", "user", user);
-	    		DatabaseMySql.delete(nomeDB, "toCheck", "user", user);
 				OutputTxt.writeLog("Errore 500+ : servizio non disponibile al momento. Analisi per il DB: "+ nomeDB);
 				System.out.println("Errore 500+ : servizio non disponibile al momento. Analisi per il DB: "+ nomeDB);
 				if (DatabaseMySql.insertError(nomeDB, user)) { // se ritorna true l'utente non viene ancora bloccato
@@ -200,8 +200,8 @@ public class urlReader  {
 		    		tot = tot + ((-tot) / 10) + 1;
 		    		System.out.println("Priorità selezionata per l'utente " + user + ": " + tot); 
 		    		DatabaseMySql.inserToCheck(nomeDB, user, tot);
-		    		return;
 				}
+				return false;
 			// Direi di fare una pausa(nomeDB,  e di richiamare la stessa funzione
 			}				
 			else if (msg.contains("Forbidden") ||
@@ -209,28 +209,29 @@ public class urlReader  {
 				DatabaseMySql.insert(nomeDB, "infoReserved", user, tabella);
 				System.out.println("Errore 403: Informazione per il DB: "+ nomeDB + " non pubblica: " + tabella + " dell' user " + user);
 				OutputTxt.writeLog("Errore 403: Informazione per il DB: "+ nomeDB + " non pubblica: " + tabella + " dell' user " + user);
-				return;
+				return true;
 			}
 			else if (msg.contains("many")) {
 				API.notifyApiFlood(nomeDB, tabella, user);
-				return;
+				return true;
 			}	
 			else if (code == 404) {
 				System.out.println("Errore 404: User not found: " + user);
 				OutputTxt.writeLog("Errore 404: per il DB: "+ nomeDB + " User not found: " + user);
-				return; 
+				return false; 
 			}
 			else if (msg.contains("Bad Request")) {
 				OutputTxt.writeError("Errore per il DB: "+ nomeDB + " bad request all'url: " + url);
 				System.out.println("Errore bad request all'url: " + url);
-				return;
+				return true;
 			}	
 		} catch (IOException e) { 
 			e.printStackTrace();
 			OutputTxt.writeException(e.getLocalizedMessage());
 	        OutputTxt.writeException("Errore nel getErrorCode dell'utente: " + user);	
+	        return true;
 		}
-		return;
+		return true;
 	}
     
    

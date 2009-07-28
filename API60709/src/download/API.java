@@ -61,12 +61,12 @@ import java.net.URL;
 		return false;
 	}
 	
-	public static void getFavorites (YouTubeService myService, String devKey, String nomeDB, String user) {
+	public static boolean getFavorites (YouTubeService myService, String devKey, String nomeDB, String user) {
 		System.out.println("ANALISI per il DB: "+ nomeDB + " dei favorites dell' utente " + user + ".");
-		getFavorites(myService, devKey, nomeDB, user,1, 0, 0);
+		return getFavorites(myService, devKey, nomeDB, user,1, 0, 0);
 	}
 	
-	public static void getFavorites (YouTubeService myService, String devKey, String nomeDB, String user, int count, int giriVuoto, int maxCount) {
+	public static boolean getFavorites (YouTubeService myService, String devKey, String nomeDB, String user, int count, int giriVuoto, int maxCount) {
 		countTemp = false;
 		try {
 			metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/users/" + user + "/favorites?&key=" + devKey +
@@ -90,7 +90,7 @@ import java.net.URL;
 					DatabaseMySql.insert(nomeDB,"videoUploadedBy", stringTemp, videoEntry.getMediaGroup().getVideoId());
 				}
 				if (++count == 1001)
-					return;
+					return true;
 			}
 			System.out.println("Favorites dell'user " + user + " scaricati fino al num: " + count + ".");
 			if (tot > 1000)
@@ -102,24 +102,26 @@ import java.net.URL;
 			if (!countTemp)
 				giriVuoto++;
 			if (giriVuoto < 2 && maxCount < 2 && tot >= count) {
-
 				System.out.println("\t\t\tTotale favorites per l'user " + user + ": " + tot);
 				getFavorites(myService, devKey, nomeDB, user, count, giriVuoto, maxCount);
+				return true;
 			}
 			else 
-				return;
+				return true;
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
-			urlReader.getErrorCode(nomeDB, "favorites", metafeedUrl, user);
+			return urlReader.getErrorCode(nomeDB, "favorites", metafeedUrl, user);
 		} catch(ResourceNotFoundException e){
         	OutputTxt.writeLog("Errore 404: User not found: " + user);
+        	return false;
         } catch(ServiceException e) {
-        	urlReader.getErrorCode(nomeDB, "favorites", metafeedUrl, user);
+        	return urlReader.getErrorCode(nomeDB, "favorites", metafeedUrl, user);
         }
+        return true;
 	}
 		
-	public static void getVideo (YouTubeService myService, String devKey, String nomeDB, String user) {
+	public static boolean getVideo (YouTubeService myService, String devKey, String nomeDB, String user) {
 		countTemp = false;
 		try {
 			metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/users/" + user + "/uploads?&key=" + devKey);
@@ -134,11 +136,13 @@ import java.net.URL;
 			e.printStackTrace();
 		}  catch(ResourceNotFoundException e){
 			OutputTxt.writeLog("Errore 404: User not found: " + user);
+			return false;
         } catch (IOException e) {
-			urlReader.getErrorCode(nomeDB, "video", metafeedUrl, user);	
+			return urlReader.getErrorCode(nomeDB, "video", metafeedUrl, user);	
 		} catch(ServiceException e) {
-			urlReader.getErrorCode(nomeDB, "video", metafeedUrl, user);
+			return urlReader.getErrorCode(nomeDB, "video", metafeedUrl, user);
         }
+		return true;
 	}
 	
 	public static void getCompleteVideo (YouTubeService myService, String devKey, String nomeDB, String user) {
@@ -352,12 +356,12 @@ import java.net.URL;
 	}
 	
 	
-	public static void getSubscriptions (YouTubeService myService, String devKey, String nomeDB, String user) {
+	public static boolean getSubscriptions (YouTubeService myService, String devKey, String nomeDB, String user) {
 		System.out.println("ANALISI per il DB: "+ nomeDB + "  delle subscriptions dell' utente " + user + ".");
-			getSubscriptions(myService, devKey, nomeDB, user, 1, 0, 0);
+		return getSubscriptions(myService, devKey, nomeDB, user, 1, 0, 0);
 	}
 	
-	public static void getSubscriptions (YouTubeService myService, String devKey, String nomeDB, String user, int count, int giriVuoto, int maxCount) {
+	public static boolean getSubscriptions (YouTubeService myService, String devKey, String nomeDB, String user, int count, int giriVuoto, int maxCount) {
 		countTemp = false;
 		try {
 			metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/users/" + user + "/subscriptions?key=" + devKey +
@@ -375,13 +379,15 @@ import java.net.URL;
 				else if (stringTemp.contains("Favorites of"))
 					stringTemp = stringTemp.substring(15);
 				else {
-					count++;
+					if (++count == tot)
+						return true;
 					continue;
 				}
 				DatabaseMySql.insert(nomeDB,"subscriptions",user, stringTemp, 
 						entry.getPublished().toString().substring(0,19), tot + "");
 				DatabaseMySql.inserToCheck(nomeDB, stringTemp);
-				count++;
+				if (++count == tot)
+					return true;
 			}
 			System.out.println("Subscriptions dell'user " + user + " scaricati fino al num: " + count + ".");
 			if (tot > 1000)
@@ -393,21 +399,22 @@ import java.net.URL;
 			if (!countTemp)
 				giriVuoto++;
 			if (giriVuoto < 2 && maxCount < 2 && tot >= count) {
-
 				System.out.println("\t\t\tTotale subscriptions per l'user " + user + ": " + tot);
 				getSubscriptions(myService, devKey, nomeDB, user, count, giriVuoto, maxCount);
 			}
 			else
-				return;
+				return true;
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}  catch(ResourceNotFoundException e){
         	OutputTxt.writeLog("Errore 404: User not found: " + user);
+        	return false;
 		} catch (IOException e) {
-			urlReader.getErrorCode(nomeDB, "subscriptions", metafeedUrl, user);
+			return urlReader.getErrorCode(nomeDB, "subscriptions", metafeedUrl, user);
 		} catch(ServiceException e) {
-			urlReader.getErrorCode(nomeDB, "subscriptions", metafeedUrl, user);
+			return urlReader.getErrorCode(nomeDB, "subscriptions", metafeedUrl, user);
         }
+		return true;
 	}
 	
     public static void notifyApiFlood (String nomeDB, String tabella, String user) {

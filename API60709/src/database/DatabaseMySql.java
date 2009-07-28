@@ -162,6 +162,8 @@ public class DatabaseMySql {
 	}
 
 	public static boolean insertError(String nomeDB, String user) {
+		DatabaseMySql.delete(nomeDB, "profile", "user", user);
+		DatabaseMySql.delete(nomeDB, "toCheck", "user", user);
 		DatabaseMySql.eseguiAggiornamento("Insert into " + nomeDB + ".error values (\"" + user + "\" , \"0\") " +
 				"on duplicate key update error = error + 1");	
 		if (DatabaseMySql.eseguiQuery("Select error from "+ nomeDB + ".error where user='" + user + "'").get(0)[0].equals("5")) {
@@ -170,5 +172,16 @@ public class DatabaseMySql {
 			return false;
 		}	
 		return true;	
+	}
+
+	public static void clearUser(String nomeDB, String user) {
+		DatabaseMySql.eseguiAggiornamento("Delete from " + nomeDB + ".profile where user='" + user + "'");
+		DatabaseMySql.eseguiAggiornamento("Delete from " + nomeDB + ".numVideo where user='" + user + "'");
+		DatabaseMySql.eseguiAggiornamento("Delete from " + nomeDB + ".numFavorites where user='" + user + "'");
+		DatabaseMySql.eseguiAggiornamento("Delete from " + nomeDB + ".friends where user='" + user + "'");
+		DatabaseMySql.eseguiAggiornamento("Delete from " + nomeDB + ".subscriptions where user='" + user + "'");
+		DatabaseMySql.eseguiAggiornamento("Delete from " + nomeDB + ".subscribers where user='" + user + "'");
+		DatabaseMySql.eseguiAggiornamento("Delete from " + nomeDB + ".activity where user='" + user + "'");
+		DatabaseMySql.eseguiAggiornamento("Delete from " + nomeDB + ".infoReserved where user='" + user + "'");		
 	}
 }
