@@ -216,10 +216,10 @@ public class DatabaseMySql {
 		DatabaseMySql.delete(nomeDB, "toCheck", "user", user);
 		DatabaseMySql.eseguiAggiornamento("Insert into " + nomeDB + ".error values (\"" + user + "\" , \"0\") " +
 				"on duplicate key update error = error + 1");	
-		if (DatabaseMySql.eseguiQuery("Select error from "+ nomeDB + ".error where user='" + user + "'").get(0)[0].equals("5")) {
-    		new Orario();
-    		DatabaseMySql.clearUser(nomeDB, user);
-			DatabaseMySql.insert("utenti", "profile", user, "blocked", Orario.getDataOra(), 500, 500, 500, "error500+");
+		if (Integer.parseInt(DatabaseMySql.eseguiQuery("Select error from "+ nomeDB + ".error where user='" + user + "'").get(0)[0]) >= 5) {
+			DatabaseMySql.clearUser(nomeDB, user);
+			new Orario();
+			DatabaseMySql.insert(nomeDB, "profile", user, "blocked", Orario.getDataOra(), 500, 500, 500, "error500+");
 			return false;
 		}	
 		return true;	
@@ -234,5 +234,5 @@ public class DatabaseMySql {
 		DatabaseMySql.eseguiAggiornamento("Delete from " + nomeDB + ".subscribers where user='" + user + "'");
 		DatabaseMySql.eseguiAggiornamento("Delete from " + nomeDB + ".activity where user='" + user + "'");
 		DatabaseMySql.eseguiAggiornamento("Delete from " + nomeDB + ".infoReserved where user='" + user + "'");		
-	}
+	} 
 }

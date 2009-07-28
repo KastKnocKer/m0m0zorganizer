@@ -24,8 +24,7 @@ public class scanPopular {
 				if (!DatabaseMySql.contiene("utenti", "profile", "user", popularToCheck)) {
 					if (API.getActivity(myService, devKey, nomeDB, popularToCheck)) {	// Ha activityFeed? 
 						if (API.getUser(myService, devKey, "active", nomeDB, popularToCheck)) { 	// E' un utente sospeso?  No --> active
-							if (!completeScan(myService, devKey, nomeDB, popularToCheck))	// Si attivo scansione completa senza activity
-								DatabaseMySql.clearUser(nomeDB, popularToCheck);	
+							completeScan(myService, devKey, nomeDB, popularToCheck);	// Si attivo scansione completa senza activity
 						}
 						else 		// Non è attivo lo tolgo dagli active e lo metto negli inactive
 							DatabaseMySql.insert("utenti", "profile", popularToCheck, "blocked", "block", 0, 0, 0, "block");
@@ -43,17 +42,16 @@ public class scanPopular {
 	}
 	
 	public static boolean  completeScan (YouTubeService myService, String devKey, String nomeDB, String user) {
-		if(!API.getVideo(myService, devKey, nomeDB, user))
+		if(!API.getSubscriptions(myService, devKey, nomeDB, user))
+			return false;
+		if(!API.getFavorites(myService, devKey, nomeDB, user))
 			return false;
 		if(!urlReader.userReader(nomeDB, "subscribers", user))
 			return false;	
-		if(!API.getFavorites(myService, devKey, nomeDB, user))
-			return false;
 		if(!urlReader.userReader(nomeDB, "friends", user))
 			return false;
-		if(!API.getSubscriptions(myService, devKey, nomeDB, user))
+		if(!API.getVideo(myService, devKey, nomeDB, user))
 			return false;
-		DatabaseMySql.eseguiAggiornamento("Delete from " + nomeDB + ".error where user='" + user + "'");
 		return true;
 	}
 }

@@ -6,6 +6,7 @@
 import com.google.gdata.client.youtube.YouTubeService;
 
 import database.DatabaseMySql;
+import database.Orario;
 import database.OutputTxt;
 import download.API;
 import download.Contatore;
@@ -29,6 +30,8 @@ public class proveIO {
 		//System.out.println(devKey.length());
 		DatabaseMySql.eseguiAggiornamento("insert into utenti.ethernet values (\"padre\", \"true\")");
 		DatabaseMySql.eseguiAggiornamento("insert into utenti.ethernet values (\"figlio\", \"true\")");
-
+		//new popularReader("utenti");
+		//new scanPopular(myService, devKey, "utenti");
+		//DatabaseMySql.insertError("utenti", "robyb70");
 	}
 }

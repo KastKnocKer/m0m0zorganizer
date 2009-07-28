@@ -209,7 +209,7 @@ public class urlReader  {
 				System.out.println("Errore 500+ : servizio non disponibile al momento. Analisi per il DB: "+ nomeDB);
 				if (DatabaseMySql.insertError(nomeDB, user)) { // se ritorna true l'utente non viene ancora bloccato
 					if (DatabaseMySql.contiene(nomeDB, "popular", "user", user))
-		    			tot = DatabaseMySql.getMinPriority() + 1;
+		    			tot = DatabaseMySql.getMinPriority() + 3;
 					else {
 						tot = DatabaseMySql.getMinPriority(); // con false l'utente viene inserito in .profile come utente bloccato
 						tot = tot + ((-tot) / 10) + 1;

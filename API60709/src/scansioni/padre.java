@@ -24,19 +24,19 @@ public class padre {
 		key[5] = "AI39si647HsBMmuW7FnWtDwb037yfACgX-FcXaHuMZXfTUH37tw8DawMPmWgbO-CeSIfoJJF5URC7ww52k94Thj_dbH9wFdxNQ";
 		
 		DatabaseMySql.eseguiAggiornamento("insert into " + nomeDB + ".key values (\"padre\", \"" + key[0] + "\")");
-		
-		DatabaseMySql.eseguiAggiornamento("insert into " + nomeDB + ".ethernet values (\"padre\", \"false\")");
+		// METTERE FALSEEEEEEEE NEL PADREEEEEEEEEEEEEEEEEEEEEEEEEE
+		DatabaseMySql.eseguiAggiornamento("insert into " + nomeDB + ".ethernet values (\"padre\", \"true\")");
 		DatabaseMySql.eseguiAggiornamento("insert into " + nomeDB + ".ethernet values (\"figlio\", \"false\")");
-		flagEth = true; 		    // true eth0 up eth1 down     false eth0 down eth1 up
-		ethernet.switchTo(nomeDB, false); 	// Se ho true sono a eth0 up e switho a eth1 e viceversa
+		//flagEth = true; 		    // true eth0 up eth1 down     false eth0 down eth1 up
+		//ethernet.switchTo(nomeDB, false); 	// Se ho true sono a eth0 up e switho a eth1 e viceversa
 		
-		new popularReader(nomeDB);
+		//new popularReader(nomeDB);
 		//Omesso perchè senza figlio
 		//DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".ethernet set flag ='true' where rete='figlio'");
 		pb = new ProcessBuilder ("/home/m0m0z/Scrivania/tesina_exec/scanPopular.sh" , "padre", nomeDB);
-		while (DatabaseMySql.getCount(nomeDB, "popToCheck") != 0) {
+	/*	while (DatabaseMySql.getCount(nomeDB, "popToCheck") != 0) {
 			try {			
-				OutputTxt.writeLog("Padre: processo scanPopular per il DB: DA CONFIGURARE");
+				OutputTxt.writeLog("Padre: processo scanPopular per il DB: " + nomeDB + ".");
 				scanner = pb.start ();
 				BufferedReader in = new BufferedReader(	new InputStreamReader(scanner.getInputStream()));
 				String line = null;
@@ -56,11 +56,11 @@ public class padre {
 			catch (IOException e) {
 				OutputTxt.writeError("Errore IO nel try start del padreExec.");
 			}  
-		}
+		} */
 		pb.command ("/home/m0m0z/Scrivania/tesina_exec/scanUser.sh" , "padre", nomeDB); 
 		while (DatabaseMySql.getCount(nomeDB, "toCheck") != 0) { // && getCount(nomeDB, "profile*ACTIVE*) < CAP)
 			try {
-				OutputTxt.writeLog("Padre: processo scanUser per il DB: DA CONFIGURARE");
+				OutputTxt.writeLog("Padre: processo scanUser per il DB: " + nomeDB + ".");
 				scanner = pb.start();
 				BufferedReader in = new BufferedReader(	new InputStreamReader(scanner.getInputStream()));
 				String line = null;
@@ -70,8 +70,8 @@ public class padre {
 				if (++n == 6) 
 					n = 0;
 				DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".key set devKey='" + key[n] + "' where crawler='padre'");
-				ethernet.switchTo(nomeDB, flagEth);
-				flagEth = !flagEth;
+				//ethernet.switchTo(nomeDB, flagEth);
+				//flagEth = !flagEth;
 				OutputTxt.writeLog("Padre: Popular scansionati   totale: " + DatabaseMySql.getCount(nomeDB, "profile"));
 				OutputTxt.writeLog("Padre: Popular scansionati   attivi: " + DatabaseMySql.eseguiQuery("Select count(*) from " + nomeDB + ".profile where status='active'").get(0)[0]);
 				OutputTxt.writeLog("Padre: Richieste API per il processo: " + Contatore.getTotApi());
@@ -100,7 +100,7 @@ public class padre {
 		pb = new ProcessBuilder ("/home/m0m0z/Scrivania/tesina_exec/scanActivity.sh" , "padre" , nomeDB, data + ".000Z", scansioneN + "");
 		while (DatabaseMySql.getCount(nomeDB, "activeList") != 0) {
 			try {			
-				OutputTxt.writeLog("Padre: processo scanActivity per il DB: DA CONFIGURARE");
+				OutputTxt.writeLog("Padre: processo scanActivity per il DB: " + nomeDB + ".");
 				scanner = pb.start ();
 				BufferedReader in = new BufferedReader(new InputStreamReader(scanner.getInputStream()));
 				String line = null;
@@ -110,10 +110,11 @@ public class padre {
 				if (++n == 6)
 					n = 0;
 				DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".key set devKey='" + key[n] + "' where crawler='padre'");
-				// Messo perchè non penso di utilizzare il figlio nelle scansioni veloci
-				DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".ethernet set flag ='false' where rete='figlio'");
-				ethernet.switchTo(nomeDB, flagEth);
-				flagEth = !flagEth;
+				//Messo perchè non penso di utilizzare il figlio nelle scansioni veloci
+				//DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".ethernet set flag ='false' where rete='figlio'");
+				
+				//ethernet.switchTo(nomeDB, flagEth);
+			    //flagEth = !flagEth;
 				OutputTxt.writeLog("Padre: Attivi   scansionati   totale: " + DatabaseMySql.getCount(nomeDB, "active" + scansioneN));
 				OutputTxt.writeLog("Padre: Inattivi scansionati   totale: " + DatabaseMySql.getCount(nomeDB, "inactive" + scansioneN));
 				OutputTxt.writeLog("Padre: Richieste API per il processo: " + Contatore.getTotApi());
