@@ -127,8 +127,6 @@ public class Database {
      		 OutputTxt.writeException("Stringa errore: " + query);
      		 risultato = false;
      	 }
-     	 else
-     		 System.out.println("DUPLICATEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
        }
       return risultato;
    }
