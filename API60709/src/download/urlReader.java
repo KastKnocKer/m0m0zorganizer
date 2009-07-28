@@ -138,7 +138,6 @@ public class urlReader  {
     		DatabaseMySql.delete(nomeDB, "toCheck", "user", user);
     		tot = DatabaseMySql.getMinPriority();
     		tot = tot + ((-tot) / 10) + 1;
-    		System.out.println(tot);
     		System.out.println("Priorità selezionata per l'utente " + user + ": " + tot);
     		DatabaseMySql.inserToCheck(nomeDB, user, tot);
     		Thread.currentThread();
@@ -192,11 +191,17 @@ public class urlReader  {
 			System.out.println((code = connection.getResponseCode()));
 			System.out.println(msg = connection.getResponseMessage());
 			if (code >= 500) {
+				DatabaseMySql.delete(nomeDB, "profile", "user", user);
+	    		DatabaseMySql.delete(nomeDB, "toCheck", "user", user);
 				OutputTxt.writeLog("Errore 500+ : servizio non disponibile al momento. Analisi per il DB: "+ nomeDB);
 				System.out.println("Errore 500+ : servizio non disponibile al momento. Analisi per il DB: "+ nomeDB);
-				if (DatabaseMySql.insertError(nomeDB, user)) // se ritorna true l'utente non viene ancora bloccato
-					pausa(nomeDB, 30, user);	// con false l'utente viene inserito in .profile come utente bloccato
-				return;
+				if (DatabaseMySql.insertError(nomeDB, user)) { // se ritorna true l'utente non viene ancora bloccato
+					tot = DatabaseMySql.getMinPriority(); // con false l'utente viene inserito in .profile come utente bloccato
+		    		tot = tot + ((-tot) / 10) + 1;
+		    		System.out.println("Priorità selezionata per l'utente " + user + ": " + tot); 
+		    		DatabaseMySql.inserToCheck(nomeDB, user, tot);
+		    		return;
+				}
 			// Direi di fare una pausa(nomeDB,  e di richiamare la stessa funzione
 			}				
 			else if (msg.contains("Forbidden") ||
