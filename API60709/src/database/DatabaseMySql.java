@@ -214,9 +214,12 @@ public class DatabaseMySql {
 
 	public static boolean insertError(String nomeDB, String user) {
 		DatabaseMySql.delete(nomeDB, "profile", "user", user);
+		System.out.println("1");
 		DatabaseMySql.delete(nomeDB, "toCheck", "user", user);
+		System.out.println("2");
 		DatabaseMySql.eseguiAggiornamento("Insert into " + nomeDB + ".error values (\"" + user + "\" , \"0\") " +
-				"on duplicate key update error = error + 1");	
+				"on duplicate key update error = error + 1");
+		System.out.println("3");
 		System.out.println("LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOL");
 		System.out.println("LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOL");
 		System.out.println("LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOL");
@@ -226,10 +229,15 @@ public class DatabaseMySql {
 		System.out.println("LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOL");
 		System.out.println("LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOL");
 		System.out.println(DatabaseMySql.eseguiQuery("Select error from "+ nomeDB + ".error where user='" + user + "'").get(0)[0]);
+		System.out.println("prova 4");
 		if (Integer.parseInt(DatabaseMySql.eseguiQuery("Select error from "+ nomeDB + ".error where user='" + user + "'").get(0)[0]) >= 5) {
+			System.out.println("5");
 			DatabaseMySql.clearUser(nomeDB, user);
+			System.out.println("6");
 			new Orario();
+			System.out.println("7");
 			DatabaseMySql.insert(nomeDB, "profile", user, "blocked", Orario.getDataOra(), 500, 500, 500, "error500+");
+			System.out.println("8");
 			return false;
 		}	
 		return true;	
@@ -244,5 +252,6 @@ public class DatabaseMySql {
 		DatabaseMySql.eseguiAggiornamento("Delete from " + nomeDB + ".subscribers where user='" + user + "'");
 		DatabaseMySql.eseguiAggiornamento("Delete from " + nomeDB + ".activity where user='" + user + "'");
 		DatabaseMySql.eseguiAggiornamento("Delete from " + nomeDB + ".infoReserved where user='" + user + "'");		
+		try {Thread.sleep(1000);} catch (InterruptedException e) {}
 	} 
 }
