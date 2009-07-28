@@ -13,8 +13,7 @@ public class padreExec {
 		OutputTxt.writeLog("Inizio scansione");
 		
 		String nomeDB;
-		nomeDB = "utenti";  // Momentaneo
-		
+		nomeDB = "utenti";  // Momentaneo		
 		padre.scansioneCompleta(nomeDB);
 	}
 }

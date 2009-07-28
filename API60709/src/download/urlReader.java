@@ -89,6 +89,7 @@ public class urlReader  {
     		if(e.getMessage().contains("Server returned HTTP response code: 50")) {
 				System.out.println("Errore 500+ : servizio non disponibile al momento.. pausa(nomeDB,  5 minuti.");
 				OutputTxt.writeLog("Errore 500+ : servizio non disponibile al momento.");
+				DatabaseMySql.insertError(nomeDB, user);
     			pausa(nomeDB, 30, user);
     			return;
     		}
@@ -135,7 +136,9 @@ public class urlReader  {
     		System.out.println("Pausa per il DB: " + nomeDB + " di " + sec + " secondi sull'utente " + user);
     		DatabaseMySql.delete(nomeDB, "profile", "user", user);
     		DatabaseMySql.delete(nomeDB, "toCheck", "user", user);
-    		tot = DatabaseMySql.getMinPriority() + (tot / 10) + 1;
+    		tot = DatabaseMySql.getMinPriority();
+    		tot = tot + ((-tot) / 10) + 1;
+    		System.out.println(tot);
     		System.out.println("Priorità selezionata per l'utente " + user + ": " + tot);
     		DatabaseMySql.inserToCheck(nomeDB, user, tot);
     		Thread.currentThread();
@@ -191,8 +194,8 @@ public class urlReader  {
 			if (code >= 500) {
 				OutputTxt.writeLog("Errore 500+ : servizio non disponibile al momento. Analisi per il DB: "+ nomeDB);
 				System.out.println("Errore 500+ : servizio non disponibile al momento. Analisi per il DB: "+ nomeDB);
-				DatabaseMySql.insertError(nomeDB, user);
-				pausa(nomeDB, 30, user);
+				if (DatabaseMySql.insertError(nomeDB, user)) // se ritorna true l'utente non viene ancora bloccato
+					pausa(nomeDB, 30, user);	// con false l'utente viene inserito in .profile come utente bloccato
 				return;
 			// Direi di fare una pausa(nomeDB,  e di richiamare la stessa funzione
 			}				

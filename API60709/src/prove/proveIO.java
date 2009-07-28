@@ -9,8 +9,6 @@ import database.DatabaseMySql;
 import database.OutputTxt;
 import download.API;
 import download.Contatore;
-import download.scanActivity;
-import download.urlReader;
 
 public class proveIO {
 
@@ -28,15 +26,6 @@ public class proveIO {
 		//System.out.println(devKey.length());
 		DatabaseMySql.eseguiAggiornamento("insert into utenti.ethernet values (\"padre\", \"true\")");
 		DatabaseMySql.eseguiAggiornamento("insert into utenti.ethernet values (\"figlio\", \"true\")");
-		if (API.getActivity(myService, devKey, "utenti", "TheLowLifeGang")) {
-			API.getUser(myService, devKey, "active", "utenti", "TheLowLifeGang");
-			API.getVideo(myService, devKey, "utenti", "TheLowLifeGang");		// Alternati in modo da limitare i flood di rete
-			urlReader.userReader("utenti", "subscribers", "TheLowLifeGang");	
-			API.getFavorites(myService, devKey, "utenti", "TheLowLifeGang");
-			urlReader.userReader("utenti", "friends", "TheLowLifeGang");
-			API.getSubscriptions(myService, devKey, "utenti", "TheLowLifeGang");
-		}
-		else 
-			System.out.println("LOL");
+		
 	}
 }
