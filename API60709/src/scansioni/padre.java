@@ -57,7 +57,7 @@ public class padre {
 				OutputTxt.writeError("Errore IO nel try start del padreExec.");
 			}  
 		}
-		pb.command ("/home/m0m0z/Scrivania/tesina_exec/scanUser.sh" , "padre"); 
+		pb.command ("/home/m0m0z/Scrivania/tesina_exec/scanUser.sh" , "padre", nomeDB); 
 		while (DatabaseMySql.getCount(nomeDB, "toCheck") != 0) { // && getCount(nomeDB, "profile*ACTIVE*) < CAP)
 			try {
 				OutputTxt.writeLog("Padre: processo scanUser per il DB: DA CONFIGURARE");

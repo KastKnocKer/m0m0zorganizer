@@ -53,6 +53,7 @@ public class scanPopular {
 			return false;
 		if(!API.getSubscriptions(myService, devKey, nomeDB, user))
 			return false;
+		DatabaseMySql.eseguiAggiornamento("Delete from " + nomeDB + ".error where user='" + user + "'");
 		return true;
 	}
 }
