@@ -213,7 +213,7 @@ public class urlReader  {
 			}
 			else if (msg.contains("many")) {
 				API.notifyApiFlood(nomeDB, tabella, user);
-				return true;
+				return false;
 			}	
 			else if (code == 404) {
 				System.out.println("Errore 404: User not found: " + user);

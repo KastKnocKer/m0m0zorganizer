@@ -10,6 +10,7 @@ import database.OutputTxt;
 import download.API;
 import download.Contatore;
 import download.popularReader;
+import download.scanPopular;
 
 public class proveIO {
 
@@ -27,6 +28,6 @@ public class proveIO {
 		//System.out.println(devKey.length());
 		DatabaseMySql.eseguiAggiornamento("insert into utenti.ethernet values (\"padre\", \"true\")");
 		DatabaseMySql.eseguiAggiornamento("insert into utenti.ethernet values (\"figlio\", \"true\")");
-		DatabaseMySql.clearUser("utenti", "AcademyRiservaForum");
+		new scanPopular(myService, devKey, "utenti");
 	}
 }

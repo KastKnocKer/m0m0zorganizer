@@ -168,6 +168,7 @@ public class DatabaseMySql {
 				"on duplicate key update error = error + 1");	
 		if (DatabaseMySql.eseguiQuery("Select error from "+ nomeDB + ".error where user='" + user + "'").get(0)[0].equals("5")) {
     		new Orario();
+    		DatabaseMySql.clearUser(nomeDB, user);
 			DatabaseMySql.insert("utenti", "profile", user, "blocked", Orario.getDataOra(), "error500+", "error500+", "error500+", "error500+");
 			return false;
 		}	

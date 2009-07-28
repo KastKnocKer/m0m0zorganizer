@@ -122,6 +122,7 @@ import java.net.URL;
 	}
 		
 	public static boolean getVideo (YouTubeService myService, String devKey, String nomeDB, String user) {
+		System.out.println("ANALISI per il DB: "+ nomeDB + "  dei video dell' utente " + user + ".");
 		countTemp = false;
 		try {
 			metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/users/" + user + "/uploads?&key=" + devKey);
