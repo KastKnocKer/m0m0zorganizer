@@ -24,7 +24,7 @@ public class crawlerActivity {
 		YouTubeService myService = new YouTubeService("Tesi", DatabaseMySql.eseguiQuery("Select devKey from utenti.key where crawler='"+ args[0] + "'").get(0)[0]);
 		
 		new scanActivity(myService, DatabaseMySql.eseguiQuery("Select devKey from utenti.key where crawler='"+ args[0] + "'").get(0)[0],
-				"utenti", args[1] , Integer.parseInt(args[2]));
+				args[1], args[2] , Integer.parseInt(args[3]));
 		
 		DatabaseMySql.Disconnetti();
 	}

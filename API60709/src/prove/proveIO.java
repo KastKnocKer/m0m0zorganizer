@@ -29,7 +29,6 @@ public class proveIO {
 		//System.out.println(devKey.length());
 		DatabaseMySql.eseguiAggiornamento("insert into utenti.ethernet values (\"padre\", \"true\")");
 		DatabaseMySql.eseguiAggiornamento("insert into utenti.ethernet values (\"figlio\", \"true\")");
-		DatabaseMySql.copyAttivi("utenti", "OGGI");
-		new scanActivity(myService, devKey, "utenti", "2009-07-18T01:10:23", 1);
+
 	}
 }

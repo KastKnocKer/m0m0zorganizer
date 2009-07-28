@@ -33,7 +33,7 @@ public class padre {
 		new popularReader(nomeDB);
 		
 		DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".ethernet set flag ='true' where rete='figlio'");
-		pb = new ProcessBuilder ("/home/m0m0z/Scrivania/tesina_exec/scanPopular.sh" , "padre");
+		pb = new ProcessBuilder ("/home/m0m0z/Scrivania/tesina_exec/scanPopular.sh" , "padre", nomeDB);
 		while (DatabaseMySql.getCount(nomeDB, "popToCheck") != 0) {
 			try {			
 				OutputTxt.writeLog("Padre: processo scanPopular per il DB: DA CONFIGURARE");
@@ -95,7 +95,9 @@ public class padre {
 		key[4] = "AI39si5XLt78NO1fRB0VaLCqUIXWkZeLDNSITQMvwwo_0scaR2qwzc2FzQTAqNqYBY0mAooL1HM4rl9BNpAefC1jx4PuMYKWsQ";
 		key[5] = "AI39si647HsBMmuW7FnWtDwb037yfACgX-FcXaHuMZXfTUH37tw8DawMPmWgbO-CeSIfoJJF5URC7ww52k94Thj_dbH9wFdxNQ";
 		
-		pb = new ProcessBuilder ("/home/m0m0z/Scrivania/tesina_exec/scanActivity.sh" , "padre" , data + ".000Z", scansioneN + "");
+		// Messo perchè non penso di utilizzare il figlio nelle scansioni veloci.
+		DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".ethernet set flag ='false' where rete='figlio'");
+		pb = new ProcessBuilder ("/home/m0m0z/Scrivania/tesina_exec/scanActivity.sh" , "padre" , nomeDB, data + ".000Z", scansioneN + "");
 		while (DatabaseMySql.getCount(nomeDB, "activeList") != 0) {
 			try {			
 				OutputTxt.writeLog("Padre: processo scanActivity per il DB: DA CONFIGURARE");
@@ -109,7 +111,7 @@ public class padre {
 					n = 0;
 				DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".key set devKey='" + key[n] + "' where crawler='padre'");
 				// Messo perchè non penso di utilizzare il figlio nelle scansioni veloci
-				DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".key set devKey='" + key[n] + "' where crawler='figlio'");
+				DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".ethernet set flag ='false' where rete='figlio'");
 				ethernet.switchTo(nomeDB, flagEth);
 				flagEth = !flagEth;
 				OutputTxt.writeLog("Padre: Attivi   scansionati   totale: " + DatabaseMySql.getCount(nomeDB, "active" + scansioneN));
