@@ -3,47 +3,49 @@ package download;
 import com.google.gdata.client.youtube.YouTubeService;
 
 import database.DatabaseMySql;
+import database.OutputTxt;
 
 public class scanActivity {
 	
 	public scanActivity (YouTubeService myService, String devKey, String nomeDB, String data, int scansioneN) {
 		try {
+			error = 0;
 			temp = 0;
 			while ((n = DatabaseMySql.getCount(nomeDB, "activeList")) != 0) {
 				if (n > 20)
 					n = 20;
-				users = new String[n];
+				users = new String[n][1];
 				userTemp = "";
 				for (i = 0; i < n; i++) {
-					users[i] = DatabaseMySql.extract(nomeDB, "activeList", "user")[1];
+					users[i] = DatabaseMySql.extractActiveList(nomeDB, "activeList", "user");
 					if (i == 0)
-						userTemp = users[0];
+						userTemp = users[0][1];
 					else 
-						userTemp = userTemp + "," + users[i];
+						userTemp = userTemp + "," + users[i][1];
 				}
-				System.out.println("Scansione activity degli utenti " + users);
-				System.out.println("LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOL");
-				System.out.println("LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOL");
-				System.out.println("LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOL");
-				System.out.println("LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOL");
-				System.out.println("LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOL");
-				System.out.println("LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOL");				
+				System.out.println("Scansione activity degli utenti " + userTemp);			
 				if (API.getActivity(myService, devKey, nomeDB, userTemp, 0, 0, data, scansioneN)) {
 					for (i = 0; i < n; i++) {
-						if(!DatabaseMySql.contiene(nomeDB, "active" + scansioneN, "user", users[i])) 
-							DatabaseMySql.insert(nomeDB, "inactive" + scansioneN, users[i], data);
+						if(!DatabaseMySql.contiene(nomeDB, "active" + scansioneN, "user", users[i][1])) 
+							DatabaseMySql.insert(nomeDB, "inactive" + scansioneN, users[i][1], data);
 					}
 				}
-				else 
+				else  {
+					error++;
 					for (i = 0; i < n; i++) 
-							DatabaseMySql.insert(nomeDB, "activeList", "1" , users[i], data);				
-				if (++temp == 1)
+						DatabaseMySql.insert(nomeDB, "activeList", error, users[i][1], users[i][2]);
+					try {
+						Thread.sleep(25000);
+					} catch (InterruptedException e) {e.printStackTrace();}
+					OutputTxt.writeError("ERRORE 500 per users" + userTemp);
+				}
+				if (++temp == 9)
 					return;
 			}
 		} catch (NullPointerException e) {System.out.println("Lista activeList terminata.");}
 	}
 			
-	private static String [] users;
+	private static String [][] users;
 	private static String userTemp;
-	private static int n, i, temp;
+	private static int n, i, temp, error;
 }

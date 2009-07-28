@@ -92,7 +92,7 @@ import java.net.URL;
 				count++;
 			}
 			System.out.println("Favorites dell'user " + user + " scaricati fino al num: " + count + ".");
-			if (count > 951 && count < tot) {
+			if (count > 950 && count < tot) {
 				count= 950;
 				maxCount++;
 			}					
@@ -175,7 +175,7 @@ import java.net.URL;
 			System.out.println("Video dell'user " + user + " scaricati fino al num: " + count + ".");
 			if (tot > 1000)
 				tot = 951;
-			if (count > 951) {
+			if (count > 950) {
 				count= 951;
 				maxCount++;
 			}				
@@ -256,7 +256,7 @@ import java.net.URL;
 			  }
 			System.out.println("Activity dell'user " + user + " scaricati fino al num: " + count + ".");
 			tot = activityFeed.getTotalResults();
-			if (count > 951 && count < tot) {
+			if (count > 950 && count < tot) {
 				count= 950;
 				maxCount++;
 			}					
@@ -344,10 +344,12 @@ import java.net.URL;
 			    			entry.getUpdated().toString().substring(0, 19));
 			    	DatabaseMySql.insert(nomeDB, "videoToCheck", entry.getVideoId());
 			    }
+				System.out.println(count);
 			  }
 			System.out.println("Activity " + N + " dell'user " + user + " scaricati fino al num: " + count + ".");
 			tot = activityFeed.getTotalResults();
-			if (count > 951 && count < tot) {
+			OutputTxt.writeException(tot + "");
+			if (count > 950 && count < tot) {
 				count= 950;
 				maxCount++;
 			}					
@@ -359,7 +361,8 @@ import java.net.URL;
 				System.out.println("\t\t\tTotale activity per l'user " + user + ": " + tot);
 				if (tot == 951 && count == 950)
 					count++;
-				getActivity(myService, devKey, nomeDB, user, count, giriVuoto, maxCount);
+				System.out.println(count);
+				getActivity (myService, devKey, nomeDB, user, count, giriVuoto, data, N, 0);
 				return true;
 			}
 		} catch (MalformedURLException e) {
@@ -408,7 +411,7 @@ import java.net.URL;
 				count++;
 			}
 			System.out.println("Subscriptions dell'user " + user + " scaricati fino al num: " + count + ".");
-			if (count > 951 && count < tot) {
+			if (count > 950 && count < tot) {
 				count= 950;
 				maxCount++;
 			}					
@@ -475,7 +478,6 @@ import java.net.URL;
 			if (code >= 500) {
 				OutputTxt.writeLog("Errore 500+ : servizio non disponibile al momento. Analisi activity per il DB: "+ nomeDB);
 				System.out.println("Errore 500+ : servizio non disponibile al momento. Analisi activity per il DB: "+ nomeDB);
-				try {Thread.sleep(30000);} catch (InterruptedException e) {}
 				return;
 			}				
 			else if (msg.contains("many")) {

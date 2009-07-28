@@ -80,6 +80,12 @@ public class DatabaseMySql {
 				" values (\"" + values1 + "\" , \"" + values2 + "\" , \"" + values3 + "\")");
 	}
 	
+	public static boolean insert (String nomeDB, String lista, int values1, String values2,
+			String values3) {
+		return db.eseguiAggiornamento("insert into " + nomeDB + "." + lista + 
+				" values (" + values1 + " , \"" + values2 + "\" , \"" + values3 + "\")");
+	}
+	
 	public static boolean insert (String nomeDB, String lista, String values1, int values2,
 			String values3) {
 		return db.eseguiAggiornamento("insert into " + nomeDB + "." + lista + 
@@ -112,13 +118,13 @@ public class DatabaseMySql {
 				" values (\"" + values1 + "\" , \"" + values2 + "\" , \"" + values3 + "\" , \""
 				+ values4 + "\" , \"" + values5 + "\")");
 	}
-	/*
+	
 	public static boolean insert (String nomeDB, String lista, String values1, String values2, String values3,
 			String values4, String values5 , String values6, String values7) {
 		return db.eseguiAggiornamento("insert into " + nomeDB + "." + lista + 
 				" values (\"" + values1 + "\" , \"" + values2 + "\" , \"" + values3 + "\" ," +
 				"\"" + values4 + "\" , \"" + values5 + "\" , \"" + values6 + "\" , \"" + values7 + "\")");
-	} */
+	} 
 	
 	public static boolean insert (String nomeDB, String lista, String values1, String values2, String values3,
 			long values4, long values5 , long values6, String values7) {
@@ -136,10 +142,26 @@ public class DatabaseMySql {
 		String[] user; 		
 		try {
 			user =  (DatabaseMySql.eseguiQuery("Select * from " + nomeDB + "." + lista + " limit 1")).get(0);
-			if (lista.equals("toCheck") || lista.equals("activeList"))
+			if (lista.equals("toCheck"))
 				DatabaseMySql.delete (nomeDB, lista, col, user[1]);
 			else
 				DatabaseMySql.delete (nomeDB, lista, col, user[0]);
+		} catch (ArrayIndexOutOfBoundsException e) {
+			OutputTxt.writeException(e.getLocalizedMessage());
+			OutputTxt.writeLog("Lista analizzata conclusa.");
+			return null;
+		}  catch (NullPointerException e) {
+			System.out.println("LOL");
+			return null;
+		}
+		return user;
+	}
+	
+	public static String[] extractActiveList (String nomeDB, String lista, String col) {
+		String[] user; 		
+		try {
+			user =  (DatabaseMySql.eseguiQuery("Select * from " + nomeDB + ".activeList group by priority limit 1")).get(0);
+			DatabaseMySql.delete (nomeDB, lista, col, user[1]);
 		} catch (ArrayIndexOutOfBoundsException e) {
 			OutputTxt.writeException(e.getLocalizedMessage());
 			OutputTxt.writeLog("Lista analizzata conclusa.");
@@ -156,7 +178,7 @@ public class DatabaseMySql {
 	}
 	
 	public static void inserToCheck (String nomeDB, String user, int num) {
-		DatabaseMySql.eseguiAggiornamento("insert into " + nomeDB + ".toCheck values (\"" + num + "\" , \"" + user + "\") on duplicate key update priority = priority - 1");
+		DatabaseMySql.eseguiAggiornamento("insert into " + nomeDB + ".toCheck values (" + num + " , \"" + user + "\") on duplicate key update priority = priority - 1");
 		return;
 	}
 	
@@ -181,7 +203,7 @@ public class DatabaseMySql {
 		Vector<String[]> v = null;
 		v = DatabaseMySql.eseguiQuery("Select user from " + nomeDB + ".profile where status ='active'");
 		for (int i = 0; i < v.size(); i++) {
-			DatabaseMySql.insert(nomeDB, "activeList", "0" , v.elementAt(i)[0], data);
+			DatabaseMySql.insert(nomeDB, "activeList", 0 , v.elementAt(i)[0], data);
 		}
 	}
 	
