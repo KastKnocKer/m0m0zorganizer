@@ -6,15 +6,10 @@
 import com.google.gdata.client.youtube.YouTubeService;
 
 import database.DatabaseMySql;
-import database.Orario;
 import database.OutputTxt;
-import download.API;
 import download.Contatore;
-import download.popularReader;
-import download.scanActivity;
 import download.scanCorrupted;
-import download.scanPopular;
-import download.scanUser;
+
 
 public class proveIO {
 
