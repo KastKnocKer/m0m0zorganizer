@@ -20,9 +20,9 @@ public class crawlerPopular {
 		System.out.println("AVVIO NUOVO FILE");
 		System.out.println("AVVIO NUOVO FILE");
 		
-		YouTubeService myService = new YouTubeService("Tesi", DatabaseMySql.eseguiQuery("Select devKey from utenti.key where crawler='"+ args[0] + "'").get(0)[0]);
+		YouTubeService myService = new YouTubeService("Tesi", DatabaseMySql.eseguiQuery("Select devKey from " + args[1] + ".key where crawler='"+ args[0] + "'").get(0)[0]);
 		
-		new scanPopular(myService, DatabaseMySql.eseguiQuery("Select devKey from utenti.key where crawler='"+ args[0] + "'").get(0)[0], args[1]);
+		new scanPopular(myService, DatabaseMySql.eseguiQuery("Select devKey from " + args[1] + ".key where crawler='"+ args[0] + "'").get(0)[0], args[1]);
 		
 		DatabaseMySql.Disconnetti();
 	}

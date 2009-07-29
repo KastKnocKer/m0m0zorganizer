@@ -32,12 +32,18 @@ public class padre {
 		new popularReader(nomeDB);
 		//Omesso perchè senza figlio
 		//DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".ethernet set flag ='true' where rete='figlio'");
+		System.out.println(nomeDB);
+		System.out.println("/home/m0m0z/Scrivania/tesina_exec/scanPopular.sh padre " + nomeDB);
 		pb = new ProcessBuilder ("/home/m0m0z/Scrivania/tesina_exec/scanPopular.sh" , "padre", nomeDB);
 		while (DatabaseMySql.getCount(nomeDB, "popToCheck") != 0) {
+			System.out.println("STEP 1");
 			try {			
 				OutputTxt.writeLog("Padre: processo scanPopular per il DB: " + nomeDB + ".");
+				System.out.println("STEP 2");
 				scanner = pb.start ();
+				System.out.println("STEP 3");
 				BufferedReader in = new BufferedReader(	new InputStreamReader(scanner.getInputStream()));
+				System.out.println("STEP 4");
 				String line = null;
 				while ((line = in.readLine()) != null)	{
 					System.out.println(line);
@@ -53,7 +59,7 @@ public class padre {
 				OutputTxt.writeLog("Padre: Richieste URL per il processo: " + Contatore.getTotUrl());
 			}
 			catch (IOException e) {
-				OutputTxt.writeError("Errore IO nel try start del padreExec.");
+				//OutputTxt.writeError("Errore IO nel try start del padreExec.");
 			}  
 		} 
 		pb.command ("/home/m0m0z/Scrivania/tesina_exec/scanUser.sh" , "padre", nomeDB); 
