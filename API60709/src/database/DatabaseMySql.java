@@ -242,8 +242,7 @@ public class DatabaseMySql {
 		DatabaseMySql.delete(nomeDB, "toCheck", "user", user);
 		DatabaseMySql.insert(nomeDB, "infoCorrupted", user, tabella, "error500+");
 		DatabaseMySql.eseguiAggiornamento("Update " + nomeDB + ".profile set status='corrupted' where user='" + user + "'");
-		System.out.println("Pausa di 10 secondi per insertError500+");
-		try {Thread.sleep(10000);} catch (InterruptedException e) {}
+		System.out.println("InsertError500+ della tabella dei " + tabella + " dell'utente " + user);
 	}
 
 	public static void clearUser(String nomeDB, String user) {
