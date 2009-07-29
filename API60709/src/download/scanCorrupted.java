@@ -6,7 +6,7 @@ import database.DatabaseMySql;
 
 public class scanCorrupted {
 
-	public static void controlloError (YouTubeService myService, String devKey, String nomeDB) {
+	public scanCorrupted (YouTubeService myService, String devKey, String nomeDB) {
 		int count = 0;
 		while (DatabaseMySql.getCount(nomeDB, "corruptedList") != 0) {
 			System.out.println(++count);
@@ -25,13 +25,20 @@ public class scanCorrupted {
 				DatabaseMySql.eseguiAggiornamento("Delete from " + nomeDB + ".infoCorrupted where user='" + user[0] + 
 				"' and tabella='activity'");
 				DatabaseMySql.eseguiAggiornamento("Delete from " + nomeDB + ".profile where user='" + user[0] + "'");
-				if (API.getActivity(myService, devKey, nomeDB, user[0])) {	// Ha activityFeed? 
+				if (API.getActivity(myService, devKey, nomeDB, user[0])) {	// Ha activityFeed?
+					count++;
 					if (API.getUser(myService, devKey, "active", nomeDB, user[0])) { 	// E' un utente sospeso?  No --> active
+						count++;
 						API.getSubscriptions(myService, devKey, nomeDB, user[0]);
+						count++;
 						API.getFavorites(myService, devKey, nomeDB, user[0]);
-						urlReader.userReader(nomeDB, "subscribers", user[0]);	
+						count++;
+						urlReader.userReader(nomeDB, "subscribers", user[0]);
+						count++;
 						urlReader.userReader(nomeDB, "friends", user[0]);
-						API.getVideo(myService, devKey, nomeDB, user[0]);
+						count++;
+						API.getVideo(myService, devKey, nomeDB, user[0]);;
+						count++;
 					}
 					else 		// Non è attivo lo tolgo dagli active e lo metto negli inactive
 						DatabaseMySql.insert("" + nomeDB + "", "profile", user[0], "blocked", "block", 0, 0, 0, "block");
@@ -44,13 +51,20 @@ public class scanCorrupted {
 				DatabaseMySql.eseguiAggiornamento("Delete from " + nomeDB + ".infoCorrupted where user='" + user[0] + 
 				"' and tabella='profile'");
 				DatabaseMySql.eseguiAggiornamento("Delete from " + nomeDB + ".profile where user='" + user[0] + "'");
-				if (API.getActivity(myService, devKey, nomeDB, user[0])) {	// Ha activityFeed? 
+				if (API.getActivity(myService, devKey, nomeDB, user[0])) {	// Ha activityFeed?
+					count++;
 					if (API.getUser(myService, devKey, "active", nomeDB, user[0])) { 	// E' un utente sospeso?  No --> active
+						count++;
 						API.getSubscriptions(myService, devKey, nomeDB, user[0]);
+						count++;
 						API.getFavorites(myService, devKey, nomeDB, user[0]);
-						urlReader.userReader(nomeDB, "subscribers", user[0]);	
+						count++;
+						urlReader.userReader(nomeDB, "subscribers", user[0]);
+						count++;
 						urlReader.userReader(nomeDB, "friends", user[0]);
+						count++;
 						API.getVideo(myService, devKey, nomeDB, user[0]);;
+						count++;
 					}
 					else 		// Non è attivo lo tolgo dagli active e lo metto negli inactive
 						DatabaseMySql.insert("" + nomeDB + "", "profile", user[0], "blocked", "block", 0, 0, 0, "block");
@@ -72,8 +86,8 @@ public class scanCorrupted {
 				DatabaseMySql.eseguiAggiornamento("Update " + nomeDB + ".profile set status='*active*' where user='"
 						+ user[0]	+ "'");
 			}
-			if (count == 25)
-				break;
+			if (count == 125)
+				return;
 		}
 	}
 	

@@ -80,6 +80,35 @@ public class padre {
 				OutputTxt.writeError("Errore IO nel try scanUser del padreExec.");
 			}  
 		}  
+		DatabaseMySql.copyCorrupted(nomeDB);
+		
+		pb.command ("/home/m0m0z/Scrivania/tesina_exec/scanCorrupted.sh" , "padre", nomeDB); 
+		while (DatabaseMySql.getCount(nomeDB, "corruptedList") != 0) { // && getCount(nomeDB, "profile*ACTIVE*) < CAP)
+			try {
+				OutputTxt.writeLog("Padre: processo scanCorrupted per il DB: " + nomeDB + ".");
+				scanner = pb.start();
+				BufferedReader in = new BufferedReader(	new InputStreamReader(scanner.getInputStream()));
+				String line = null;
+				while ((line = in.readLine()) != null)	{
+					System.out.println(line);
+				} 
+				if (++n == 6) 
+					n = 0;
+				DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".key set devKey='" + key[n] + "' where crawler='padre'");
+				DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".ethernet set flag='false' where rete='figlio'"); 
+				ethernet.switchTo(nomeDB, flagEth);
+				flagEth = !flagEth;
+				OutputTxt.writeLog("Padre: Popular scansionati   totale: " + DatabaseMySql.getCount(nomeDB, "profile"));
+				OutputTxt.writeLog("Padre: Popular scansionati   attivi: " + DatabaseMySql.eseguiQuery("Select count(*) from " + nomeDB + ".profile where status='active'").get(0)[0]);
+				OutputTxt.writeLog("Padre: Richieste API per il processo: " + Contatore.getTotApi());
+				OutputTxt.writeLog("Padre: Richieste URL per il processo: " + Contatore.getTotUrl());
+			} catch (IOException e) {
+				OutputTxt.writeError("Errore IO nel try scanUser del padreExec.");
+			}  
+		}  
+		new Orario();
+		DatabaseMySql.copyAttivi(nomeDB, Orario.getDataOra());
+		
 		// flag per dire al figlio se partire o no
 	}
 	
