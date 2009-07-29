@@ -36,8 +36,6 @@ public class proveIO {
 		new scanUser(myService, devKey, "utenti");
 		//DatabaseMySql.insertError("utenti", "robyb70");
 		System.out.println(DatabaseMySql.contiene("utenti", "profile", "user", "lanicosun")); */
-		for (;;)
-			System.out.println(((int) (Math.random()* 20)));
 
 	}
 }

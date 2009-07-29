@@ -214,6 +214,18 @@ public class DatabaseMySql {
 		}
 	}
 	
+	public static boolean contiene (String nomeDB, String lista, String colonna1, String id1, String colonna2, String id2 ) {
+		try {
+			System.out.println("select * from " + nomeDB + "." + lista + " where " + colonna1 + "='" + id1 +
+					"' and " + colonna2 + "='" + id2 + "'");
+			//(db.eseguiQuery("select * from " + nomeDB + "." + lista + " where " + colonna1 + "='" + id1 +
+			//		"' and " + colonna2 + "='" + id2 + "'")).get(0);
+			return true;
+		} catch (ArrayIndexOutOfBoundsException e) {
+			return false;
+		}
+	}
+	
 	public static void copyAttivi (String nomeDB, String data) {
 		Vector<String[]> v = null;
 		v = DatabaseMySql.eseguiQuery("Select user from " + nomeDB + ".profile where status ='active'");
