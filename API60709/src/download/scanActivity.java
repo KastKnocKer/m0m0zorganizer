@@ -9,7 +9,9 @@ public class scanActivity {
 	
 	public scanActivity (YouTubeService myService, String devKey, String nomeDB, String data, int scansioneN) {
 		try {
-			error = 0;
+			try {
+				error = Integer.parseInt(DatabaseMySql.eseguiQuery("Select MAX(error) from " + nomeDB + ".error").get(0)[0]);
+			} catch (NullPointerException e) { error = 0;}
 			temp = 0;
 			while ((n = DatabaseMySql.getCount(nomeDB, "activeList")) != 0) {
 				if (n > 20)
