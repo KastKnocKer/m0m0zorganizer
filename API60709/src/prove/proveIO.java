@@ -29,6 +29,6 @@ public class proveIO {
 		DatabaseMySql.eseguiAggiornamento("insert into utenti.ethernet values (\"padre\", \"true\")");
 		DatabaseMySql.eseguiAggiornamento("insert into utenti.ethernet values (\"figlio\", \"true\")");
 		//DatabaseMySql.copyCorrupted("utenti");
-
+		
 	}
 }
