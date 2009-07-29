@@ -138,6 +138,11 @@ public class DatabaseMySql {
 				col + "= '" + values + "'");
 	}
 	
+	public static boolean delete (String nomeDB, String lista, String col1, String values1, String col2, String values2) {
+		return db.eseguiAggiornamento("delete from " + nomeDB + "." + lista + " where " + 
+				col1 + "= '" + values1 + "' and " + col2 + "= '" + values2 + "'");
+	}
+	
 	public static String[] extract (String nomeDB, String lista, String col) {
 		String[] user; 		
 		try {
@@ -155,9 +160,24 @@ public class DatabaseMySql {
 			return null;
 		}
 		return user;
+		
+	}	public static String[] extractCorrupted (String nomeDB) {
+		String[] user; 		
+		try {
+			user =  (DatabaseMySql.eseguiQuery("Select * from " + nomeDB + ".corruptedList limit 1")).get(0);
+			DatabaseMySql.delete (nomeDB, "corruptedList", "user", user[0], "tabella", user[1]);
+		} catch (ArrayIndexOutOfBoundsException e) {
+			OutputTxt.writeException(e.getLocalizedMessage());
+			OutputTxt.writeLog("Lista analizzata conclusa.");
+			return null;
+		}  catch (NullPointerException e) {
+			System.out.println("LOL");
+			return null;
+		}
+		return user;
 	}
 	
-	public static String[] extractActiveList (String nomeDB, String col) {
+	public static String[] extractActiveList (String nomeDB, String colonna) {
 
 		try {
 			if(DatabaseMySql.contiene(nomeDB, "activeList", "priority", "0"))
@@ -166,7 +186,7 @@ public class DatabaseMySql {
 				temp[0] = DatabaseMySql.selectRandomPriority(nomeDB);
 				temp =  (DatabaseMySql.eseguiQuery("Select * from " + nomeDB + ".activeList where priority ='" + temp[0] +"'")).get(0);
 			}
-			DatabaseMySql.delete (nomeDB, "activeList", col, temp[1]);
+			DatabaseMySql.delete (nomeDB, "activeList", colonna, temp[1]);
 		} catch (ArrayIndexOutOfBoundsException e) {
 			OutputTxt.writeException(e.getLocalizedMessage());
 			OutputTxt.writeLog("Lista analizzata conclusa.");
@@ -216,10 +236,8 @@ public class DatabaseMySql {
 	
 	public static boolean contiene (String nomeDB, String lista, String colonna1, String id1, String colonna2, String id2 ) {
 		try {
-			System.out.println("select * from " + nomeDB + "." + lista + " where " + colonna1 + "='" + id1 +
-					"' and " + colonna2 + "='" + id2 + "'");
-			//(db.eseguiQuery("select * from " + nomeDB + "." + lista + " where " + colonna1 + "='" + id1 +
-			//		"' and " + colonna2 + "='" + id2 + "'")).get(0);
+			(db.eseguiQuery("select * from " + nomeDB + "." + lista + " where " + colonna1 + "='" + id1 +
+					"' and " + colonna2 + "='" + id2 + "'")).get(0);
 			return true;
 		} catch (ArrayIndexOutOfBoundsException e) {
 			return false;
@@ -228,9 +246,17 @@ public class DatabaseMySql {
 	
 	public static void copyAttivi (String nomeDB, String data) {
 		Vector<String[]> v = null;
-		v = DatabaseMySql.eseguiQuery("Select user from " + nomeDB + ".profile where status ='active'");
+		v = DatabaseMySql.eseguiQuery("Select user from " + nomeDB + ".profile where status ='active' or status ='corrupted'");
 		for (int i = 0; i < v.size(); i++) {
 			DatabaseMySql.insert(nomeDB, "activeList", 0 , v.elementAt(i)[0], data);
+		}
+	}
+	
+	public static void copyCorrupted (String nomeDB) {
+		Vector<String[]> v = null;
+		v = DatabaseMySql.eseguiQuery("Select user,tabella from " + nomeDB + ".infoCorrupted where error='error500+'");
+		for (int i = 0; i < v.size(); i++) {
+			DatabaseMySql.insert(nomeDB, "corruptedList", v.get(i)[0], v.get(i)[1]);
 		}
 	}
 	
