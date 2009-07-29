@@ -7,6 +7,7 @@ import com.google.gdata.client.youtube.YouTubeService;
 
 import database.DatabaseMySql;
 import database.OutputTxt;
+import database.createDatabase;
 import download.Contatore;
 import download.scanCorrupted;
 
@@ -28,7 +29,6 @@ public class proveIO {
 		DatabaseMySql.eseguiAggiornamento("insert into utenti.ethernet values (\"padre\", \"true\")");
 		DatabaseMySql.eseguiAggiornamento("insert into utenti.ethernet values (\"figlio\", \"true\")");
 		//DatabaseMySql.copyCorrupted("utenti");
-		new scanCorrupted (myService, devKey, "utenti");
 
 	}
 }
