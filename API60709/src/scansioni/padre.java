@@ -69,6 +69,7 @@ public class padre {
 				if (++n == 6) 
 					n = 0;
 				DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".key set devKey='" + key[n] + "' where crawler='padre'");
+				DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".ethernet set flag='false' where rete='figlio'"); 
 				ethernet.switchTo(nomeDB, flagEth);
 				flagEth = !flagEth;
 				OutputTxt.writeLog("Padre: Popular scansionati   totale: " + DatabaseMySql.getCount(nomeDB, "profile"));
@@ -79,13 +80,13 @@ public class padre {
 				OutputTxt.writeError("Errore IO nel try scanUser del padreExec.");
 			}  
 		}  
-		// Copia degli utenti attivi per avere una lista per le scansioni veloci
-		new Orario();
-		DatabaseMySql.copyAttivi(nomeDB, Orario.getData());
 		// flag per dire al figlio se partire o no
 	}
 	
 	public static void scansioneVeloce (int scansioneN, String nomeDB, String data) {
+		// Copia degli utenti attivi per avere una lista per le scansioni veloci
+		new Orario();
+		DatabaseMySql.copyAttivi(nomeDB, Orario.getData());
 		key = new String[6];
 		key[0] = "AI39si4fzIi01PLvZIYjyHDVpyEKyvUHJAUvG4N9US4g1SYHmmcojgJ-joGo4q3ajF6eLPom3lmUoFw7IpYStDWUoOm29jadMA";
 		key[1] = "AI39si7e_IYXZqXB764Zgqll4sJlxizsHT02LAx1yo6CHG-8eaayATP-OGG330hhLj1HUHmjzwU62X7s8WHSe8JpiqpfrfGoGw";
