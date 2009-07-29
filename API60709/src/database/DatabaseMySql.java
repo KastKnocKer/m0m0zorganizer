@@ -165,8 +165,8 @@ public class DatabaseMySql {
 			else {
 				temp[0] = DatabaseMySql.selectRandomPriority(nomeDB);
 				temp =  (DatabaseMySql.eseguiQuery("Select * from " + nomeDB + ".activeList where priority ='" + temp[0] +"'")).get(0);
-				DatabaseMySql.delete (nomeDB, "activeList", col, temp[1]);
 			}
+			DatabaseMySql.delete (nomeDB, "activeList", col, temp[1]);
 		} catch (ArrayIndexOutOfBoundsException e) {
 			OutputTxt.writeException(e.getLocalizedMessage());
 			OutputTxt.writeLog("Lista analizzata conclusa.");
