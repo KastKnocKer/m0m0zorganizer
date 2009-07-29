@@ -19,7 +19,7 @@ public class scanActivity {
 				users = new String[n][1];
 				userTemp = "";
 				for (i = 0; i < n; i++) {
-					users[i] = DatabaseMySql.extractActiveList(nomeDB, "activeList", "user");
+					users[i] = DatabaseMySql.extractActiveList(nomeDB, "user");
 					if (i == 0)
 						userTemp = users[0][1];
 					else 

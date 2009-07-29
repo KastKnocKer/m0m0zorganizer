@@ -157,17 +157,19 @@ public class DatabaseMySql {
 		return user;
 	}
 	
-	public static String[] extractActiveList (String nomeDB, String lista, String col) {
+	public static String[] extractActiveList (String nomeDB, String col) {
 		String[] user; 		
 		try {
-			user =  (DatabaseMySql.eseguiQuery("Select * from " + nomeDB + ".activeList group by priority limit 1")).get(0);
-			DatabaseMySql.delete (nomeDB, lista, col, user[1]);
+			if(DatabaseMySql.contiene(nomeDB, "activeList", "priority", "0"))
+				user =  (DatabaseMySql.eseguiQuery("Select * from " + nomeDB + ".activeList order by priority desc limit 1")).get(0);
+			else 
+				user =  (DatabaseMySql.eseguiQuery("Select * from " + nomeDB + ".activeList group by priority desc limit 1")).get(0);
+			DatabaseMySql.delete (nomeDB, "activeList", col, user[1]);
 		} catch (ArrayIndexOutOfBoundsException e) {
 			OutputTxt.writeException(e.getLocalizedMessage());
 			OutputTxt.writeLog("Lista analizzata conclusa.");
 			return null;
 		}  catch (NullPointerException e) {
-			System.out.println("LOL");
 			return null;
 		}
 		return user;
@@ -212,35 +214,12 @@ public class DatabaseMySql {
 		return Integer.parseInt((DatabaseMySql.eseguiQuery("Select min(priority) from utenti.toCheck")).get(0)[0].toString());
 	}
 
-	public static boolean insertError(String nomeDB, String user) {
-		DatabaseMySql.delete(nomeDB, "profile", "user", user);
-		System.out.println("1");
+	public static void insert500error(String nomeDB, String tabella, String user) {
 		DatabaseMySql.delete(nomeDB, "toCheck", "user", user);
-		System.out.println("2");
-		DatabaseMySql.eseguiAggiornamento("Insert into " + nomeDB + ".error values (\"" + user + "\" , \"0\") " +
-				"on duplicate key update error = error + 1");
-		System.out.println("3");
-		System.out.println("LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOL");
-		System.out.println("LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOL");
-		System.out.println("LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOL");
-		System.out.println("LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOL");
-		System.out.println("LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOL");
-		System.out.println("LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOL");
-		System.out.println("LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOL");
-		System.out.println("LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOL");
-		System.out.println(DatabaseMySql.eseguiQuery("Select error from "+ nomeDB + ".error where user='" + user + "'").get(0)[0]);
-		System.out.println("prova 4");
-		if (Integer.parseInt(DatabaseMySql.eseguiQuery("Select error from "+ nomeDB + ".error where user='" + user + "'").get(0)[0]) >= 5) {
-			System.out.println("5");
-			DatabaseMySql.clearUser(nomeDB, user);
-			System.out.println("6");
-			new Orario();
-			System.out.println("7");
-			DatabaseMySql.insert(nomeDB, "profile", user, "blocked", Orario.getDataOra(), 500, 500, 500, "error500+");
-			System.out.println("8");
-			return false;
-		}	
-		return true;	
+		DatabaseMySql.insert(nomeDB, "infoCorrupted", user, tabella, "error500+");
+		DatabaseMySql.eseguiAggiornamento("Update " + nomeDB + ".profile set status='corrupted' where user='" + user + "'");
+		System.out.println("Pausa di 10 secondi per insertError500+");
+		try {Thread.sleep(10000);} catch (InterruptedException e) {}
 	}
 
 	public static void clearUser(String nomeDB, String user) {

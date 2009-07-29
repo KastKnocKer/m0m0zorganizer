@@ -53,7 +53,7 @@ public class urlReader  {
 			    else if (inputLine.contains("Non è")) {
 					in.close();
 			    	OutputTxt.writeLog("Errore 403: Informazione non pubblica: " + tabella + " dell' user " + user);
-			    	DatabaseMySql.insert(nomeDB, "infoReserved", user, tabella);
+			    	DatabaseMySql.insert(nomeDB, "infoCorrupted", user, tabella, "Reserved");
 			    	return true;
 			    }
 			    else if (inputLine.contains("Questo account è stato")) {
@@ -89,16 +89,9 @@ public class urlReader  {
     	catch (IOException e) {  
     		if(e.getMessage().contains("Server returned HTTP response code: 50")) {
 				System.out.println("Errore 500+ : servizio non disponibile al momento.");
-				OutputTxt.writeLog("Errore 500+ : servizio non disponibile al momento.");
-				DatabaseMySql.insertError(nomeDB, user);
-				if (DatabaseMySql.contiene(nomeDB, "popular", "user", user))
-	    			tot = DatabaseMySql.getMinPriority() + 1;
-				else {
-					tot = DatabaseMySql.getMinPriority();
-					tot = tot + ((-tot) / 10) + 1;
-				}
-				System.out.println("Priorità selezionata per l'utente " + user + ": " + tot);
-				DatabaseMySql.inserToCheck(nomeDB, user, tot); 
+				OutputTxt.writeLog("Errore 500+ : servizio non disponibile al momento sulla tabella " + tabella +
+						" dell'utente " + user);
+				DatabaseMySql.insert500error(nomeDB, tabella, user);
     			return false;
     		}
     	}
@@ -207,22 +200,12 @@ public class urlReader  {
 			if (code >= 500) {
 				OutputTxt.writeLog("Errore 500+ : servizio non disponibile al momento. Analisi per il DB: "+ nomeDB + "dell'utente " + user);
 				System.out.println("Errore 500+ : servizio non disponibile al momento. Analisi per il DB: "+ nomeDB + "dell'utente " + user);
-				if (DatabaseMySql.insertError(nomeDB, user)) { // se ritorna true l'utente non viene ancora bloccato
-					if (DatabaseMySql.contiene(nomeDB, "popular", "user", user))
-		    			tot = DatabaseMySql.getMinPriority() + 5;
-					else {
-						tot = DatabaseMySql.getMinPriority(); // con false l'utente viene inserito in .profile come utente bloccato
-						tot = tot + ((-tot) / 10) + 1;
-					}
-					System.out.println("Priorità selezionata per l'utente " + user + ": " + tot);
-					DatabaseMySql.inserToCheck(nomeDB, user, tot);	
-					return false;
-				}
+				DatabaseMySql.insert500error(nomeDB, tabella, user);
 				return false;
-			}				
+				}
 			else if (msg.contains("Forbidden") ||
 					connection.getResponseMessage().contains("are not public")) {
-				DatabaseMySql.insert(nomeDB, "infoReserved", user, tabella);
+				DatabaseMySql.insert(nomeDB, "infoCorrupted", user, tabella, "Reserved");
 				System.out.println("Errore 403: Informazione per il DB: "+ nomeDB + " non pubblica: " + tabella + " dell' user " + user);
 				OutputTxt.writeLog("Errore 403: Informazione per il DB: "+ nomeDB + " non pubblica: " + tabella + " dell' user " + user);
 				return true;

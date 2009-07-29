@@ -11,6 +11,6 @@ public class figlioExec {
 		DatabaseMySql.connetti();	// Connessione al database
 		
 		String nomeDB = "utenti";
-		padre.scansioneVeloce(0, nomeDB, "2009-07-21T01:01:01");
+		padre.scansioneVeloce(1, nomeDB, "2009-07-21T01:01:01");
 	}
 }
