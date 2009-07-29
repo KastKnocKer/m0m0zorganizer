@@ -41,17 +41,11 @@ public class scanPopular {
 		} catch (NullPointerException e) {System.out.println("Lista popular terminata.");}
 	}
 	
-	public static boolean  completeScan (YouTubeService myService, String devKey, String nomeDB, String user) {
-		if(!API.getSubscriptions(myService, devKey, nomeDB, user))
-			return false;
-		if(!API.getFavorites(myService, devKey, nomeDB, user))
-			return false;
-		if(!urlReader.userReader(nomeDB, "subscribers", user))
-			return false;	
-		if(!urlReader.userReader(nomeDB, "friends", user))
-			return false;
-		if(!API.getVideo(myService, devKey, nomeDB, user))
-			return false;
-		return true;
+	public static void  completeScan (YouTubeService myService, String devKey, String nomeDB, String user) {
+		API.getSubscriptions(myService, devKey, nomeDB, user);
+		API.getFavorites(myService, devKey, nomeDB, user);
+		urlReader.userReader(nomeDB, "subscribers", user);	
+		urlReader.userReader(nomeDB, "friends", user);
+		API.getVideo(myService, devKey, nomeDB, user);
 	}
 }

@@ -24,8 +24,8 @@ public class scanUser {
 				if (!DatabaseMySql.contiene("utenti", "profile", "user", userToCheck)) {  // L'ho già fatto?
 					if (API.getActivity(myService, devKey, nomeDB, userToCheck)) {	// Ha activityFeed?
 						if (API.getUser(myService, devKey, "active", nomeDB, userToCheck)) {			// E' un utente sospeso?  No --> active
-							if(completeScan(myService, devKey, nomeDB, userToCheck))	// Si attivo scansione completa senza activity
-								temp++;
+							completeScan(myService, devKey, nomeDB, userToCheck);	// Si attivo scansione completa senza activity
+							temp++;
 						}
 						else 		// Non è attivo lo tolgo dagli active e lo metto negli inactive
 							DatabaseMySql.insert("utenti", "profile", userToCheck, "blocked", "block", 0, 0, 0, "block");
@@ -34,7 +34,7 @@ public class scanUser {
 						if (!API.getUser(myService, devKey, "inactive", nomeDB, userToCheck))
 							DatabaseMySql.insert("utenti", "profile", userToCheck, "blocked", "block", 0, 0, 0, "block");
 				}
-				if (temp == 25) {
+				if (temp == 35) {
 					return;
 				}
 			}
@@ -42,18 +42,12 @@ public class scanUser {
 	}
 	
 	
-	public static boolean  completeScan (YouTubeService myService, String devKey, String nomeDB, String user) {
-		if(!API.getSubscriptions(myService, devKey, nomeDB, user))
-			return false;
-		if(!API.getFavorites(myService, devKey, nomeDB, user))
-			return false;
-		if(!urlReader.userReader(nomeDB, "subscribers", user))
-			return false;	
-		if(!urlReader.userReader(nomeDB, "friends", user))
-			return false;
-		if(!API.getVideo(myService, devKey, nomeDB, user))
-			return false;
-		return true;
+	public static void  completeScan (YouTubeService myService, String devKey, String nomeDB, String user) {
+		API.getSubscriptions(myService, devKey, nomeDB, user);
+		API.getFavorites(myService, devKey, nomeDB, user);
+		urlReader.userReader(nomeDB, "subscribers", user);	
+		urlReader.userReader(nomeDB, "friends", user);
+		API.getVideo(myService, devKey, nomeDB, user);
 	}
 	/*
 	public static void inactive() {
