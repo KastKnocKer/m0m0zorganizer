@@ -33,7 +33,9 @@ public class scanActivity {
 					}
 				}
 				else  {
-					error++;
+					try {
+						error = Integer.parseInt(DatabaseMySql.eseguiQuery("Select MAX(priority) from " + nomeDB + ".activeList").get(0)[0]);
+					} catch (NullPointerException e) {error = 0;}
 					for (i = 0; i < n; i++) 
 						DatabaseMySql.insert(nomeDB, "activeList", error, users[i][1], users[i][2]);
 					try {

@@ -158,13 +158,15 @@ public class DatabaseMySql {
 	}
 	
 	public static String[] extractActiveList (String nomeDB, String col) {
-		String[] user; 		
+
 		try {
 			if(DatabaseMySql.contiene(nomeDB, "activeList", "priority", "0"))
-				user =  (DatabaseMySql.eseguiQuery("Select * from " + nomeDB + ".activeList order by priority desc limit 1")).get(0);
-			else 
-				user =  (DatabaseMySql.eseguiQuery("Select * from " + nomeDB + ".activeList group by priority desc limit 1")).get(0);
-			DatabaseMySql.delete (nomeDB, "activeList", col, user[1]);
+				temp =  (DatabaseMySql.eseguiQuery("Select * from " + nomeDB + ".activeList group by priority desc limit 1")).get(0);
+			else {
+				temp[0] = DatabaseMySql.selectRandomPriority(nomeDB);
+				temp =  (DatabaseMySql.eseguiQuery("Select * from " + nomeDB + ".activeList where priority ='" + temp[0] +"'")).get(0);
+				DatabaseMySql.delete (nomeDB, "activeList", col, temp[1]);
+			}
 		} catch (ArrayIndexOutOfBoundsException e) {
 			OutputTxt.writeException(e.getLocalizedMessage());
 			OutputTxt.writeLog("Lista analizzata conclusa.");
@@ -172,7 +174,17 @@ public class DatabaseMySql {
 		}  catch (NullPointerException e) {
 			return null;
 		}
-		return user;
+		return temp;
+	}
+	
+	public static String selectRandomPriority (String nomeDB) {
+		Vector<String[]> v = new Vector<String[]>();
+		v = DatabaseMySql.eseguiQuery("Select priority from " + nomeDB + ".activeList group by priority");
+		temp = new String[v.size()];
+		for (i = 0; i < v.size() ; i++) {
+			temp[i] = v.get(i)[0];
+		}
+		return temp[(int) (Math.random()* v.size())];
 	}
 	
 	public static void inserToCheck (String nomeDB, String user) {
@@ -233,4 +245,7 @@ public class DatabaseMySql {
 		DatabaseMySql.eseguiAggiornamento("Delete from " + nomeDB + ".infoReserved where user='" + user + "'");		
 		try {Thread.sleep(1000);} catch (InterruptedException e) {}
 	} 
+	
+	private static 	String[] temp; 		
+	private static 	int i;
 }

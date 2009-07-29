@@ -22,7 +22,7 @@ public class proveIO {
 		DatabaseMySql.connetti();	// Connessione al database
 		new OutputTxt(); 			// Definisco il FileHandler per tutto il programma
 		new Contatore ();
-		
+	/*	
 		//YouTubeService myService = new YouTubeService("Tesina");
 		//API.getUser(myService, "active", "momoz1987");
 		String devKey = "AI39si5XLt78NO1fRB0VaLCqUIXWkZeLDNSITQMvwwo_0scaR2qwzc2FzQTAqNqYBY0mAooL1HM4rl9BNpAefC1jx4PuMYKWsQ";
@@ -35,6 +35,9 @@ public class proveIO {
 	//	new scanPopular(myService, devKey, "utenti");
 		new scanUser(myService, devKey, "utenti");
 		//DatabaseMySql.insertError("utenti", "robyb70");
-		System.out.println(DatabaseMySql.contiene("utenti", "profile", "user", "lanicosun"));
+		System.out.println(DatabaseMySql.contiene("utenti", "profile", "user", "lanicosun")); */
+		for (;;)
+			System.out.println(((int) (Math.random()* 20)));
+
 	}
 }

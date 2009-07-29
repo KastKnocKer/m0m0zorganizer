@@ -1,6 +1,5 @@
 
 
-import scansioni.figlio;
 import scansioni.padre;
 import database.DatabaseMySql;
 
