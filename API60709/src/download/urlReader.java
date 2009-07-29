@@ -54,6 +54,7 @@ public class urlReader  {
 					in.close();
 			    	OutputTxt.writeLog("Errore 403: Informazione non pubblica: " + tabella + " dell' user " + user);
 			    	DatabaseMySql.insert(nomeDB, "infoCorrupted", user, tabella, "Reserved");
+			    	DatabaseMySql.eseguiAggiornamento("Update " + nomeDB + ".profile set status='corrupted' where user='" + user + "'");
 			    	return true;
 			    }
 			    else if (inputLine.contains("Questo account è stato")) {
@@ -206,6 +207,7 @@ public class urlReader  {
 			else if (msg.contains("Forbidden") ||
 					connection.getResponseMessage().contains("are not public")) {
 				DatabaseMySql.insert(nomeDB, "infoCorrupted", user, tabella, "Reserved");
+				DatabaseMySql.eseguiAggiornamento("Update " + nomeDB + ".profile set status='corrupted' where user='" + user + "'");
 				System.out.println("Errore 403: Informazione per il DB: "+ nomeDB + " non pubblica: " + tabella + " dell' user " + user);
 				OutputTxt.writeLog("Errore 403: Informazione per il DB: "+ nomeDB + " non pubblica: " + tabella + " dell' user " + user);
 				return true;
