@@ -50,7 +50,7 @@ import java.net.URL;
         	OutputTxt.writeLog("Errore 404: User not found: " + user);
         	return false;
         } catch(ServiceException e) {
-        	notifyApiFlood(nomeDB, "profile" , user);
+        	urlReader.getErrorCode(nomeDB, "profile", metafeedUrl, user);
         	return false;
         } catch(IOException e) { 
     		e.printStackTrace();
