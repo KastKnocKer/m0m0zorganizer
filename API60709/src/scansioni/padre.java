@@ -107,7 +107,7 @@ public class padre {
 			}  
 		}  
 		new Orario();
-		DatabaseMySql.copyAttivi(nomeDB, Orario.getDataOra());
+		DatabaseMySql.copyAttivi(nomeDB);
 		
 		// flag per dire al figlio se partire o no
 	}
@@ -115,7 +115,7 @@ public class padre {
 	public static void scansioneVeloce (int scansioneN, String nomeDB, String data) {
 		// Copia degli utenti attivi per avere una lista per le scansioni veloci
 		new Orario();
-		DatabaseMySql.copyAttivi(nomeDB, Orario.getData());
+		DatabaseMySql.copyAttivi(nomeDB);
 		key = new String[6];
 		key[0] = "AI39si4fzIi01PLvZIYjyHDVpyEKyvUHJAUvG4N9US4g1SYHmmcojgJ-joGo4q3ajF6eLPom3lmUoFw7IpYStDWUoOm29jadMA";
 		key[1] = "AI39si7e_IYXZqXB764Zgqll4sJlxizsHT02LAx1yo6CHG-8eaayATP-OGG330hhLj1HUHmjzwU62X7s8WHSe8JpiqpfrfGoGw";
@@ -126,7 +126,7 @@ public class padre {
 		
 		// Messo perchè non penso di utilizzare il figlio nelle scansioni veloci.
 		DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".ethernet set flag ='false' where rete='figlio'");
-		pb = new ProcessBuilder ("/home/m0m0z/Scrivania/tesina_exec/scanActivity.sh" , "padre" , nomeDB, data, scansioneN + "");
+		pb = new ProcessBuilder ("/home/m0m0z/Scrivania/tesina_exec/scanActivity.sh" , "padre" , nomeDB, scansioneN + "");
 		while (DatabaseMySql.getCount(nomeDB, "activeList") != 0) {
 			try {			
 				OutputTxt.writeLog("Padre: processo scanActivity per il DB: " + nomeDB + ".");

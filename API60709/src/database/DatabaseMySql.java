@@ -181,7 +181,7 @@ public class DatabaseMySql {
 
 		try {
 			if(DatabaseMySql.contiene(nomeDB, "activeList", "priority", "0"))
-				temp =  (DatabaseMySql.eseguiQuery("Select * from " + nomeDB + ".activeList group by priority desc limit 1")).get(0);
+				temp =  (DatabaseMySql.eseguiQuery("Select * from " + nomeDB + ".activeList group by priority desc, data desc limit 1")).get(0);
 			else {
 				temp[0] = DatabaseMySql.selectRandomPriority(nomeDB);
 				temp =  (DatabaseMySql.eseguiQuery("Select * from " + nomeDB + ".activeList where priority ='" + temp[0] +"'")).get(0);
@@ -244,11 +244,21 @@ public class DatabaseMySql {
 		}
 	}
 	
-	public static void copyAttivi (String nomeDB, String data) {
+	public static void copyAttivi (String nomeDB) {
 		Vector<String[]> v = null;
-		v = DatabaseMySql.eseguiQuery("Select user from " + nomeDB + ".profile where status ='active' or status ='corrupted'");
+		temp = new String[1];
+		v = DatabaseMySql.eseguiQuery("Select user,dataScan from " + nomeDB + ".profile where status='active' or status ='corrupted'");
 		for (int i = 0; i < v.size(); i++) {
-			DatabaseMySql.insert(nomeDB, "activeList", 0 , v.elementAt(i)[0], data);
+			temp[0] = v.get(i)[1];
+			temp[0] = temp[0].substring(0, 13);
+			if (temp[0].endsWith("00")) {
+				temp[0] = temp[0].substring(0, temp[0].indexOf("T"));
+				temp[0] = temp[0] + "01:00:00";
+				
+			}
+			else 
+				temp[0] = temp[0] + ":00:00";
+			DatabaseMySql.insert(nomeDB, "activeList", 0 , v.get(i)[0], temp[0]);
 		}
 	}
 	
