@@ -270,8 +270,8 @@ public class DatabaseMySql {
 		}
 	}
 	
-	public static int getMinPriority () {
-		return Integer.parseInt((DatabaseMySql.eseguiQuery("Select min(priority) from utenti.toCheck")).get(0)[0].toString());
+	public static int getMinPriority (String nomeDB) {
+		return Integer.parseInt((DatabaseMySql.eseguiQuery("Select min(priority) from " + nomeDB + ".toCheck")).get(0)[0].toString());
 	}
 
 	public static void insert500error(String nomeDB, String tabella, String user) {

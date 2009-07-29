@@ -36,14 +36,10 @@ public class padre {
 		System.out.println("/home/m0m0z/Scrivania/tesina_exec/scanPopular.sh padre " + nomeDB);
 		pb = new ProcessBuilder ("/home/m0m0z/Scrivania/tesina_exec/scanPopular.sh" , "padre", nomeDB);
 		while (DatabaseMySql.getCount(nomeDB, "popToCheck") != 0) {
-			System.out.println("STEP 1");
 			try {			
 				OutputTxt.writeLog("Padre: processo scanPopular per il DB: " + nomeDB + ".");
-				System.out.println("STEP 2");
 				scanner = pb.start ();
-				System.out.println("STEP 3");
 				BufferedReader in = new BufferedReader(	new InputStreamReader(scanner.getInputStream()));
-				System.out.println("STEP 4");
 				String line = null;
 				while ((line = in.readLine()) != null)	{
 					System.out.println(line);

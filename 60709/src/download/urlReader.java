@@ -141,9 +141,9 @@ public class urlReader  {
     		DatabaseMySql.delete(nomeDB, "profile", "user", user);
     		DatabaseMySql.delete(nomeDB, "toCheck", "user", user);
     		if (DatabaseMySql.contiene(nomeDB, "popular", "user", user))
-    			tot = DatabaseMySql.getMinPriority() + 1;
+    			tot = DatabaseMySql.getMinPriority(nomeDB) + 1;
     		else {
-    			tot = DatabaseMySql.getMinPriority();
+    			tot = DatabaseMySql.getMinPriority(nomeDB);
     			tot = tot + ((-tot) / 10) + 1;
     		}
     		System.out.println("Priorità selezionata per l'utente " + user + ": " + tot);

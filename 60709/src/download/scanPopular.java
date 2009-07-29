@@ -19,7 +19,7 @@ public class scanPopular {
 		int temp = 0, control = 0;
 		String popularToCheck;	
 		try {
-			control = Integer.parseInt((DatabaseMySql.eseguiQuery("Select count(DISTINCT user) from utenti.popular")).get(0)[0]) / 4 + 1;
+			control = Integer.parseInt((DatabaseMySql.eseguiQuery("Select count(DISTINCT user) from " + nomeDB + ".popular")).get(0)[0]) / 4 + 1;
 			for (; (popularToCheck = DatabaseMySql.extract(nomeDB, "popToCheck", "user")[0]) != null ;) {
 				if (!DatabaseMySql.contiene(nomeDB, "profile", "user", popularToCheck)) {
 					if (API.getActivity(myService, devKey, nomeDB, popularToCheck)) {	// Ha activityFeed? 
