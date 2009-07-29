@@ -7,7 +7,7 @@ import download.scanActivity;
 public class crawlerActivity {
 
 	public static void main(String[] args) {		
-		new DatabaseMySql("utenti");		// Definisco il database per tutto il programma
+		new DatabaseMySql(args[1]);		// Definisco il database per tutto il programma
 		DatabaseMySql.connetti();	// Connessione al database
 		new OutputTxt(); 			// Definisco il FileHandler per tutto il programma
 		

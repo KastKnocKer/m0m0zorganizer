@@ -7,7 +7,7 @@ import download.scanCorrupted;
 public class crawlerCorrupted {
 
 	public static void main(String[] args) {		
-		new DatabaseMySql("utenti");		// Definisco il database per tutto il programma
+		new DatabaseMySql(args[1]);		// Definisco il database per tutto il programma
 		DatabaseMySql.connetti();	// Connessione al database
 		new OutputTxt(); 			// Definisco il FileHandler per tutto il programma
 		YouTubeService myService = new YouTubeService("Tesi", DatabaseMySql.eseguiQuery("Select devKey from utenti.key where crawler='"+ args[0] + "'").get(0)[0]);

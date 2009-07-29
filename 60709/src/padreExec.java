@@ -8,11 +8,11 @@ import database.createDatabase;
 public class padreExec {
 
 	public static void main(String[] args) {
-		new DatabaseMySql("utenti"); // DA CONFIGURARE
+		new DatabaseMySql("root"); // DA CONFIGURARE
 		DatabaseMySql.connetti();	// Connessione al database
 		OutputTxt.writeLog("Inizio scansione");
 		String nomeDB;
-		nomeDB = "utenti";
+		nomeDB = "scansione";
 		
 		new createDatabase(nomeDB);		
 		padre.scansioneCompleta(nomeDB);
