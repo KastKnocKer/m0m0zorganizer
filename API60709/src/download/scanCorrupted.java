@@ -29,7 +29,12 @@ public class scanCorrupted {
 						urlReader.userReader(nomeDB, "friends", user[0]);
 						API.getVideo(myService, devKey, nomeDB, user[0]);
 					}
+					else 		// Non è attivo lo tolgo dagli active e lo metto negli inactive
+						DatabaseMySql.insert("utenti", "profile", user[0], "blocked", "block", 0, 0, 0, "block");
 				}
+				else 
+					if (!API.getUser(myService, devKey, "inactive", nomeDB, user[0]))
+					DatabaseMySql.insert("utenti", "profile", user[0], "blocked", "block", 0, 0, 0, "block");
 			}
 			else if (user[1].equals("profile")) {
 				DatabaseMySql.eseguiAggiornamento("Delete from utenti.profile where user='" + user[0] + "'");
@@ -41,7 +46,12 @@ public class scanCorrupted {
 						urlReader.userReader(nomeDB, "friends", user[0]);
 						API.getVideo(myService, devKey, nomeDB, user[0]);;
 					}
+					else 		// Non è attivo lo tolgo dagli active e lo metto negli inactive
+						DatabaseMySql.insert("utenti", "profile", user[0], "blocked", "block", 0, 0, 0, "block");
 				}
+				else 
+					if (!API.getUser(myService, devKey, "inactive", nomeDB, user[0]))
+					DatabaseMySql.insert("utenti", "profile", user[0], "blocked", "block", 0, 0, 0, "block");
 			}			
 			else if (user[1].equals("friends")) {
 				DatabaseMySql.eseguiAggiornamento("Delete from utenti.infoCorrupted where user='" + user[0] + 
