@@ -97,7 +97,7 @@ public class padre {
 		
 		// Messo perchè non penso di utilizzare il figlio nelle scansioni veloci.
 		DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".ethernet set flag ='false' where rete='figlio'");
-		pb = new ProcessBuilder ("/home/m0m0z/Scrivania/tesina_exec/scanActivity.sh" , "padre" , nomeDB, data + ".000Z", scansioneN + "");
+		pb = new ProcessBuilder ("/home/m0m0z/Scrivania/tesina_exec/scanActivity.sh" , "padre" , nomeDB, data, scansioneN + "");
 		while (DatabaseMySql.getCount(nomeDB, "activeList") != 0) {
 			try {			
 				OutputTxt.writeLog("Padre: processo scanActivity per il DB: " + nomeDB + ".");
