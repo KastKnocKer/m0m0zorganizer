@@ -62,7 +62,7 @@ public class popularReader {
 		} 						
 		catch (IOException e) { 
 			OutputTxt.writeLog("Errore nel download dei canali più popolari del " + time);
-			urlReader.getErrorCode(nomeDB, "popularReader", metafeedUrl, "utenti");
+			urlReader.getErrorCode(nomeDB, "popularReader", metafeedUrl, "popular");
 		}
 		try {
 			in.close();
