@@ -27,12 +27,9 @@ public class scanUser {
 							completeScan(myService, devKey, nomeDB, userToCheck);	// Si attivo scansione completa senza activity
 							temp++;
 						}
-						else 		// Non è attivo lo tolgo dagli active e lo metto negli inactive
-							DatabaseMySql.insert(nomeDB, "profile", userToCheck, "blocked", "block", 0, 0, 0, "block");
-						}
+					}
 					else
-						if (!API.getUser(myService, devKey, "inactive", nomeDB, userToCheck))
-							DatabaseMySql.insert(nomeDB, "profile", userToCheck, "blocked", "block", 0, 0, 0, "block");
+						API.getUser(myService, devKey, "inactive", nomeDB, userToCheck);
 				}
 				if (temp == 35) {
 					return;

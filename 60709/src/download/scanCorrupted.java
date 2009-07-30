@@ -31,21 +31,18 @@ public class scanCorrupted {
 						count++;
 						API.getSubscriptions(myService, devKey, nomeDB, user[0]);
 						count++;
-						API.getFavorites(myService, devKey, nomeDB, user[0]);
-						count++;
 						urlReader.userReader(nomeDB, "subscribers", user[0]);
+						count++;
+						API.getFavorites(myService, devKey, nomeDB, user[0]);
 						count++;
 						urlReader.userReader(nomeDB, "friends", user[0]);
 						count++;
 						API.getVideo(myService, devKey, nomeDB, user[0]);;
 						count++;
 					}
-					else 		// Non è attivo lo tolgo dagli active e lo metto negli inactive
-						DatabaseMySql.insert("" + nomeDB + "", "profile", user[0], "blocked", "block", 0, 0, 0, "block");
 				}
 				else 
-					if (!API.getUser(myService, devKey, "inactive", nomeDB, user[0]))
-					DatabaseMySql.insert("" + nomeDB + "", "profile", user[0], "blocked", "block", 0, 0, 0, "block");
+					API.getUser(myService, devKey, "inactive", nomeDB, user[0]);
 			}
 			else if (user[1].equals("profile")) {
 				DatabaseMySql.eseguiAggiornamento("Delete from " + nomeDB + ".infoCorrupted where user='" + user[0] + 
@@ -57,21 +54,19 @@ public class scanCorrupted {
 						count++;
 						API.getSubscriptions(myService, devKey, nomeDB, user[0]);
 						count++;
-						API.getFavorites(myService, devKey, nomeDB, user[0]);
-						count++;
 						urlReader.userReader(nomeDB, "subscribers", user[0]);
+						count++;
+						API.getFavorites(myService, devKey, nomeDB, user[0]);
 						count++;
 						urlReader.userReader(nomeDB, "friends", user[0]);
 						count++;
 						API.getVideo(myService, devKey, nomeDB, user[0]);;
 						count++;
 					}
-					else 		// Non è attivo lo tolgo dagli active e lo metto negli inactive
-						DatabaseMySql.insert("" + nomeDB + "", "profile", user[0], "blocked", "block", 0, 0, 0, "block");
 				}
-				else if (!API.getUser(myService, devKey, "inactive", nomeDB, user[0]))
-					DatabaseMySql.insert("" + nomeDB + "", "profile", user[0], "blocked", "block", 0, 0, 0, "block");
-			}			
+				else 
+					API.getUser(myService, devKey, "inactive", nomeDB, user[0]);
+			}
 			else if (user[1].equals("friends")) {
 				DatabaseMySql.eseguiAggiornamento("Delete from " + nomeDB + ".infoCorrupted where user='" + user[0] + 
 				"' and tabella='friends'");
@@ -86,7 +81,7 @@ public class scanCorrupted {
 				DatabaseMySql.eseguiAggiornamento("Update " + nomeDB + ".profile set status='*active*' where user='"
 						+ user[0]	+ "'");
 			}
-			if (count == 125)
+			if (count == 100)
 				return;
 		}
 	}

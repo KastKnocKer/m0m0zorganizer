@@ -26,12 +26,9 @@ public class scanPopular {
 						if (API.getUser(myService, devKey, "active", nomeDB, popularToCheck)) { 	// E' un utente sospeso?  No --> active
 							completeScan(myService, devKey, nomeDB, popularToCheck);	// Si attivo scansione completa senza activity
 						}
-						else 		// Non è attivo lo tolgo dagli active e lo metto negli inactive
-							DatabaseMySql.insert(nomeDB, "profile", popularToCheck, "blocked", "block", 0, 0, 0, "block");
 					}
 					else
-						if (!API.getUser(myService, devKey, "inactive", nomeDB, popularToCheck))
-							DatabaseMySql.insert(nomeDB, "profile", popularToCheck, "blocked", "block", 0, 0, 0, "block");
+						API.getUser(myService, devKey, "inactive", nomeDB, popularToCheck);
 					temp++;
 				}
 				if (temp == control) {

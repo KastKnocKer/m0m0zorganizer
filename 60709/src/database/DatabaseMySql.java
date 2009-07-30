@@ -277,6 +277,9 @@ public class DatabaseMySql {
 	public static void insert500error(String nomeDB, String tabella, String user) {
 		DatabaseMySql.delete(nomeDB, "toCheck", "user", user);
 		DatabaseMySql.insert(nomeDB, "infoCorrupted", user, tabella, "error500+");
+		if(tabella.equals("profile"))
+			DatabaseMySql.insert(nomeDB , "profile", user, "corrupted", "corrupted", 0, 0, 0, "profile");
+		else
 		DatabaseMySql.eseguiAggiornamento("Update " + nomeDB + ".profile set status='corrupted' where user='" + user + "'");
 		System.out.println("InsertError500+ della tabella dei " + tabella + " dell'utente " + user);
 	}

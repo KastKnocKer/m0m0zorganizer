@@ -35,7 +35,7 @@ public class padre {
 		System.out.println(nomeDB);
 		System.out.println("/home/m0m0z/Scrivania/tesina_exec/scanPopular.sh padre " + nomeDB);
 		pb = new ProcessBuilder ("/home/m0m0z/Scrivania/tesina_exec/scanPopular.sh" , "padre", nomeDB);
-		while (DatabaseMySql.getCount(nomeDB, "popToCheck") != 0) {
+		/*while (DatabaseMySql.getCount(nomeDB, "popToCheck") != 0) {
 			try {			
 				OutputTxt.writeLog("Padre: processo scanPopular per il DB: " + nomeDB + ".");
 				scanner = pb.start ();
@@ -81,7 +81,7 @@ public class padre {
 			} catch (IOException e) {
 				OutputTxt.writeError("Errore IO nel try scanUser del padreExec.");
 			}  
-		}  
+		}   */
 		DatabaseMySql.copyCorrupted(nomeDB);
 		
 		pb.command ("/home/m0m0z/Scrivania/tesina_exec/scanCorrupted.sh" , "padre", nomeDB); 
