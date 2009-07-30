@@ -30,12 +30,12 @@ public class padre {
 		ethernet.switchTo(nomeDB, false); 	// Se ho true sono a eth0 up e switho a eth1 e viceversa
 		
 		new popularReader(nomeDB);
-		//Omesso perchè senza figlio
-		//DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".ethernet set flag ='true' where rete='figlio'");
+		// Blocca il figlio fino alla fine del popularReader
+		DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".ethernet set flag ='true' where rete='figlio'");
 		System.out.println(nomeDB);
 		System.out.println("/home/m0m0z/Scrivania/tesina_exec/scanPopular.sh padre " + nomeDB);
 		pb = new ProcessBuilder ("/home/m0m0z/Scrivania/tesina_exec/scanPopular.sh" , "padre", nomeDB);
-		/*while (DatabaseMySql.getCount(nomeDB, "popToCheck") != 0) {
+		while (DatabaseMySql.getCount(nomeDB, "popToCheck") != 0) {
 			try {			
 				OutputTxt.writeLog("Padre: processo scanPopular per il DB: " + nomeDB + ".");
 				scanner = pb.start ();
@@ -55,7 +55,7 @@ public class padre {
 				OutputTxt.writeLog("Padre: Richieste URL per il processo: " + Contatore.getTotUrl());
 			}
 			catch (IOException e) {
-				//OutputTxt.writeError("Errore IO nel try start del padreExec.");
+				OutputTxt.writeError("Errore IO nel try start del padreExec.");
 			}  
 		} 
 		pb.command ("/home/m0m0z/Scrivania/tesina_exec/scanUser.sh" , "padre", nomeDB); 
@@ -71,7 +71,7 @@ public class padre {
 				if (++n == 6) 
 					n = 0;
 				DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".key set devKey='" + key[n] + "' where crawler='padre'");
-				DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".ethernet set flag='false' where rete='figlio'"); 
+				//DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".ethernet set flag='false' where rete='figlio'"); 
 				ethernet.switchTo(nomeDB, flagEth);
 				flagEth = !flagEth;
 				OutputTxt.writeLog("Padre: Popular scansionati   totale: " + DatabaseMySql.getCount(nomeDB, "profile"));
@@ -81,7 +81,7 @@ public class padre {
 			} catch (IOException e) {
 				OutputTxt.writeError("Errore IO nel try scanUser del padreExec.");
 			}  
-		}   */
+		}   
 		DatabaseMySql.copyCorrupted(nomeDB);
 		
 		pb.command ("/home/m0m0z/Scrivania/tesina_exec/scanCorrupted.sh" , "padre", nomeDB); 
@@ -97,7 +97,7 @@ public class padre {
 				if (++n == 6) 
 					n = 0;
 				DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".key set devKey='" + key[n] + "' where crawler='padre'");
-				DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".ethernet set flag='false' where rete='figlio'"); 
+			//	DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".ethernet set flag='false' where rete='figlio'"); 
 				ethernet.switchTo(nomeDB, flagEth);
 				flagEth = !flagEth;
 				OutputTxt.writeLog("Padre: Popular scansionati   totale: " + DatabaseMySql.getCount(nomeDB, "profile"));

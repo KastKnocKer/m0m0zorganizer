@@ -46,19 +46,4 @@ public class scanUser {
 		urlReader.userReader(nomeDB, "friends", user);
 		API.getVideo(myService, devKey, nomeDB, user);
 	}
-	/*
-	public static void inactive() {
-		String[] userTemp;	
-		for (; (userTemp = DatabaseMySql.extract(nomeDB, "inactive", "user")) != null ;) {
-			if (API.getUser("inactive", userTemp[0])) {			// E' un utente sospeso?  No --> active
-				if (API.getActivity(userTemp[0]))	// Ha activityFeed? 
-					DatabaseMySql.moveUser(nomeDB, "inactive", "active", "user", userTemp[0]);
-				completeScan(userTemp[0], false);	// Si attivo scansione completa senza activity
-				Runtime.getRuntime().gc();
-			}
-			else
-				DatabaseMySql.insert(nomeDB, "blocked", userTemp[0]);
-			//Runtime.getRuntime().gc();
-		}
-	} */
 }
