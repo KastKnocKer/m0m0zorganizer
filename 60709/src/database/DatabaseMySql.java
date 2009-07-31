@@ -178,13 +178,12 @@ public class DatabaseMySql {
 	}
 	
 	public static String[] extractActiveList (String nomeDB, String colonna) {
-
+		temp = new String[3];
 		try {
 			if(DatabaseMySql.contiene(nomeDB, "activeList", "priority", "0"))
-				temp =  (DatabaseMySql.eseguiQuery("Select * from " + nomeDB + ".activeList group by priority desc, data desc limit 1")).get(0);
+				temp =  (DatabaseMySql.eseguiQuery("Select * from " + nomeDB + ".activeList group by priority, data limit 1")).get(0);
 			else {
-				temp[0] = DatabaseMySql.selectRandomPriority(nomeDB);
-				temp =  (DatabaseMySql.eseguiQuery("Select * from " + nomeDB + ".activeList where priority ='" + temp[0] +"'")).get(0);
+				temp =  (DatabaseMySql.eseguiQuery("Select * from " + nomeDB + ".activeList order by RAND() limit 1")).get(0);
 			}
 			DatabaseMySql.delete (nomeDB, "activeList", colonna, temp[1]);
 		} catch (ArrayIndexOutOfBoundsException e) {
@@ -192,6 +191,7 @@ public class DatabaseMySql {
 			OutputTxt.writeLog("Lista analizzata conclusa.");
 			return null;
 		}  catch (NullPointerException e) {
+			System.out.println("Null nel extrackActiveList");
 			return null;
 		}
 		return temp;
@@ -252,8 +252,8 @@ public class DatabaseMySql {
 			temp[0] = v.get(i)[1];
 			temp[0] = temp[0].substring(0, 13);
 			if (temp[0].endsWith("00")) {
-				temp[0] = temp[0].substring(0, temp[0].indexOf("T"));
-				temp[0] = temp[0] + "01:00:00";
+				temp[0] = temp[0].substring(0, temp[0].indexOf("T") + 1);
+				temp[0] = temp[0] + "01:00:01";
 				
 			}
 			else 

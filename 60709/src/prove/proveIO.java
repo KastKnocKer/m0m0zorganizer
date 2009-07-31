@@ -3,13 +3,17 @@
 
 //import com.google.gdata.client.youtube.YouTubeService;
 
+import scansioni.padre;
+
 import com.google.gdata.client.youtube.YouTubeService;
 
 import database.DatabaseMySql;
+import database.Orario;
 import database.OutputTxt;
 import database.createDatabase;
 import download.API;
 import download.Contatore;
+import download.scanActivity;
 import download.scanCorrupted;
 import download.urlReader;
 
@@ -31,17 +35,8 @@ public class proveIO {
 		DatabaseMySql.eseguiAggiornamento("insert into scansione.ethernet values (\"padre\", \"true\")");
 		DatabaseMySql.eseguiAggiornamento("update scansione.ethernet set flag='true' where rete='padre'");
 		DatabaseMySql.eseguiAggiornamento("insert into scansione.ethernet values (\"figlio\", \"false\")");
-		if (API.getActivity(myService, devKey, "scansione","AndrejBiondic")) {	// Ha activityFeed?
-			if (API.getUser(myService, devKey, "active", "scansione","AndrejBiondic")) { 	// E' un utente sospeso?  No --> active
-				API.getSubscriptions(myService, devKey, "scansione","AndrejBiondic");
-				urlReader.userReader("scansione", "subscribers","AndrejBiondic");
-				API.getFavorites(myService, devKey, "scansione","AndrejBiondic");
-				urlReader.userReader("scansione", "friends","AndrejBiondic");
-				API.getVideo(myService, devKey, "scansione","AndrejBiondic");;
-				
-			}
-		}
-		else 
-			API.getUser(myService, devKey, "inactive", "scansione","AndrejBiondic");
+		//DatabaseMySql.copyAttivi("scansione");
+		new Orario();
+		new scanActivity(myService, devKey, "scansione", 1);
 	}
 }

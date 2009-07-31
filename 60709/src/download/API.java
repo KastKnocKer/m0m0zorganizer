@@ -308,7 +308,6 @@ import java.net.URL;
 			for (UserEventEntry entry : activityFeed.getEntries()) {
 				count++;
 				stringTemp = entry.getAuthors().get(0).getName();
-				System.out.println("INSERIMENTO UTENTE ATTIVO!");
 				DatabaseMySql.insert(nomeDB, "active" + N, stringTemp, data);
 				System.out.println(count + ": Attività riscontrata per l'utente " + stringTemp);
 				countTemp = true;
