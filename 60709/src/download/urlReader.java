@@ -207,7 +207,7 @@ public class urlReader  {
 			else if (msg.contains("Forbidden") ||
 					connection.getResponseMessage().contains("are not public")) {
 				DatabaseMySql.insert(nomeDB, "infoCorrupted", user, tabella, "Reserved");
-				if (DatabaseMySql.contiene(nomeDB, "profilo", "user", user))
+				if (DatabaseMySql.contiene(nomeDB, "profile", "user", user))
 					DatabaseMySql.eseguiAggiornamento("Update " + nomeDB + ".profile set status='corrupted' where user='" + user + "'");
 				else {
 					new Orario();
