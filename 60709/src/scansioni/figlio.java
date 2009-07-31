@@ -42,8 +42,6 @@ public class figlio {
 				OutputTxt.writeLog("Figlio: Popular scansionati   totale: " + DatabaseMySql.getCount("" + nomeDB + "", "profile"));
 				OutputTxt.writeLog("Figlio: Popular scansionati   attivi: " + DatabaseMySql.eseguiQuery("Select count(*) from " + nomeDB + ".profile where status='active'").get(0)[0]);
 				OutputTxt.writeLog("Figlio: Popular scansionati   corrupted: " + DatabaseMySql.eseguiQuery("Select count(*) from " + nomeDB + ".profile where status='corrupted'").get(0)[0]);
-				OutputTxt.writeLog("Figlio: Richieste API per il processo: " + Contatore.getTotApi());
-				OutputTxt.writeLog("Figlio: Richieste URL per il processo: " + Contatore.getTotUrl());
 			}
 			catch (IOException e) {
 				OutputTxt.writeError("Errore IO nel try start del figlioExec.");
@@ -65,8 +63,6 @@ public class figlio {
 				OutputTxt.writeLog("Figlio: Popular scansionati   totale: " + DatabaseMySql.getCount("" + nomeDB + "", "profile"));
 				OutputTxt.writeLog("Figlio: Popular scansionati   attivi: " + DatabaseMySql.eseguiQuery("Select count(*) from " + nomeDB + ".profile where status='active'").get(0)[0]);
 				OutputTxt.writeLog("Figlio: Popular scansionati   corrupted: " + DatabaseMySql.eseguiQuery("Select count(*) from " + nomeDB + ".profile where status='corrupted'").get(0)[0]);
-				OutputTxt.writeLog("Figlio: Richieste API per il processo: " + Contatore.getTotApi());
-				OutputTxt.writeLog("Figlio: Richieste URL per il processo: " + Contatore.getTotUrl());
 			} catch (IOException e) {
 				OutputTxt.writeError("Errore IO nel try scanUser del figlioExec.");
 			}  

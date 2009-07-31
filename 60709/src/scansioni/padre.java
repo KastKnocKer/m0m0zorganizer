@@ -51,8 +51,7 @@ public class padre {
 				flagEth = !flagEth;
 				OutputTxt.writeLog("Padre: Popular scansionati   totale: " + DatabaseMySql.getCount(nomeDB, "profile"));
 				OutputTxt.writeLog("Padre: Popular scansionati   attivi: " + DatabaseMySql.eseguiQuery("Select count(*) from " + nomeDB + ".profile where status='active'").get(0)[0]);
-				OutputTxt.writeLog("Padre: Richieste API per il processo: " + Contatore.getTotApi());
-				OutputTxt.writeLog("Padre: Richieste URL per il processo: " + Contatore.getTotUrl());
+
 			}
 			catch (IOException e) {
 				OutputTxt.writeError("Errore IO nel try start del padreExec.");
@@ -74,10 +73,9 @@ public class padre {
 				//DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".ethernet set flag='false' where rete='figlio'"); 
 				ethernet.switchTo(nomeDB, flagEth);
 				flagEth = !flagEth;
-				OutputTxt.writeLog("Padre: Popular scansionati   totale: " + DatabaseMySql.getCount(nomeDB, "profile"));
+				OutputTxt.writeLog("Padre: Popular scansionati   totale: " + DatabaseMySql.getCount("" + nomeDB + "", "profile"));
 				OutputTxt.writeLog("Padre: Popular scansionati   attivi: " + DatabaseMySql.eseguiQuery("Select count(*) from " + nomeDB + ".profile where status='active'").get(0)[0]);
-				OutputTxt.writeLog("Padre: Richieste API per il processo: " + Contatore.getTotApi());
-				OutputTxt.writeLog("Padre: Richieste URL per il processo: " + Contatore.getTotUrl());
+				OutputTxt.writeLog("Padre: Popular scansionati   corrupted: " + DatabaseMySql.eseguiQuery("Select count(*) from " + nomeDB + ".profile where status='corrupted'").get(0)[0]);
 			} catch (IOException e) {
 				OutputTxt.writeError("Errore IO nel try scanUser del padreExec.");
 			}  
@@ -100,10 +98,9 @@ public class padre {
 			//	DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".ethernet set flag='false' where rete='figlio'"); 
 				ethernet.switchTo(nomeDB, flagEth);
 				flagEth = !flagEth;
-				OutputTxt.writeLog("Padre: Popular scansionati   totale: " + DatabaseMySql.getCount(nomeDB, "profile"));
+				OutputTxt.writeLog("Padre: Popular scansionati   totale: " + DatabaseMySql.getCount("" + nomeDB + "", "profile"));
 				OutputTxt.writeLog("Padre: Popular scansionati   attivi: " + DatabaseMySql.eseguiQuery("Select count(*) from " + nomeDB + ".profile where status='active'").get(0)[0]);
-				OutputTxt.writeLog("Padre: Richieste API per il processo: " + Contatore.getTotApi());
-				OutputTxt.writeLog("Padre: Richieste URL per il processo: " + Contatore.getTotUrl());
+				OutputTxt.writeLog("Padre: Popular scansionati   corrupted: " + DatabaseMySql.eseguiQuery("Select count(*) from " + nomeDB + ".profile where status='corrupted'").get(0)[0]);
 			} catch (IOException e) {
 				OutputTxt.writeError("Errore IO nel try scanUser del padreExec.");
 			}  
@@ -143,9 +140,9 @@ public class padre {
 				DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".key set devKey='" + key[n] + "' where crawler='padre'");
 				ethernet.switchTo(nomeDB, flagEth);
 			    flagEth = !flagEth;
-				OutputTxt.writeLog("Padre: Attivi   scansionati   totale: " + DatabaseMySql.getCount(nomeDB, "active" + scansioneN));
-				OutputTxt.writeLog("Padre: Inattivi scansionati   totale: " + DatabaseMySql.getCount(nomeDB, "inactive" + scansioneN));
-				OutputTxt.writeLog("Padre: Richieste API per il processo: " + Contatore.getTotApi());
+				OutputTxt.writeLog("Padre: Popular scansionati   totale: " + DatabaseMySql.getCount("" + nomeDB + "", "profile"));
+				OutputTxt.writeLog("Padre: Popular scansionati   attivi: " + DatabaseMySql.eseguiQuery("Select count(*) from " + nomeDB + ".profile where status='active'").get(0)[0]);
+				OutputTxt.writeLog("Padre: Popular scansionati   corrupted: " + DatabaseMySql.eseguiQuery("Select count(*) from " + nomeDB + ".profile where status='corrupted'").get(0)[0]);
 			}
 			catch (IOException e) {
 				OutputTxt.writeError("Errore IO nel try start del padreExec.");
