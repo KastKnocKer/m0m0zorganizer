@@ -10,7 +10,7 @@ public class scanActivity {
 	public scanActivity (YouTubeService myService, String devKey, String nomeDB, int scansioneN) {
 		try {
 			temp = 0;
-			while ( (count = DatabaseMySql.getCount(nomeDB, "activeList")) != 0) {
+			while ((count = DatabaseMySql.getCount(nomeDB, "activeList")) != 0) {
 				userTemp = "";
 				data = DatabaseMySql.eseguiQuery("Select min(data) from " + nomeDB + ".activeList").get(0)[0];
 				if(DatabaseMySql.contiene(nomeDB, "activeList", "priority", "0")) {
@@ -18,12 +18,14 @@ public class scanActivity {
 							"where data ='" + data + "'").get(0)[0]);
 					if (n > 20)
 						n = 20;
-					users = new String[n][3];
 				}
-				else if (count > 150)
+				else if (count > 400)
 					n = count / 50;
+				else if (count > 250)
+					n = 2;
 				else 
 					n = 1;
+				users = new String[n][3];
 				for (i = 0; i < n; i++) {
 					users[i] = DatabaseMySql.extractActiveList(nomeDB, "user");
 					System.out.println((i + 1) + ": " +users[i][1]);
@@ -40,12 +42,17 @@ public class scanActivity {
 					}
 				}
 				else  {
-					for (i = 0; i < n; i++) 
-						DatabaseMySql.insert(nomeDB, "activeList", "1" , users[i][1], users[i][2]);
-					try {
-						Thread.sleep(2000);
-					} catch (InterruptedException e) {e.printStackTrace();}
-					OutputTxt.writeError("ERRORE 500 per users" + userTemp);
+					if (n == 1) {
+						DatabaseMySql.insert(nomeDB, "corrupted" + scansioneN, users[i][1], data);
+					}
+					else {
+						for (i = 0; i < n; i++) 
+							DatabaseMySql.insert(nomeDB, "activeList", "1" , users[i][1], users[i][2]);
+						try {
+							Thread.sleep(500);
+						} catch (InterruptedException e) {e.printStackTrace();}
+						OutputTxt.writeError("ERRORE 500 per users" + userTemp);
+					}
 				}
 				if (++temp == 25) {
 					System.out.println("Esco per max giri raggiunti per il processo");

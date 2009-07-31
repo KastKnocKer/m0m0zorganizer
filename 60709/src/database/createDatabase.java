@@ -30,12 +30,15 @@ public class createDatabase {
 		DatabaseMySql.eseguiAggiornamento("create table " + nomeDB + ".activeList 		(priority char(10), user Char(20) UNIQUE, data char(19), PRIMARY KEY(priority, user))");
 		DatabaseMySql.eseguiAggiornamento("create table " + nomeDB + ".active1 			(user Char(20), data char(19), PRIMARY KEY(user))");
 		DatabaseMySql.eseguiAggiornamento("create table " + nomeDB + ".inactive1 		(user Char(20), data char(19), PRIMARY KEY(user))");
+		DatabaseMySql.eseguiAggiornamento("create table " + nomeDB + ".corrupted1 		(user Char(20), data char(19), PRIMARY KEY(user))");
 		DatabaseMySql.eseguiAggiornamento("create table " + nomeDB + ".activity1 		(user Char(20), id Char(20), action char(20), updated char(19), PRIMARY KEY(user, id, action))");
 		DatabaseMySql.eseguiAggiornamento("create table " + nomeDB + ".active2 			(user Char(20), data char(19), PRIMARY KEY(user))");
 		DatabaseMySql.eseguiAggiornamento("create table " + nomeDB + ".inactive2		(user Char(20), data char(19), PRIMARY KEY(user))");
+		DatabaseMySql.eseguiAggiornamento("create table " + nomeDB + ".corrupted2 			(user Char(20), data char(19), PRIMARY KEY(user))");
 		DatabaseMySql.eseguiAggiornamento("create table " + nomeDB + ".activity2		(user Char(20), id Char(20), action char(20), updated char(19), PRIMARY KEY(user, id, action))");
 		DatabaseMySql.eseguiAggiornamento("create table " + nomeDB + ".active3			(user Char(20), data char(19), PRIMARY KEY(user))");
 		DatabaseMySql.eseguiAggiornamento("create table " + nomeDB + ".inactive3 		(user Char(20), data char(19), PRIMARY KEY(user))");
+		DatabaseMySql.eseguiAggiornamento("create table " + nomeDB + ".corrupted3 			(user Char(20), data char(19), PRIMARY KEY(user))");
 		DatabaseMySql.eseguiAggiornamento("create table " + nomeDB + ".activity3 		(user Char(20), id Char(20), action char(20), updated char(19), PRIMARY KEY(user, id, action))");
 	}
 	
