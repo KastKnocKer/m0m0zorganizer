@@ -344,7 +344,6 @@ import java.net.URL;
 			    			entry.getUpdated().toString().substring(0, 19));
 			    	DatabaseMySql.insert(nomeDB, "videoToCheck", entry.getVideoId());
 			    }
-				System.out.println(count);
 			  }
 			System.out.println("Activity " + N + " dell'user " + user + " scaricati fino al num: " + count + ".");
 			tot = activityFeed.getTotalResults();
