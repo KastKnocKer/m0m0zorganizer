@@ -47,7 +47,8 @@ import java.net.URL;
             OutputTxt.writeException("Errore nel getUser dell'utente: " + user);
             return false;
         } catch(ResourceNotFoundException e){
-        	DatabaseMySql.insert(nomeDB , "profile", user, "blocked", "block", 0, 0, 0, "block");
+        	new Orario();
+        	DatabaseMySql.insert(nomeDB , "profile", user, "blocked", Orario.getDataOra(), 0, 0, 0, "block");
         	OutputTxt.writeLog("Errore 404: User not found: " + user);
         	return false;
         } catch(ServiceException e) {
