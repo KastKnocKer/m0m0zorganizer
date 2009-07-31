@@ -12,7 +12,6 @@ public class scanCorrupted {
 		DatabaseMySql.eseguiAggiornamento("create table " + nomeDB + ".user 	(count char(5), user Char(20), tabella char(15), flag char(10), PRIMARY KEY (user, tabella))");
 		user = new String[2];
 		
-		int count = 0;
 		while (DatabaseMySql.getCount(nomeDB, "corruptedList") != 0) {
 			user = DatabaseMySql.extractCorrupted(nomeDB);
 			System.out.println(++count);
@@ -43,8 +42,9 @@ public class scanCorrupted {
 						API.getVideo(myService, devKey, nomeDB, user[0]);;
 					}
 				}
-				else 
-					API.getUser(myService, devKey, "inactive", nomeDB, user[0]);			
+				else {
+					API.getUser(myService, devKey, "inactive", nomeDB, user[0]);
+				}
 				DatabaseMySql.insert(nomeDB, "user", count + "", user[0], "activity", 
 						DatabaseMySql.contiene(nomeDB, "infoCorrupted", "user", user[0], "tabella" , "activity") + "");
 			}
@@ -84,10 +84,15 @@ public class scanCorrupted {
 				DatabaseMySql.eseguiAggiornamento("Update " + nomeDB + ".profile set status='*active*' where user='"
 						+ user[0]	+ "'");
 			}
-			if (count == 200)
-				return;
+			//if (count == 200)
+				//return;
+			System.out.println("COUNT ARRIVATO A : " + count);
+			System.out.println("COUNT ARRIVATO A : " + count);
+			System.out.println("COUNT ARRIVATO A : " + count);
+			System.out.println("COUNT ARRIVATO A : " + count);
 		}
 	}
 	
 	static private String[] user;
+	static int count;
 }

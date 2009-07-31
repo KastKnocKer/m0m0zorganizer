@@ -207,7 +207,12 @@ public class urlReader  {
 			else if (msg.contains("Forbidden") ||
 					connection.getResponseMessage().contains("are not public")) {
 				DatabaseMySql.insert(nomeDB, "infoCorrupted", user, tabella, "Reserved");
-				DatabaseMySql.eseguiAggiornamento("Update " + nomeDB + ".profile set status='corrupted' where user='" + user + "'");
+				if (DatabaseMySql.contiene(nomeDB, "profilo", "user", user))
+					DatabaseMySql.eseguiAggiornamento("Update " + nomeDB + ".profile set status='corrupted' where user='" + user + "'");
+				else {
+					new Orario();
+					DatabaseMySql.insert(nomeDB , "profile", user, "corrupted", Orario.getDataOra(), 0, 0, 0, "profreserv");
+				}
 				System.out.println("Errore 403: Informazione per il DB: "+ nomeDB + " non pubblica: " + tabella + " dell' user " + user);
 				OutputTxt.writeLog("Errore 403: Informazione per il DB: "+ nomeDB + " non pubblica: " + tabella + " dell' user " + user);
 				return false;
