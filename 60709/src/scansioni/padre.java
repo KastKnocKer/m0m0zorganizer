@@ -31,11 +31,10 @@ public class padre {
 		
 		new popularReader(nomeDB);
 		// Blocca il figlio fino alla fine del popularReader
-		DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".ethernet set flag ='true' where rete='figlio'");
-		System.out.println(nomeDB);
-		System.out.println("/home/m0m0z/Scrivania/tesina_exec/scanPopular.sh padre " + nomeDB);
+		//DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".ethernet set flag ='true' where rete='figlio'");
+		System.out.println("Nome del database per la scansione " + nomeDB);
 		pb = new ProcessBuilder ("/home/m0m0z/Scrivania/tesina_exec/scanPopular.sh" , "padre", nomeDB);
-		while (DatabaseMySql.getCount(nomeDB, "popToCheck") != 0) {
+		/*while (DatabaseMySql.getCount(nomeDB, "popToCheck") != 0) {
 			try {			
 				OutputTxt.writeLog("Padre: processo scanPopular per il DB: " + nomeDB + ".");
 				scanner = pb.start ();
@@ -81,9 +80,9 @@ public class padre {
 			}  
 		}   
 		DatabaseMySql.copyCorrupted(nomeDB);
-		
+		*/
 		pb.command ("/home/m0m0z/Scrivania/tesina_exec/scanCorrupted.sh" , "padre", nomeDB); 
-		while (DatabaseMySql.getCount(nomeDB, "corruptedList") != 0) { // && getCount(nomeDB, "profile*ACTIVE*) < CAP)
+	//	while (DatabaseMySql.getCount(nomeDB, "corruptedList") != 0) { // && getCount(nomeDB, "profile*ACTIVE*) < CAP)
 			try {
 				OutputTxt.writeLog("Padre: processo scanCorrupted per il DB: " + nomeDB + ".");
 				scanner = pb.start();
@@ -104,9 +103,9 @@ public class padre {
 			} catch (IOException e) {
 				OutputTxt.writeError("Errore IO nel try scanUser del padreExec.");
 			}  
-		}  
-		new Orario();
-		DatabaseMySql.copyAttivi(nomeDB);
+	//	}  
+	//	new Orario();
+	//	DatabaseMySql.copyAttivi(nomeDB);
 		
 		// flag per dire al figlio se partire o no
 	}
