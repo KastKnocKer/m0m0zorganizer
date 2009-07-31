@@ -54,10 +54,13 @@ public class scanActivity {
 						OutputTxt.writeError("ERRORE 500 per users" + userTemp);
 					}
 				}
-				if (++temp == 25) {
-					System.out.println("Esco per max giri raggiunti per il processo");
-					return;
-				}
+			//	if (++temp == 25) {
+					System.out.println("RICHIESTA ACTIVITY NUMERO: " + temp);
+					System.out.println("RICHIESTA ACTIVITY NUMERO: " + temp);
+					System.out.println("RICHIESTA ACTIVITY NUMERO: " + temp);
+					System.out.println("RICHIESTA ACTIVITY NUMERO: " + temp);
+					//return;
+			//	}
 			}
 		} catch (NullPointerException e) {System.out.println("Lista activeList terminata.");}
 	}
