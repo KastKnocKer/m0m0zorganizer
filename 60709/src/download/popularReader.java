@@ -19,6 +19,8 @@ public class popularReader {
 	}	
 	    
 	public static void popularReaderTool (String nomeDB, String time, int pag) {
+		if (DatabaseMySql.getCount(nomeDB, "popular") != 0)
+			return;
 		int count = 0;
 		int tmp = 24 * (pag - 1);
 		System.out.println("\n popularReader reader del " + time);
