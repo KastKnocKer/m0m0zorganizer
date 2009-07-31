@@ -91,7 +91,8 @@ public class padre {
 		"lista='user");
 		
 		if(DatabaseMySql.contiene("root", "scansioni", "nomeDB", nomeDB, "lista", "corrupted", "status", "false")) {
-			DatabaseMySql.copyCorrupted(nomeDB);
+			if (DatabaseMySql.getCount(nomeDB, "corruptedList") == 0)
+				DatabaseMySql.copyCorrupted(nomeDB);
 			pb.command ("/home/m0m0z/Scrivania/tesina_exec/scanCorrupted.sh" , "padre", nomeDB); 
 			while (DatabaseMySql.getCount(nomeDB, "corruptedList") != 0) { // && getCount(nomeDB, "profile*ACTIVE*) < CAP)
 				try {
@@ -125,8 +126,11 @@ public class padre {
 		if(DatabaseMySql.contiene("root", "scansioni", "nomeDB", nomeDB, "lista", "veloce" + scansioneN, "status", "true")) 
 			return;
 		// Copia degli utenti attivi per avere una lista per le scansioni veloci
-		new Orario();
-		DatabaseMySql.copyAttivi(nomeDB);
+		if (DatabaseMySql.getCount(nomeDB, "activeList") == 0) {
+			new Orario();
+			DatabaseMySql.copyAttivi(nomeDB);
+		}
+		
 		key = new String[6];
 		key[0] = "AI39si4fzIi01PLvZIYjyHDVpyEKyvUHJAUvG4N9US4g1SYHmmcojgJ-joGo4q3ajF6eLPom3lmUoFw7IpYStDWUoOm29jadMA";
 		key[1] = "AI39si7e_IYXZqXB764Zgqll4sJlxizsHT02LAx1yo6CHG-8eaayATP-OGG330hhLj1HUHmjzwU62X7s8WHSe8JpiqpfrfGoGw";
