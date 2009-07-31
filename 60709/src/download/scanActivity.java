@@ -43,7 +43,7 @@ public class scanActivity {
 				}
 				else  {
 					if (n == 1) {
-						DatabaseMySql.insert(nomeDB, "corrupted" + scansioneN, users[i][1], data);
+						DatabaseMySql.insert(nomeDB, "corrupted" + scansioneN, users[0][1], data);
 					}
 					else {
 						for (i = 0; i < n; i++) 
@@ -55,7 +55,7 @@ public class scanActivity {
 					}
 				}
 			//	if (++temp == 25) {
-					System.out.println("RICHIESTA ACTIVITY NUMERO: " + temp);
+					System.out.println("RICHIESTA ACTIVITY NUMERO: " + ++temp);
 					System.out.println("RICHIESTA ACTIVITY NUMERO: " + temp);
 					System.out.println("RICHIESTA ACTIVITY NUMERO: " + temp);
 					System.out.println("RICHIESTA ACTIVITY NUMERO: " + temp);
