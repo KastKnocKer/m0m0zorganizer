@@ -164,7 +164,7 @@ public class DatabaseMySql {
 	}	public static String[] extractCorrupted (String nomeDB) {
 		String[] user; 		
 		try {
-			user =  (DatabaseMySql.eseguiQuery("Select * from " + nomeDB + ".corruptedList limit 1")).get(0);
+			user =  (DatabaseMySql.eseguiQuery("Select user, tabella from " + nomeDB + ".corruptedList limit 1")).get(0);
 			DatabaseMySql.delete (nomeDB, "corruptedList", "user", user[0], "tabella", user[1]);
 		} catch (ArrayIndexOutOfBoundsException e) {
 			OutputTxt.writeException(e.getLocalizedMessage());
@@ -244,14 +244,28 @@ public class DatabaseMySql {
 		}
 	}
 	
+	public static boolean contiene (String nomeDB, String lista, String colonna1, String id1, String colonna2, String id2, String colonna3, String id3 ) {
+		try {
+			(db.eseguiQuery("select * from " + nomeDB + "." + lista + " where " + colonna1 + "='" + id1 +
+					"' and " + colonna2 + "='" + id2 + "' and " + colonna3 + "='" + id3 + "'")).get(0);
+			return true;
+		} catch (ArrayIndexOutOfBoundsException e) {
+			return false;
+		}
+	}
+	
 	public static void copyAttivi (String nomeDB) {
 		Vector<String[]> v = null;
 		temp = new String[1];
 		v = DatabaseMySql.eseguiQuery("Select user,dataScan from " + nomeDB + ".profile where status='active' or status ='corrupted'");
 		for (int i = 0; i < v.size(); i++) {
 			temp[0] = v.get(i)[1];
+			if (temp[0].equals("corrupted")) {
+				continue;
+			}
+				
 			temp[0] = temp[0].substring(0, 13);
-			if (temp[0].endsWith("00")) {
+			 if (temp[0].endsWith("00")) {
 				temp[0] = temp[0].substring(0, temp[0].indexOf("T") + 1);
 				temp[0] = temp[0] + "01:00:01";
 				
@@ -277,8 +291,10 @@ public class DatabaseMySql {
 	public static void insert500error(String nomeDB, String tabella, String user) {
 		DatabaseMySql.delete(nomeDB, "toCheck", "user", user);
 		DatabaseMySql.insert(nomeDB, "infoCorrupted", user, tabella, "error500+");
-		if(tabella.equals("profile"))
-			DatabaseMySql.insert(nomeDB , "profile", user, "corrupted", "corrupted", 0, 0, 0, "profile");
+		if(tabella.equals("profile")) {
+			new Orario();
+			DatabaseMySql.insert(nomeDB , "profile", user, "corrupted", Orario.getDataOra(), 0, 0, 0, "profile");
+		}
 		else
 		DatabaseMySql.eseguiAggiornamento("Update " + nomeDB + ".profile set status='corrupted' where user='" + user + "'");
 		System.out.println("InsertError500+ della tabella dei " + tabella + " dell'utente " + user);
