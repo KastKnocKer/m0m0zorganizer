@@ -210,7 +210,7 @@ public class urlReader  {
 				DatabaseMySql.eseguiAggiornamento("Update " + nomeDB + ".profile set status='corrupted' where user='" + user + "'");
 				System.out.println("Errore 403: Informazione per il DB: "+ nomeDB + " non pubblica: " + tabella + " dell' user " + user);
 				OutputTxt.writeLog("Errore 403: Informazione per il DB: "+ nomeDB + " non pubblica: " + tabella + " dell' user " + user);
-				return true;
+				return false;
 			}
 			else if (msg.contains("many")) {
 				API.notifyApiFlood(nomeDB, tabella, user);
@@ -224,7 +224,7 @@ public class urlReader  {
 			else if (msg.contains("Bad Request")) {
 				OutputTxt.writeError("Errore per il DB: "+ nomeDB + " bad request all'url: " + url);
 				System.out.println("Errore bad request all'url: " + url);
-				return true;
+				return false;
 			}	
 		} catch (IOException e) { 
 			e.printStackTrace();
