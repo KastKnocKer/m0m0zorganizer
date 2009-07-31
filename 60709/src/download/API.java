@@ -55,6 +55,7 @@ import java.net.URL;
         	urlReader.getErrorCode(nomeDB, "profile", metafeedUrl, user);
         	return false;
         } catch(IOException e) { 
+        	urlReader.getErrorCode(nomeDB, "profile", metafeedUrl, user);
     		e.printStackTrace();
             OutputTxt.writeException(e.getLocalizedMessage());
             OutputTxt.writeException("Errore nel getUser dell'utente: " + user);
