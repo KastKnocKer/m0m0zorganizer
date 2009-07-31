@@ -140,12 +140,12 @@ public class urlReader  {
     		System.out.println("Pausa per il DB: " + nomeDB + " di " + sec + " secondi sull'utente " + user);
     		DatabaseMySql.delete(nomeDB, "profile", "user", user);
     		DatabaseMySql.delete(nomeDB, "toCheck", "user", user);
-    		if (DatabaseMySql.contiene(nomeDB, "popular", "user", user))
-    			tot = DatabaseMySql.getMinPriority(nomeDB) + 1;
-    		else {
+    		//if (DatabaseMySql.contiene(nomeDB, "popular", "user", user))
+    		//	tot = DatabaseMySql.getMinPriority(nomeDB) + 1;
+    		//else {
     			tot = DatabaseMySql.getMinPriority(nomeDB);
     			tot = tot + ((-tot) / 10) + 1;
-    		}
+    		//	}
     		System.out.println("Priorità selezionata per l'utente " + user + ": " + tot);
     		DatabaseMySql.inserToCheck(nomeDB, user, tot);
     		Thread.currentThread();
