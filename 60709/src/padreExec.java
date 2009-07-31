@@ -12,7 +12,11 @@ public class padreExec {
 		DatabaseMySql.connetti();	// Connessione al database
 		OutputTxt.writeLog("Inizio scansione");
 		String nomeDB;
-		nomeDB = "scansione";
+		if (args[0] == null) {
+			System.out.println("Inserire il nome del db per la scansione.");
+			System.exit(0);
+		}
+		nomeDB = args[0];
 		
 		new createDatabase(nomeDB);		
 		padre.scansioneCompleta(nomeDB);
