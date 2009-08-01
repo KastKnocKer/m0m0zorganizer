@@ -4,117 +4,87 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 public class Orario extends GregorianCalendar {
-
+	
 	public Orario () {
 		super();
 		Orologio = this;
 	}
-
-	public static String getOra () {
-		ora = getOre() + ":" + getMinuti() + ":" + getSecondi();
-		return ora;
+	
+	public static String getDataOra() {
+		return getDataOra(0,0);
 	}
 	
-	public static String getData () {
-		data = (Orologio.get(Calendar.YEAR)) + "-" + getMeseMod(0) + "-" + getGiornoMod(0);
-		return data;
+	public static String getDataOra(int giorno) {
+		return getDataOra(giorno,0);
 	}
 	
-	public static String getData (int giorno) {
-		data = (Orologio.get(Calendar.YEAR)) + "-" + getMeseMod(0) + "-" + getGiornoMod(giorno);
-		return data;
-	}
-	
-	public static String getSecondi () {
-		data = Orologio.get(Calendar.SECOND) + "";
-		if (Orologio.get(Calendar.SECOND) < 10)
+	public static String getDataOra(int giorno, int minuto) {
+		riporto = 0;
+		// SECONDI
+		input = Orologio.get(Calendar.SECOND);
+		data = input + "";
+		if (input < 10)
 			data = "0" + data;
-		return data;
-	}
-	
-	public static String getMinuti () {
-		data = Orologio.get(Calendar.MINUTE) + "";
-		if (Orologio.get(Calendar.MINUTE) < 10)
+		// MINUTI
+		input = Orologio.get(Calendar.MINUTE) + minuto;
+		if (input > 59) {
+			riporto = 1;
+			input = 0;
+		}
+		data = input + ":" + data;
+		if (input < 10)
 			data = "0" + data;
-		return data;
-	}	
-	
-	public static String getOre () {
+		// ORE
 		if (Orologio.get(Calendar.AM_PM) == 0) {
-			data = Orologio.get(Calendar.HOUR) + "";
-			if (Orologio.get(Calendar.HOUR) < 10)
+			input = Orologio.get(Calendar.HOUR) + riporto;
+			data = "T" + input + ":" + data;
+			riporto = 0;
+			if (input < 10)
 				data = "0" + data;
 		}
-		else 
-			data = (Orologio.get(Calendar.HOUR) + 12) + "";
-		return data;
-	}
-	
-	public static String getGiornoMod (int mod) {
-		if (mod != 0) {
-			if((Orologio.get(Calendar.DATE) - mod) < 0)
-				data = "01";
-			else {
-				data = (Orologio.get(Calendar.DATE) - mod) + "";
-				if (Orologio.get(Calendar.DATE) -mod < 10)			
-					data = "0" + data;
-			}
-		}				
 		else {
-			data = (Orologio.get(Calendar.DATE) - mod) + "";
-			if (Orologio.get(Calendar.DATE) < 10)			
-				data = "0" + data;
-		}			
-		return data;
-	}
-	public static String getMeseMod (int mod) {
-		if (mod != 0) {
-			if(Orologio.get(Calendar.MONTH) - ++mod == 0)
-				data = "12";
-			else if (Orologio.get(Calendar.MONTH) - mod == -1)
-				data = "11";
-			else {
-				data = (Orologio.get(Calendar.MONTH) - mod) + "";
-				if (Orologio.get(Calendar.MONTH) - mod < 10)			
-					data = "0" + data;
+			input = Orologio.get(Calendar.HOUR) + 12 + riporto;
+			riporto = 0;
+			if (input > 23) {
+				input = 0;
+				riporto = 1;
 			}
-		}	
-		else {  // CONTROLLARE SOLO SE IL PORTATILE SBAGLIA SOLO IL PORTATILE 
-			data = (Orologio.get(Calendar.MONTH) + 1) + ""; // CORRETTO SOTTO GETMESEMODNORMALE()
-			if ((Orologio.get(Calendar.MONTH) + 1) < 10)			
-				data = "0" + data;
-		}			
-		return data;
+			data = "T" +input + ":" + data;
+		}
+		
+		input = Orologio.get(Calendar.DATE) + riporto + giorno;
+		riporto = 0;
+		switch (Orologio.get(Calendar.MONTH) + 1) {
+	        case 1:  	if (input > 31) {riporto = 1; input = 1; }  break;
+	        case 2:  	if (input > 28) {riporto = 1; input = 1; }  break; 
+	        case 3:  	if (input > 31) {riporto = 1; input = 1; }  break; 
+	        case 4:  	if (input > 30) {riporto = 1; input = 1; }  break; 
+	        case 5:  	if (input > 31) {riporto = 1; input = 1; }  break; 
+	        case 6:  	if (input > 30) {riporto = 1; input = 1; }  break; 
+	        case 7:  	if (input > 31) {riporto = 1; input = 1; }  break; 
+	        case 8: 	if (input > 31) {riporto = 1; input = 1; }  break; 
+	        case 9:  	if (input > 30) {riporto = 1; input = 1; }  break; 
+	        case 10: 	if (input > 31) {riporto = 1; input = 1; }  break; 
+	        case 11: 	if (input > 30) {riporto = 1; input = 1; }  break; 
+	        case 12: 	if (input > 31) {riporto = 1; input = 1; }  break; 
+	        default: break;
+		}
+		data = input + data;
+		// MESE
+		input = Orologio.get(Calendar.MONTH) + 1 + riporto;
+		riporto = 0;
+		if (input > 12) {
+			input = 1;
+			riporto = 1;			
+		}
+		data = input + "-" + data;
+		
+		input = Orologio.get(Calendar.YEAR) + riporto;
+		return  input + "-" + data;		
 	}
 	
-	public static String getMeseModNORMALE (int mod) {
-		if (mod != 0) {
-			if(Orologio.get(Calendar.MONTH) - mod < 0)
-				data = "01";
-			else {
-				data = (Orologio.get(Calendar.MONTH) - mod) + "";
-				if (Orologio.get(Calendar.MONTH) - mod < 10)			
-					data = "0" + data;
-			}
-		}	
-		else {  // CONTROLLARE SOLO SE IL PORTATILE SBAGLIA SOLO IL PORTATILE
-			data = Orologio.get(Calendar.MONTH) + "";
-			if (Orologio.get(Calendar.MONTH) < 10)			
-				data = "0" + data;
-		}			
-		return data;
-	}
-	
-	public static String getDataOra () {
-		return  Orario.getData() + "T" + Orario.getOra();
-	}
-	
-	public static String getDataOra (int giorno) {
-		return  Orario.getData(giorno) + "T" + Orario.getOra();
-	}
-	
-	private static String ora;
 	private static String data;
+	private static int input, riporto;
 	private static Orario Orologio;
 	private static final long serialVersionUID = 1L;
 }

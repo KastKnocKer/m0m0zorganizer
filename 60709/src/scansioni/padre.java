@@ -30,6 +30,13 @@ public class padre {
 		ethernet.switchTo(nomeDB, false); 	// Se ho true sono a eth0 up e switho a eth1 e viceversa
 		
 		if(DatabaseMySql.contiene("root", "scansioni", "nomeDB", nomeDB, "lista", "popular", "status", "false")) {
+			new Orario();
+			DatabaseMySql.eseguiAggiornamento("Update root.scansioni set inizio='" + Orario.getDataOra() + 
+					"' where nomeDB='" + nomeDB + "' and lista='popular'");
+			DatabaseMySql.eseguiAggiornamento("Update root.scansioni set fine='" + Orario.getDataOra(7) + 
+					"' where nomeDB='" + nomeDB + "' and lista='popular'");
+			DatabaseMySql.eseguiAggiornamento("Update root.scansioni set inizio='" + Orario.getDataOra(7) + 
+					"' where nomeDB='" + nomeDB + "' and lista='popular'");
 			new popularReader(nomeDB);
 		
 			// Blocca il figlio fino alla fine del popularReader
