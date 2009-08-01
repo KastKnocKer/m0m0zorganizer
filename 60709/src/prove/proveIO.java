@@ -21,7 +21,7 @@ import download.urlReader;
 public class proveIO {
 
 	public static void main(String[] args) {
-		new DatabaseMySql("scansione");		// Definisco il database per tutto il programma
+		new DatabaseMySql("root");		// Definisco il database per tutto il programma
 		DatabaseMySql.connetti();	// Connessione al database
 		new OutputTxt(); 			// Definisco il FileHandler per tutto il programma
 		new Contatore ();
@@ -32,11 +32,11 @@ public class proveIO {
 		YouTubeService myService = new YouTubeService("Tesi");
 		//new scanUser(myService, devKey);
 		//System.out.println(devKey.length());
-		DatabaseMySql.eseguiAggiornamento("insert into scansione.ethernet values (\"padre\", \"true\")");
-		DatabaseMySql.eseguiAggiornamento("update scansione.ethernet set flag='true' where rete='padre'");
-		DatabaseMySql.eseguiAggiornamento("insert into scansione.ethernet values (\"figlio\", \"false\")");
-		//DatabaseMySql.copyAttivi("scansione");
-		new Orario();
-		new scanActivity(myService, devKey, "scansione", 1);
+		DatabaseMySql.eseguiAggiornamento("insert into scansione.ethernet values (\"mamma\", \"true\")");
+	//	DatabaseMySql.eseguiAggiornamento("update scansione.ethernet set flag='true' where rete='padre'");
+	//	DatabaseMySql.eseguiAggiornamento("insert into scansione.ethernet values (\"figlio\", \"false\")");
+	//	DatabaseMySql.copyCorrupted("scansione");
+	//	new Orario();
+	//	new scanCorrupted(myService, devKey, "scansione");
 	}
 }
