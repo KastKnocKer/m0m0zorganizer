@@ -19,10 +19,15 @@ public class createRootDB {
 		DatabaseMySql.eseguiAggiornamento("create table root.scansioni 	(nomeDB Char(10), lista char(10), completed Char(5), inizio Char(19), fine Char(19), PRIMARY KEY(nomeDB, lista))");
 		
 		makeListeScansione("prima");
+		new createDatabase ("prima");
 		makeListeScansione("seconda");
+		new createDatabase ("seconda");
 		makeListeScansione("terza");
+		new createDatabase ("terza");
 		makeListeScansione("quarta");
+		new createDatabase ("quarta");
 		makeListeScansione("quinta");
+		new createDatabase ("quinta");
 		
 		DatabaseMySql.Disconnetti();
 	}
