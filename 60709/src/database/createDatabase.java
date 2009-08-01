@@ -21,8 +21,6 @@ public class createDatabase {
 		DatabaseMySql.eseguiAggiornamento("create table " + nomeDB + ".numVideo			(user Char(20), totale int(10), data char(19),  PRIMARY KEY(user))");		
 		DatabaseMySql.eseguiAggiornamento("create table " + nomeDB + ".numFavorites		(user Char(20), totale int(10), data char(19),  PRIMARY KEY(user))");		
 		DatabaseMySql.eseguiAggiornamento("create table " + nomeDB + ".activity 		(user Char(20), id Char(20), action char(20), updated char(19), PRIMARY KEY(user, id, action))");
-		DatabaseMySql.eseguiAggiornamento("create table " + nomeDB + ".videoUploadedBy 	(user Char(20), id Char(11), PRIMARY KEY(user, id))");
-		DatabaseMySql.eseguiAggiornamento("create table " + nomeDB + ".videoToCheck		(id char(11), PRIMARY KEY (id))");
 		DatabaseMySql.eseguiAggiornamento("create table " + nomeDB + ".corruptedList	(user Char(20), tabella char(15), PRIMARY KEY (user, tabella))");
 		DatabaseMySql.eseguiAggiornamento("create table " + nomeDB + ".activeList 		(priority char(10), user Char(20) UNIQUE, data char(19), PRIMARY KEY(priority, user))");
 		DatabaseMySql.eseguiAggiornamento("create table " + nomeDB + ".active1 			(user Char(20), data char(19), PRIMARY KEY(user))");

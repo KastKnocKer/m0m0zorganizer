@@ -87,7 +87,7 @@ import java.net.URL;
 					DatabaseMySql.insert(nomeDB, "favorites", user , videoEntry.getMediaGroup().getVideoId(), 
 							stringTemp , videoEntry.getPublished().toString().substring(0,19));
 					DatabaseMySql.inserToCheck(nomeDB, stringTemp);
-					DatabaseMySql.insert(nomeDB,"videoUploadedBy", stringTemp, videoEntry.getMediaGroup().getVideoId());
+					DatabaseMySql.insert("root", "videoUploadedBy", stringTemp, videoEntry.getMediaGroup().getVideoId());
 				}
 				count++;
 			}
@@ -221,17 +221,17 @@ import java.net.URL;
 				if(entry.getUserEventType() == UserEventEntry.Type.VIDEO_UPLOADED) {
 					DatabaseMySql.insert(nomeDB, "activity", stringTemp, entry.getVideoId(), "uploaded", 
 							entry.getUpdated().toString().substring(0, 19));
-					DatabaseMySql.insert(nomeDB, "videoUploadedBy" , stringTemp, entry.getVideoId()); 
+					DatabaseMySql.insert("root", "videoUploadedBy" , stringTemp, entry.getVideoId()); 
 			    }
 			    else if(entry.getUserEventType() == UserEventEntry.Type.VIDEO_RATED) {
 			    	DatabaseMySql.insert(nomeDB, "activity", stringTemp, entry.getVideoId(), "rated", 
 			    			entry.getUpdated().toString().substring(0, 19));
-			    	DatabaseMySql.insert(nomeDB, "videoToCheck", entry.getVideoId());
+			    	DatabaseMySql.insert("root", "videoToCheck", entry.getVideoId());
 			    }
 			    else if(entry.getUserEventType() == UserEventEntry.Type.VIDEO_FAVORITED) {
 			    	DatabaseMySql.insert(nomeDB, "activity", stringTemp, entry.getVideoId(), "favorited", 
 			    			entry.getUpdated().toString().substring(0, 19));
-			    	DatabaseMySql.insert(nomeDB, "videoToCheck", entry.getVideoId());
+			    	DatabaseMySql.insert("root", "videoToCheck", entry.getVideoId());
 			    }
 			    else if(entry.getUserEventType() == UserEventEntry.Type.USER_SUBSCRIPTION_ADDED) {
 			    	DatabaseMySql.insert(nomeDB, "activity", stringTemp, entry.getUsername(), "subscribed",
@@ -244,12 +244,12 @@ import java.net.URL;
 			    else if(entry.getUserEventType() == UserEventEntry.Type.VIDEO_COMMENTED) {
 			    	DatabaseMySql.insert(nomeDB, "activity", stringTemp, entry.getVideoId(), "commented",
 			    			entry.getUpdated().toString().substring(0, 19));
-			    	DatabaseMySql.insert(nomeDB, "videoToCheck", entry.getVideoId());
+			    	DatabaseMySql.insert("root", "videoToCheck", entry.getVideoId());
 			    }
 			    else if(entry.getUserEventType() == UserEventEntry.Type.VIDEO_SHARED) {
 			    	DatabaseMySql.insert(nomeDB, "activity", stringTemp, entry.getVideoId(), "shared", 
 			    			entry.getUpdated().toString().substring(0, 19));
-			    	DatabaseMySql.insert(nomeDB, "videoToCheck", entry.getVideoId());
+			    	DatabaseMySql.insert("root", "videoToCheck", entry.getVideoId());
 			    }
 				count++;
 			  }
@@ -312,17 +312,17 @@ import java.net.URL;
 				if(entry.getUserEventType() == UserEventEntry.Type.VIDEO_UPLOADED) {
 					DatabaseMySql.insert(nomeDB, "activity" + N, stringTemp, entry.getVideoId(), "uploaded", 
 							entry.getUpdated().toString().substring(0, 19));
-					DatabaseMySql.insert(nomeDB, "videoUploadedBy" , stringTemp, entry.getVideoId());
+					DatabaseMySql.insert("root", "videoUploadedBy" , stringTemp, entry.getVideoId());
 			    }
 			    else if(entry.getUserEventType() == UserEventEntry.Type.VIDEO_RATED) {
 			    	DatabaseMySql.insert(nomeDB, "activity" + N, stringTemp, entry.getVideoId(), "rated", 
 			    			entry.getUpdated().toString().substring(0, 19));
-			    	DatabaseMySql.insert(nomeDB, "videoToCheck", entry.getVideoId());
+			    	DatabaseMySql.insert("root", "videoToCheck", entry.getVideoId());
 			    }
 			    else if(entry.getUserEventType() == UserEventEntry.Type.VIDEO_FAVORITED) {
 			    	DatabaseMySql.insert(nomeDB, "activity" + N, stringTemp, entry.getVideoId(), "favorited", 
 			    			entry.getUpdated().toString().substring(0, 19));
-			    	DatabaseMySql.insert(nomeDB, "videoToCheck", entry.getVideoId());
+			    	DatabaseMySql.insert("root", "videoToCheck", entry.getVideoId());
 			    }
 			    else if(entry.getUserEventType() == UserEventEntry.Type.USER_SUBSCRIPTION_ADDED) {
 			    	DatabaseMySql.insert(nomeDB, "activity" + N, stringTemp, entry.getUsername(), "subscribed",
@@ -335,12 +335,12 @@ import java.net.URL;
 			    else if(entry.getUserEventType() == UserEventEntry.Type.VIDEO_COMMENTED) {
 			    	DatabaseMySql.insert(nomeDB, "activity" + N, stringTemp, entry.getVideoId(), "commented",
 			    			entry.getUpdated().toString().substring(0, 19));
-			    	DatabaseMySql.insert(nomeDB, "videoToCheck", entry.getVideoId());
+			    	DatabaseMySql.insert("root", "videoToCheck", entry.getVideoId());
 			    }
 			    else if(entry.getUserEventType() == UserEventEntry.Type.VIDEO_SHARED) {
 			    	DatabaseMySql.insert(nomeDB, "activity" + N, stringTemp, entry.getVideoId(), "shared", 
 			    			entry.getUpdated().toString().substring(0, 19));
-			    	DatabaseMySql.insert(nomeDB, "videoToCheck", entry.getVideoId());
+			    	DatabaseMySql.insert("root", "videoToCheck", entry.getVideoId());
 			    }
 			  }
 			System.out.println("Activity " + N + " dell'user " + user + " scaricati fino al num: " + count + ".");
