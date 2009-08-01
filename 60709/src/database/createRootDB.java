@@ -16,7 +16,7 @@ public class createRootDB {
 		DatabaseMySql.eseguiAggiornamento("Drop database quinta");
 				
 		DatabaseMySql.eseguiAggiornamento("create database root");				
-		DatabaseMySql.eseguiAggiornamento("create table root.scansioni (nomeDB Char(10), lista char(10), status Char(5), PRIMARY KEY(nomeDB, lista))");
+		DatabaseMySql.eseguiAggiornamento("create table root.scansioni 	(nomeDB Char(10), lista char(10), status Char(5), inizio Char(19), fine Char(19), PRIMARY KEY(nomeDB, lista))");
 		
 		makeListeScansione("prima");
 		makeListeScansione("seconda");
@@ -28,15 +28,15 @@ public class createRootDB {
 	}
 	
 	public static void makeListeScansione (String database) {
-		DatabaseMySql.insert("root", "scansioni", database, "popular", 	 "false");
-		DatabaseMySql.insert("root", "scansioni", database, "user", 	 "false");
-		DatabaseMySql.insert("root", "scansioni", database, "corrupted", "false");
-		DatabaseMySql.insert("root", "scansioni", database, "veloce1",   "false");
-		DatabaseMySql.insert("root", "scansioni", database, "veloce2",   "false");
-		DatabaseMySql.insert("root", "scansioni", database, "veloce3",   "false");
-		DatabaseMySql.insert("root", "scansioni", database, "veloce4",   "false");
-		DatabaseMySql.insert("root", "scansioni", database, "veloce5",   "false");
-		DatabaseMySql.insert("root", "scansioni", database, "veloce6",   "false");
-		DatabaseMySql.insert("root", "scansioni", database, "veloce7",   "false");		
+		DatabaseMySql.insert("root", "scansioni", database, "popular", 	 "false", "toDefine", "toDefine");
+		DatabaseMySql.insert("root", "scansioni", database, "user", 	 "false", "toDefine", "toDefine");
+		DatabaseMySql.insert("root", "scansioni", database, "corrupted", "false", "toDefine", "toDefine");
+		DatabaseMySql.insert("root", "scansioni", database, "veloce1",   "false", "toDefine", "toDefine");
+		DatabaseMySql.insert("root", "scansioni", database, "veloce2",   "false", "toDefine", "toDefine");
+		DatabaseMySql.insert("root", "scansioni", database, "veloce3",   "false", "toDefine", "toDefine");
+		DatabaseMySql.insert("root", "scansioni", database, "veloce4",   "false", "toDefine", "toDefine");
+		DatabaseMySql.insert("root", "scansioni", database, "veloce5",   "false", "toDefine", "toDefine");
+		DatabaseMySql.insert("root", "scansioni", database, "veloce6",   "false", "toDefine", "toDefine");
+		DatabaseMySql.insert("root", "scansioni", database, "veloce7",   "false", "toDefine", "toDefine");		
 	}
 }
