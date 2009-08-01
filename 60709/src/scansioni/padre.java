@@ -31,6 +31,8 @@ public class padre {
 		flagEth = true; 		    // true eth0 up eth1 down     false eth0 down eth1 up
 		ethernet.switchTo(false); 	// Se ho true sono a eth0 up e switho a eth1 e viceversa
 		DatabaseMySql.eseguiAggiornamento("Update root.ethernet set flag='true' where rete='figlio'");
+		pb = new ProcessBuilder ("java", "crawlerPopular" , "padre", nomeDB);
+		
 		if(DatabaseMySql.contiene("root", "scansioni", "nomeDB", nomeDB, "lista", "popular", "completed", "false")) {
 			DatabaseMySql.eseguiAggiornamento("Update root.scansioni set inizio='" + Orario.getDataOra()  + "' where nomeDB='" + nomeDB + "' and lista='popular'");
 			DatabaseMySql.eseguiAggiornamento("Update root.scansioni set fine='"   + Orario.getDataOra()  + "' where nomeDB='" + nomeDB + "' and lista='popular'");
@@ -38,7 +40,6 @@ public class padre {
 			
 			if (DatabaseMySql.getCount(nomeDB, "popular") == 0)
 				new popularReader(nomeDB);		
-			pb = new ProcessBuilder ("java", "crawlerPopular" , "padre", nomeDB);
 			while (DatabaseMySql.getCount(nomeDB, "popToCheck") != 0) {
 				try {			
 					OutputTxt.writeLog("Padre: processo scanPopular per il DB: " + nomeDB + ".");

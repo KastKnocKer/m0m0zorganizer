@@ -5,6 +5,7 @@ import database.DatabaseMySql;
 import database.Orario;
 import database.OutputTxt;
 import download.Contatore;
+import download.ethernet;
 import download.urlReader;
 
 public class figlioExec {
@@ -27,13 +28,13 @@ public class figlioExec {
 			nomeDB = DatabaseMySql.eseguiQuery("Select nomeDB from root.scansioni where completed='false' limit 1").get(0)[0];
 						
 			while (DatabaseMySql.contiene("root", "config", "id", "figlio", "status", "off")) {
-				DatabaseMySql.eseguiAggiornamento("Update root.ethernet set flag='false' where rete='figlio'");
+				ethernet.checkEthernet();
 				System.out.println("In attesa della fine dello scanPopular.");
 				try {Thread.sleep(10000);} catch (InterruptedException e1) {}
 			}
 			
 			if (DatabaseMySql.contiene("root", "config", "id", "figlio", "lista", "user", "status", "on")) {
-				pb = new ProcessBuilder ("java.exe", "crawlerUser" , "figlio", nomeDB); 
+				pb = new ProcessBuilder ("java", "crawlerUser" , "figlio", nomeDB); 
 				while (DatabaseMySql.getCount(nomeDB, "toCheck") != 0 && Orario.getDataOra().compareTo(
 						DatabaseMySql.eseguiQuery("Select fine from root.scansioni where nomeDB='" + 
 								nomeDB + "' and lista='user'").get(0)[0]) < 0) {
@@ -62,6 +63,7 @@ public class figlioExec {
 				if ((videoId = DatabaseMySql.extract("root", "videoToCheck", "id")[0]) != null)
 					urlReader.getVideoUploader(videoId);
 			}
+			ethernet.checkEthernet();
 			System.out.println("Pausa..");
 			try {Thread.sleep(5000);} catch (InterruptedException e) {}
 		}
