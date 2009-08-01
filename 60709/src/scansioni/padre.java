@@ -60,7 +60,7 @@ public class padre {
 			}
 		}
 		DatabaseMySql.eseguiAggiornamento("Update root.scansioni set status='true' where nomeDB='" + nomeDB + "' and " +
-		"lista='popular");
+		"lista='popular'");
 		
 		if(DatabaseMySql.contiene("root", "scansioni", "nomeDB", nomeDB, "lista", "user", "status", "false")) {
 			pb.command ("/home/m0m0z/Scrivania/tesina_exec/scanUser.sh" , "padre", nomeDB); 
@@ -88,7 +88,7 @@ public class padre {
 			} 
 		}
 		DatabaseMySql.eseguiAggiornamento("Update root.scansioni set status='true' where nomeDB='" + nomeDB + "' and " +
-		"lista='user");
+		"lista='user'");
 		
 		if(DatabaseMySql.contiene("root", "scansioni", "nomeDB", nomeDB, "lista", "corrupted", "status", "false")) {
 			if (DatabaseMySql.getCount(nomeDB, "corruptedList") == 0)
@@ -118,7 +118,7 @@ public class padre {
 			}  
 		}
 		DatabaseMySql.eseguiAggiornamento("Update root.scansioni set status='true' where nomeDB='" + nomeDB + "' and " +
-		"lista='corrupted");		
+		"lista='corrupted'");		
 		// flag per dire al figlio se partire o no
 	}
 	
@@ -165,7 +165,7 @@ public class padre {
 			}  
 		}	
 		DatabaseMySql.eseguiAggiornamento("Update root.scansioni set status='true' where nomeDB='" + nomeDB + "' and " +
-		"lista='veloce" + scansioneN);	
+		"lista='veloce" + scansioneN + "'");	
 	}
 	
 	private static ProcessBuilder pb = null;
