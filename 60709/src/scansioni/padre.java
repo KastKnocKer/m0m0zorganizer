@@ -29,7 +29,7 @@ public class padre {
 		DatabaseMySql.eseguiAggiornamento("Update root.config set status='off' where id='figlio'");
 		
 		flagEth = true; 		    // true eth0 up eth1 down     false eth0 down eth1 up
-		ethernet.switchTo(nomeDB, false); 	// Se ho true sono a eth0 up e switho a eth1 e viceversa
+		ethernet.switchTo(false); 	// Se ho true sono a eth0 up e switho a eth1 e viceversa
 		DatabaseMySql.eseguiAggiornamento("Update root.ethernet set flag='true' where rete='figlio'");
 		if(DatabaseMySql.contiene("root", "scansioni", "nomeDB", nomeDB, "lista", "popular", "completed", "false")) {
 			DatabaseMySql.eseguiAggiornamento("Update root.scansioni set inizio='" + Orario.getDataOra()  + "' where nomeDB='" + nomeDB + "' and lista='popular'");
@@ -51,7 +51,7 @@ public class padre {
 					if (++n == 6)
 						n = 0;
 					DatabaseMySql.eseguiAggiornamento("update root.key set devKey='" + key[n] + "' where crawler='padre'");
-					ethernet.switchTo(nomeDB, flagEth);
+					ethernet.switchTo(flagEth);
 					flagEth = !flagEth;
 					OutputTxt.writeLog("Padre: Popular scansionati    totale: " + DatabaseMySql.getCount(nomeDB, "profile"));
 					OutputTxt.writeLog("Padre: Popular scansionati    attivi: " + DatabaseMySql.eseguiQuery("Select count(*) from " + nomeDB + ".profile where status='active'").get(0)[0]);
@@ -85,7 +85,7 @@ public class padre {
 					if (++n == 6) 
 						n = 0;
 					DatabaseMySql.eseguiAggiornamento("update root.key set devKey='" + key[n] + "' where crawler='padre'");
-					ethernet.switchTo(nomeDB, flagEth);
+					ethernet.switchTo(flagEth);
 					flagEth = !flagEth;
 					OutputTxt.writeLog("Padre: User scansionati    totale: " + DatabaseMySql.getCount("" + nomeDB + "", "profile"));
 					OutputTxt.writeLog("Padre: User scansionati    attivi: " + DatabaseMySql.eseguiQuery("Select count(*) from " + nomeDB + ".profile where status='active'").get(0)[0]);
@@ -121,7 +121,7 @@ public class padre {
 					if (++n == 6) 
 						n = 0;
 					DatabaseMySql.eseguiAggiornamento("update root.key set devKey='" + key[n] + "' where crawler='padre'");
-					ethernet.switchTo(nomeDB, flagEth);
+					ethernet.switchTo(flagEth);
 					flagEth = !flagEth;
 					OutputTxt.writeLog("Padre: User corrupted 				    totale: " + DatabaseMySql.getCount("" + nomeDB + "", "profile"));
 					OutputTxt.writeLog("Padre: User corrupted ri-scansionati    attivi: " + DatabaseMySql.eseguiQuery("Select count(*) from " + nomeDB + ".profile where status='active'").get(0)[0]);
@@ -180,7 +180,7 @@ public class padre {
 				if (++n == 6)
 					n = 0;
 				DatabaseMySql.eseguiAggiornamento("update root.key set devKey='" + key[n] + "' where crawler='padre'");
-				ethernet.switchTo(nomeDB, flagEth);
+				ethernet.switchTo(flagEth);
 			    flagEth = !flagEth;
 				OutputTxt.writeLog("Padre: User scansionati nelle actvity    totale: " + DatabaseMySql.getCount("" + nomeDB + "", "profile"));
 				OutputTxt.writeLog("Padre: User scansionati nelle actvity    attivi: " + DatabaseMySql.eseguiQuery("Select count(*) from " + nomeDB + ".profile where status='active'").get(0)[0]);

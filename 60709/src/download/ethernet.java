@@ -12,11 +12,11 @@ public class ethernet {
 	
 	public ethernet () {}
 	
-	public static void switchTo (String nomeDB, boolean flag) {		
+	public static void switchTo (boolean flag) {		
 		try {
 			System.out.println("Avvio switching ethernet..Attendere..");
 			DatabaseMySql.eseguiAggiornamento("update root.ethernet set flag ='false' where rete='padre'");
-			while (DatabaseMySql.contiene(nomeDB, "ethernet", "rete", "figlio", "flag", "true")) { 
+			while (DatabaseMySql.contiene("root", "ethernet", "rete", "figlio", "flag", "true")) { 
 				try {	
 					System.out.println("Attesa segnale dal processo figlio..Attendere..");
 					Thread.sleep(1000);	

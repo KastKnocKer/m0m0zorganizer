@@ -24,10 +24,12 @@ public class figlioExec {
 		DatabaseMySql.eseguiAggiornamento("insert into root.key values (\"figlio\", \"" + key[0] + "\")");
 		
 		while (true) {
-			nomeDB = DatabaseMySql.eseguiQuery("Select nomeDB from root.scansione where completed='false' limit 1").get(0)[0];
+			nomeDB = DatabaseMySql.eseguiQuery("Select nomeDB from root.scansioni where completed='false' limit 1").get(0)[0];
 						
 			while (DatabaseMySql.contiene("root", "config", "id", "figlio", "status", "off")) {
-				try {Thread.sleep(10000); System.out.println("In attesa della fine dello scanPopular.");} catch (InterruptedException e1) {}
+				DatabaseMySql.eseguiAggiornamento("Update root.ethernet set flag='false' where rete='figlio'");
+				System.out.println("In attesa della fine dello scanPopular.");
+				try {Thread.sleep(10000);} catch (InterruptedException e1) {}
 			}
 			
 			if (DatabaseMySql.contiene("root", "config", "id", "figlio", "lista", "user", "status", "on")) {
