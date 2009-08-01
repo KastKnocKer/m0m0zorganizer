@@ -15,7 +15,7 @@ public class createRootDB {
 				
 		DatabaseMySql.eseguiAggiornamento("create database root");				
 		DatabaseMySql.eseguiAggiornamento("create table root.scansioni 	 	 (nomeDB Char(10), lista char(10), completed Char(5), inizio Char(19), fine Char(19), PRIMARY KEY(nomeDB, lista))");
-		DatabaseMySql.eseguiAggiornamento("create table root.config   	 	 (id char(10), lista char(10), status char(10), PRIMARY KEY(crawler))");
+		DatabaseMySql.eseguiAggiornamento("create table root.config   	 	 (id char(10), lista char(10), status char(10), PRIMARY KEY(id))");
 		DatabaseMySql.eseguiAggiornamento("create table root.videoUploadedBy (user Char(20), id Char(11) UNIQUE, PRIMARY KEY(user, id))");
 		DatabaseMySql.eseguiAggiornamento("create table root.videoToCheck	 (id char(11), PRIMARY KEY (id))");
 		DatabaseMySql.eseguiAggiornamento("create table root.key 		 	 (crawler Char(10), devKey char(100), PRIMARY KEY(crawler))");

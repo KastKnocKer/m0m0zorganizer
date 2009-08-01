@@ -21,7 +21,7 @@ import java.net.URL;
 	    try {   
 	    	System.out.println("\nANALISI per il DB: "+ nomeDB + "  del profilo dell' utente " + user + ".");
             metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/users/" + user + "?v=2&key=" + devKey);
-            ethernet.checkEthernet(nomeDB);
+            ethernet.checkEthernet();
             Contatore.incApi();
             UserProfileEntry profileEntry = myService.getEntry(metafeedUrl, 
            			UserProfileEntry.class);
@@ -72,7 +72,7 @@ import java.net.URL;
 		try {
 			metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/users/" + user + "/favorites?&key=" + devKey +
 					"&max-results=50&start-index=" + count );
-			ethernet.checkEthernet(nomeDB);
+			ethernet.checkEthernet();
 			Contatore.incApi();
 			videoFeed = myService.getFeed(metafeedUrl, VideoFeed.class);
 	    	System.out.println("\t\t\t\t\t\t\t\t\t\t\t\tPacchetto arrivato.");
@@ -127,7 +127,7 @@ import java.net.URL;
 		countTemp = false;
 		try {
 			metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/users/" + user + "/uploads?&key=" + devKey);
-			ethernet.checkEthernet(nomeDB);
+			ethernet.checkEthernet();
 			Contatore.incApi();
 			videoFeed = myService.getFeed(metafeedUrl, VideoFeed.class);
 	    	System.out.println("\t\t\t\t\t\t\t\t\t\t\t\tPacchetto arrivato.");
@@ -156,7 +156,7 @@ import java.net.URL;
 		try {
 			metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/users/" + user + "/uploads?&key=" + devKey +
 					"&max-results=50&start-index=" + count);
-			ethernet.checkEthernet(nomeDB);
+			ethernet.checkEthernet();
 			Contatore.incApi();
 			videoFeed = myService.getFeed(metafeedUrl, VideoFeed.class);
 	    	System.out.println("\t\t\t\t\t\t\t\t\t\t\t\tPacchetto arrivato.");
@@ -207,7 +207,7 @@ import java.net.URL;
 		try {
 			metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/events?v=2&max-results=50&start-index=" + count + "&author=" 
 					+ user + "&key=" + devKey);
-			ethernet.checkEthernet(nomeDB);
+			ethernet.checkEthernet();
 			Contatore.incApi();
 			activityFeed = myService.getFeed(metafeedUrl, UserEventFeed.class);
 	    	System.out.println("\t\t\t\t\t\t\t\t\t\t\t\tPacchetto arrivato.");
@@ -300,7 +300,7 @@ import java.net.URL;
 			metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/events?v=2&published-min=" + data + 
 					".000Z&max-results=50&start-index=" + (count + 1) + "&author=" + user + "&key=" + devKey);
 			System.out.println(metafeedUrl);
-			ethernet.checkEthernet(nomeDB);
+			ethernet.checkEthernet();
 			Contatore.incApi();
 			activityFeed = myService.getFeed(metafeedUrl, UserEventFeed.class);
 	    	System.out.println("\t\t\t\t\t\t\t\t\t\t\t\tPacchetto arrivato.");
@@ -394,7 +394,7 @@ import java.net.URL;
 		try {
 			metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/users/" + user + "/subscriptions?key=" + devKey +
 					"&max-results=50&start-index=" + count);
-			ethernet.checkEthernet(nomeDB);
+			ethernet.checkEthernet();
 			Contatore.incApi();
 			feed = myService.getFeed(metafeedUrl, SubscriptionFeed.class);
 	    	System.out.println("\t\t\t\t\t\t\t\t\t\t\t\tPacchetto arrivato.");
@@ -475,7 +475,7 @@ import java.net.URL;
     	System.out.println("ActivityGetErrorCode per il DB: "+ nomeDB + " sui " + tabella  + " dell'utente " + user);
 		HttpURLConnection connection;
 		try {		
-			ethernet.checkEthernet(nomeDB);
+			ethernet.checkEthernet();
 			Contatore.incApi();
 			connection = (HttpURLConnection) url.openConnection();
 			System.out.println((code = connection.getResponseCode()));

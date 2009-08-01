@@ -24,7 +24,7 @@ public class urlReader  {
     	}
     	try {
 	    	metafeedUrl = new URL("http://www.youtube.com/profile?user=" + user + "&view=" + tabella + "&start=" + count);
-	    	ethernet.checkEthernet(nomeDB);
+	    	ethernet.checkEthernet();
 	    	Contatore.incUrl();
 	    	in = new BufferedReader(new InputStreamReader(metafeedUrl.openStream()));
 	    	System.out.println("\t\t\t\t\t\t\t\t\t\t\t\tPacchetto arrivato.");
@@ -161,6 +161,8 @@ public class urlReader  {
     public static void getVideoUploader (String videoId) {
 		try {
 			metafeedUrl = new URL ("http://gdata.youtube.com/feeds/api/videos/" + videoId);
+			ethernet.checkEthernet();
+			Contatore.incApi();
 			in = new BufferedReader(new InputStreamReader(metafeedUrl.openStream()));
 	    	System.out.println("\t\t\t\t\t\t\t\t\t\t\t\tPacchetto arrivato.");
 			while ((inputLine = in.readLine()) != null) {
@@ -193,7 +195,7 @@ public class urlReader  {
     	System.out.println("GetErrorCode per il DB: "+ nomeDB + " sui " + tabella  + " dell'utente " + user);
 		HttpURLConnection connection;
 		try {		
-			ethernet.checkEthernet(nomeDB);
+			ethernet.checkEthernet();
 			Contatore.incApi();
 			connection = (HttpURLConnection) url.openConnection();
 			System.out.println((code = connection.getResponseCode()));

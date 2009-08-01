@@ -51,13 +51,13 @@ public class ethernet {
 	}
 			
 	
-	public static void checkEthernet (String nomeDB) {
+	public static void checkEthernet () {
 		try {
-			if (DatabaseMySql.contiene(nomeDB, "ethernet", "rete", "padre", "flag", "true"))
+			if (DatabaseMySql.contiene("root", "ethernet", "rete", "padre", "flag", "true"))
 				return;
 			else {
 				DatabaseMySql.eseguiAggiornamento("update root.ethernet set flag ='false' where rete='figlio'");
-				while (DatabaseMySql.contiene(nomeDB, "ethernet", "rete", "padre", "flag", "false")) {
+				while (DatabaseMySql.contiene("root", "ethernet", "rete", "padre", "flag", "false")) {
 					try {
 						System.out.println("Ethernet switching..Attendere..");
 						Thread.sleep(1000);	
@@ -71,7 +71,7 @@ public class ethernet {
 				OutputTxt.writeError("Errore di interrupt nel timer del checkEthernet");
 			}
 			System.out.println("Possibile switching ethernet..Controllo in corso..");
-			checkEthernet(nomeDB);			
+			checkEthernet();			
 		}
 	}
 		
