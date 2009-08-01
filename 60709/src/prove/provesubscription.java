@@ -10,7 +10,7 @@ public class provesubscription {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-    	System.out.println(Orario.getDataOra(31, 10, 59));
+    	System.out.println(Orario.getDataOra(31, 22, 0));
 	}
 
 }

@@ -22,5 +22,10 @@ public class padreExec {
 		padre.scansioneCompleta(nomeDB);
 		padre.scansioneVeloce(1, nomeDB, Orario.getDataOra());
 		padre.scansioneVeloce(2, nomeDB, Orario.getDataOra());
+		padre.scansioneVeloce(3, nomeDB, Orario.getDataOra());
+		padre.scansioneVeloce(4, nomeDB, Orario.getDataOra());
+		padre.scansioneVeloce(5, nomeDB, Orario.getDataOra());
+		padre.scansioneVeloce(6, nomeDB, Orario.getDataOra());
+		padre.scansioneVeloce(7, nomeDB, Orario.getDataOra());
 	}
 }
