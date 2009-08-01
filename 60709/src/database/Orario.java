@@ -105,7 +105,7 @@ public class Orario extends GregorianCalendar {
 			data = "0" + data;
 		input = Orologio.get(Calendar.YEAR) + riporto;
 		return  input + "-" + data;		
-	}
+	} 
 	
 	private static String data;
 	private static int input, riporto;
