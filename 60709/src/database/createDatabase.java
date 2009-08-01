@@ -3,12 +3,9 @@ package database;
 public class createDatabase {
 	
 	public createDatabase (String nomeDB) {
-		new DatabaseMySql("root");
+		new DatabaseMySql("connessione");
 		DatabaseMySql.connetti();
 		DatabaseMySql.eseguiAggiornamento("create database " + nomeDB);
-		DatabaseMySql.Disconnetti();
-		new DatabaseMySql(nomeDB);
-		DatabaseMySql.connetti();
 		currentDB = nomeDB;
 		DatabaseMySql.eseguiAggiornamento("create table " + nomeDB + ".key 				(crawler Char(10), devKey char(100), PRIMARY KEY(crawler))");
 		DatabaseMySql.eseguiAggiornamento("create table " + nomeDB + ".ethernet 		(rete Char(6), flag char(5), PRIMARY KEY (rete))");
@@ -56,6 +53,7 @@ public class createDatabase {
 		DatabaseMySql.eseguiAggiornamento("create table " + nomeDB + ".inactive7		(user Char(20), data char(19), PRIMARY KEY(user))");
 		DatabaseMySql.eseguiAggiornamento("create table " + nomeDB + ".corrupted7 		(user Char(20), data char(19), PRIMARY KEY(user))");
 		DatabaseMySql.eseguiAggiornamento("create table " + nomeDB + ".activity7 		(user Char(20), id Char(20), action char(20), updated char(19), PRIMARY KEY(user, id, action))");
+		DatabaseMySql.Disconnetti();
 	}
 	
 	public static String getCurrentDB () {
