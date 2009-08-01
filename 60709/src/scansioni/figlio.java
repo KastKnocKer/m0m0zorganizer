@@ -25,7 +25,7 @@ public class figlio  extends Thread {
 		
 		DatabaseMySql.eseguiAggiornamento("insert into " + nomeDB + ".key values (\"figlio\", \"" + key[0] + "\")");
 		
-		while (DatabaseMySql.eseguiQuery("Select flag from " + nomeDB + ".ethernet where crawler='figlio'").get(0)[0].equals("false")) {
+		while (DatabaseMySql.contiene(nomeDB, "ethernet", "rete", "figlio", "flag", "false")) {
 			try {Thread.sleep(5000); System.out.println("In attesa della fine dello scanPopular.");} catch (InterruptedException e1) {}
 			}
 		
