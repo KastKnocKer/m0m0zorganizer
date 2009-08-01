@@ -51,14 +51,14 @@ public class Orario extends GregorianCalendar {
 		if (Orologio.get(Calendar.AM_PM) == 0) {
 			input = Orologio.get(Calendar.HOUR) + riporto + ora;
 			riporto = 0;
-			if (input < 10) {
-				data = "T0" + input + ":" + data;
-			}
 			if (input > 23) {
 				input = input % 24;
 				riporto = 1;
-				data = "T" + input + ":" + data;
 			}
+			if (input < 10)
+				data = "T0" + input + ":" + data;
+			else 
+				data = "T" + input + ":" + data;
 		}
 		else {
 			input = Orologio.get(Calendar.HOUR) + 12 + riporto + ora;
@@ -67,7 +67,10 @@ public class Orario extends GregorianCalendar {
 				input = input % 24;
 				riporto = 1;
 			}
-			data = "T" +input + ":" + data;
+			if (input < 10)
+				data = "T0" + input + ":" + data;
+			else 
+				data = "T" + input + ":" + data;
 		}
 		
 		input = Orologio.get(Calendar.DATE) + riporto + giorno;
@@ -88,6 +91,8 @@ public class Orario extends GregorianCalendar {
 	        default: break;
 		}
 		data = input + data;
+		if (input < 10)
+			data = "0" + data;
 		// MESE
 		input = Orologio.get(Calendar.MONTH) + 1 + riporto;
 		riporto = 0;
@@ -96,7 +101,8 @@ public class Orario extends GregorianCalendar {
 			riporto = 1;			
 		}
 		data = input + "-" + data;
-		
+		if (input < 10)
+			data = "0" + data;
 		input = Orologio.get(Calendar.YEAR) + riporto;
 		return  input + "-" + data;		
 	}
