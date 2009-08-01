@@ -16,7 +16,7 @@ public class ethernet {
 		try {
 			System.out.println("Avvio switching ethernet..Attendere..");
 			DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".ethernet set flag ='false' where rete='padre'");
-			while (DatabaseMySql.eseguiQuery("Select flag from " + nomeDB + ".ethernet where rete='figlio'").get(0)[0].contains("true")) { 
+			while (DatabaseMySql.contiene(nomeDB, "ethernet", "rete", "figlio", "flag", "true")) { 
 				try {	
 					System.out.println("Attesa segnale dal processo figlio..Attendere..");
 					Thread.sleep(1000);	
@@ -53,11 +53,11 @@ public class ethernet {
 	
 	public static void checkEthernet (String nomeDB) {
 		try {
-			if (DatabaseMySql.eseguiQuery("Select flag from " + nomeDB + ".ethernet where rete='padre'").get(0)[0].contains("true"))
+			if (DatabaseMySql.contiene(nomeDB, "ethernet", "rete", "padre", "flag", "true"))
 				return;
 			else {
 				DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".ethernet set flag ='false' where rete='figlio'");
-				while (DatabaseMySql.eseguiQuery("Select flag from " + nomeDB + ".ethernet where rete='padre'").get(0)[0].contains("false")) {
+				while (DatabaseMySql.contiene(nomeDB, "ethernet", "rete", "padre", "flag", "false")) {
 					try {
 						System.out.println("Ethernet switching..Attendere..");
 						Thread.sleep(1000);	
