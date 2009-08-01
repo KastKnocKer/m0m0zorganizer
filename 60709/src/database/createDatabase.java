@@ -53,7 +53,6 @@ public class createDatabase {
 		DatabaseMySql.eseguiAggiornamento("create table " + nomeDB + ".inactive7		(user Char(20), data char(19), PRIMARY KEY(user))");
 		DatabaseMySql.eseguiAggiornamento("create table " + nomeDB + ".corrupted7 		(user Char(20), data char(19), PRIMARY KEY(user))");
 		DatabaseMySql.eseguiAggiornamento("create table " + nomeDB + ".activity7 		(user Char(20), id Char(20), action char(20), updated char(19), PRIMARY KEY(user, id, action))");
-		DatabaseMySql.Disconnetti();
 	}
 	
 	public static String getCurrentDB () {
