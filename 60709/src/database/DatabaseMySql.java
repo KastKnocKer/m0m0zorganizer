@@ -292,7 +292,6 @@ public class DatabaseMySql {
 		DatabaseMySql.delete(nomeDB, "toCheck", "user", user);
 		DatabaseMySql.insert(nomeDB, "infoCorrupted", user, tabella, "error500+");
 		if(tabella.equals("profile")) {
-			new Orario();
 			DatabaseMySql.insert(nomeDB , "profile", user, "corrupted", Orario.getDataOra(), 0, 0, 0, "profile");
 		}
 		else

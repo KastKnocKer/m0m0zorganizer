@@ -20,7 +20,6 @@ public class padreExec {
 		
 		new createDatabase(nomeDB);		
 		padre.scansioneCompleta(nomeDB);
-		new Orario();
 		padre.scansioneVeloce(1, nomeDB, Orario.getDataOra());
 		padre.scansioneVeloce(2, nomeDB, Orario.getDataOra());
 	}

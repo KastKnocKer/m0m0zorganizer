@@ -19,6 +19,7 @@ public class Orario extends GregorianCalendar {
 	}
 	
 	public static String getDataOra(int giorno, int minuto) {
+		new Orario();
 		riporto = 0;
 		// SECONDI
 		input = Orologio.get(Calendar.SECOND);

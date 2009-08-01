@@ -29,7 +29,6 @@ import java.net.URL;
            	System.out.println("Profilo scaricato per l'utente: " + profileEntry.getUsername());           	
            	userStats = profileEntry.getStatistics();
            	if(userStats != null) {
-           		new Orario();
            		DatabaseMySql.insert(nomeDB, "profile", user, status, Orario.getDataOra(), userStats.getSubscriberCount(),
            				userStats.getViewCount(), userStats.getVideoWatchCount(),
            				userStats.getLastWebAccess().toString().substring(0, 19));
@@ -47,7 +46,6 @@ import java.net.URL;
             OutputTxt.writeException("Errore nel getUser dell'utente: " + user);
             return false;
         } catch(ResourceNotFoundException e){
-        	new Orario();
         	DatabaseMySql.insert(nomeDB , "profile", user, "blocked", Orario.getDataOra(), 0, 0, 0, "block");
         	OutputTxt.writeLog("Errore 404: User not found: " + user);
         	return false;
@@ -80,7 +78,6 @@ import java.net.URL;
 	    	System.out.println("\t\t\t\t\t\t\t\t\t\t\t\tPacchetto arrivato.");
 			if (count == 1 ) {
 				tot = videoFeed.getTotalResults();
-				new Orario();
 				DatabaseMySql.insert(nomeDB, "numFavorites", user, tot , Orario.getDataOra());
 			}
 			for (VideoEntry videoEntry : videoFeed.getEntries() ) {
@@ -135,7 +132,6 @@ import java.net.URL;
 			videoFeed = myService.getFeed(metafeedUrl, VideoFeed.class);
 	    	System.out.println("\t\t\t\t\t\t\t\t\t\t\t\tPacchetto arrivato.");
 			tot = videoFeed.getTotalResults();
-			new Orario();
 			DatabaseMySql.insert(nomeDB, "numVideo", user, tot, Orario.getDataOra());
 		} catch (MalformedURLException e) {
 			e.printStackTrace();

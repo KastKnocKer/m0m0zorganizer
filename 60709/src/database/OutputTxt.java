@@ -42,7 +42,6 @@ public class OutputTxt {
 	public static void writeLog (String check) {
 		try {			
 			logWriter = new BufferedWriter(new FileWriter("./Log", true));
-			new Orario();
 			//System.out.println(Orario.getDataOra() + ": " + check);
 			logWriter.write(Orario.getDataOra() + ": " + check);
 			logWriter.newLine();			
@@ -58,7 +57,6 @@ public class OutputTxt {
 	public static void writeError (String check) {
 		try {			
 			logWriter = new BufferedWriter(new FileWriter("./Error", true));
-			new Orario();
 			System.out.println(Orario.getDataOra() + ": " + check);
 			logWriter.write(Orario.getDataOra() + ": " + check);
 			logWriter.newLine();			
@@ -74,7 +72,6 @@ public class OutputTxt {
 	public static void writeException (String check) {
 		try {			
 			logWriter = new BufferedWriter(new FileWriter("./Exception", true));
-			new Orario();
 			logWriter.write(Orario.getDataOra() + ": " + check);
 			logWriter.newLine();			
 			logWriter.flush();

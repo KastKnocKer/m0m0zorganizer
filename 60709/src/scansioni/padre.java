@@ -30,15 +30,13 @@ public class padre {
 		ethernet.switchTo(nomeDB, false); 	// Se ho true sono a eth0 up e switho a eth1 e viceversa
 		
 		if(DatabaseMySql.contiene("root", "scansioni", "nomeDB", nomeDB, "lista", "popular", "status", "false")) {
-			new Orario();
 			DatabaseMySql.eseguiAggiornamento("Update root.scansioni set inizio='" + Orario.getDataOra() + 
 					"' where nomeDB='" + nomeDB + "' and lista='popular'");
-			DatabaseMySql.eseguiAggiornamento("Update root.scansioni set fine='" + Orario.getDataOra(7) + 
+
+			DatabaseMySql.eseguiAggiornamento("Update root.scansioni set inizio='" + Orario.getDataOra() + 
 					"' where nomeDB='" + nomeDB + "' and lista='popular'");
-			DatabaseMySql.eseguiAggiornamento("Update root.scansioni set inizio='" + Orario.getDataOra(7) + 
-					"' where nomeDB='" + nomeDB + "' and lista='popular'");
-			new popularReader(nomeDB);
-		
+						
+			new popularReader(nomeDB);		
 			// Blocca il figlio fino alla fine del popularReader
 			//DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".ethernet set flag ='true' where rete='figlio'");
 			System.out.println("Nome del database per la scansione " + nomeDB);
@@ -66,9 +64,19 @@ public class padre {
 				}  
 			}
 		}
-		DatabaseMySql.eseguiAggiornamento("Update root.scansioni set status='true' where nomeDB='" + nomeDB + "' and " +
-		"lista='popular'");
 		
+		DatabaseMySql.eseguiAggiornamento("Update root.scansioni set fine='" + Orario.getDataOra() + 
+				"' where nomeDB='" + nomeDB + "' and lista='popular'");
+		
+		
+		DatabaseMySql.eseguiAggiornamento("Update root.scansioni set status='true' where nomeDB='" + nomeDB + "' and " +
+		"lista='popular'");	
+		
+		
+		DatabaseMySql.eseguiAggiornamento("Update root.scansioni set fine='" + Orario.getDataOra(7) + 
+				"' where nomeDB='" + nomeDB + "' and lista='popular'");
+		DatabaseMySql.eseguiAggiornamento("Update root.scansioni set inizio='" + Orario.getDataOra(7,1) + 
+				"' where nomeDB='" + nomeDB + "' and lista='popular'");
 		if(DatabaseMySql.contiene("root", "scansioni", "nomeDB", nomeDB, "lista", "user", "status", "false")) {
 			pb.command ("/home/m0m0z/Scrivania/tesina_exec/scanUser.sh" , "padre", nomeDB); 
 			while (DatabaseMySql.getCount(nomeDB, "toCheck") != 0) { // && getCount(nomeDB, "profile*ACTIVE*) < CAP)
@@ -134,7 +142,6 @@ public class padre {
 			return;
 		// Copia degli utenti attivi per avere una lista per le scansioni veloci
 		if (DatabaseMySql.getCount(nomeDB, "activeList") == 0) {
-			new Orario();
 			DatabaseMySql.copyAttivi(nomeDB);
 		}
 		
