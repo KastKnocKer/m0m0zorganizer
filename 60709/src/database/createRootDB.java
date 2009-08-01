@@ -16,7 +16,7 @@ public class createRootDB {
 		DatabaseMySql.eseguiAggiornamento("Drop database quinta");
 				
 		DatabaseMySql.eseguiAggiornamento("create database root");				
-		DatabaseMySql.eseguiAggiornamento("create table root.scansioni 	(nomeDB Char(10), lista char(10), status Char(5), inizio Char(19), fine Char(19), PRIMARY KEY(nomeDB, lista))");
+		DatabaseMySql.eseguiAggiornamento("create table root.scansioni 	(nomeDB Char(10), lista char(10), completed Char(5), inizio Char(19), fine Char(19), PRIMARY KEY(nomeDB, lista))");
 		
 		makeListeScansione("prima");
 		makeListeScansione("seconda");

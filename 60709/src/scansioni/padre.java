@@ -29,7 +29,7 @@ public class padre {
 		flagEth = true; 		    // true eth0 up eth1 down     false eth0 down eth1 up
 		ethernet.switchTo(nomeDB, false); 	// Se ho true sono a eth0 up e switho a eth1 e viceversa
 		
-		if(DatabaseMySql.contiene("root", "scansioni", "nomeDB", nomeDB, "lista", "popular", "status", "false")) {
+		if(DatabaseMySql.contiene("root", "scansioni", "nomeDB", nomeDB, "lista", "popular", "completed", "false")) {
 			DatabaseMySql.eseguiAggiornamento("Update root.scansioni set inizio='" + Orario.getDataOra()  + "' where nomeDB='" + nomeDB + "' and lista='popular'");
 			DatabaseMySql.eseguiAggiornamento("Update root.scansioni set fine='"   + Orario.getDataOra()  + "' where nomeDB='" + nomeDB + "' and lista='popular'");
 			DatabaseMySql.eseguiAggiornamento("Update root.scansioni set fine='"   + Orario.getDataOra(7) + "' where nomeDB='" + nomeDB + "' and lista='user'");
@@ -63,10 +63,10 @@ public class padre {
 			}
 		}
 		
-		DatabaseMySql.eseguiAggiornamento("Update root.scansioni set status='true' where nomeDB='" + nomeDB + "' and " + "lista='popular'");
+		DatabaseMySql.eseguiAggiornamento("Update root.scansioni set completed='true' where nomeDB='" + nomeDB + "' and " + "lista='popular'");
 		DatabaseMySql.eseguiAggiornamento("Update root.scansioni set fine='"   + Orario.getDataOra() + "' where nomeDB='" + nomeDB + "' and lista='popular'");
 		DatabaseMySql.eseguiAggiornamento("Update root.scansioni set inizio='" + Orario.getDataOra() + "' where nomeDB='" + nomeDB + "' and lista='user'");
-		if(DatabaseMySql.contiene("root", "scansioni", "nomeDB", nomeDB, "lista", "user", "status", "false")) {
+		if(DatabaseMySql.contiene("root", "scansioni", "nomeDB", nomeDB, "lista", "user", "completed", "false")) {
 			pb.command ("/home/m0m0z/Scrivania/tesina_exec/scanUser.sh" , "padre", nomeDB); 
 			while (DatabaseMySql.getCount(nomeDB, "toCheck") != 0) { // && getCount(nomeDB, "profile*ACTIVE*) < CAP)
 				try {
@@ -91,10 +91,10 @@ public class padre {
 				}  
 			} 
 		}
-		DatabaseMySql.eseguiAggiornamento("Update root.scansioni set status='true' where nomeDB='" + nomeDB + "' and " +
+		DatabaseMySql.eseguiAggiornamento("Update root.scansioni set completed='true' where nomeDB='" + nomeDB + "' and " +
 		"lista='user'");
 		
-		if(DatabaseMySql.contiene("root", "scansioni", "nomeDB", nomeDB, "lista", "corrupted", "status", "false")) {
+		if(DatabaseMySql.contiene("root", "scansioni", "nomeDB", nomeDB, "lista", "corrupted", "completed", "false")) {
 			if (DatabaseMySql.getCount(nomeDB, "corruptedList") == 0)
 				DatabaseMySql.copyCorrupted(nomeDB);
 			pb.command ("/home/m0m0z/Scrivania/tesina_exec/scanCorrupted.sh" , "padre", nomeDB); 
@@ -121,13 +121,13 @@ public class padre {
 				}  
 			}  
 		}
-		DatabaseMySql.eseguiAggiornamento("Update root.scansioni set status='true' where nomeDB='" + nomeDB + "' and " +
+		DatabaseMySql.eseguiAggiornamento("Update root.scansioni set completed='true' where nomeDB='" + nomeDB + "' and " +
 		"lista='corrupted'");		
 		// flag per dire al figlio se partire o no
 	}
 	
 	public static void scansioneVeloce (int scansioneN, String nomeDB, String data) {
-		if(DatabaseMySql.contiene("root", "scansioni", "nomeDB", nomeDB, "lista", "veloce" + scansioneN, "status", "true")) 
+		if(DatabaseMySql.contiene("root", "scansioni", "nomeDB", nomeDB, "lista", "veloce" + scansioneN, "completed", "true")) 
 			return;
 		// Copia degli utenti attivi per avere una lista per le scansioni veloci
 		if (DatabaseMySql.getCount(nomeDB, "activeList") == 0) {
@@ -167,7 +167,7 @@ public class padre {
 				OutputTxt.writeError("Errore IO nel try start del padreExec.");
 			}  
 		}	
-		DatabaseMySql.eseguiAggiornamento("Update root.scansioni set status='true' where nomeDB='" + nomeDB + "' and " +
+		DatabaseMySql.eseguiAggiornamento("Update root.scansioni set completed='true' where nomeDB='" + nomeDB + "' and " +
 		"lista='veloce" + scansioneN + "'");	
 	}
 	
