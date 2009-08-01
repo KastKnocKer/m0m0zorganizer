@@ -35,7 +35,7 @@ public class padre {
 			DatabaseMySql.eseguiAggiornamento("Update root.scansioni set fine='"   + Orario.getDataOra(0, 0, 3) + "' where nomeDB='" + nomeDB + "' and lista='user'");
 						
 			new popularReader(nomeDB);		
-			pb = new ProcessBuilder ("/home/m0m0z/Scrivania/tesina_exec/scanPopular.sh" , "padre", nomeDB);
+			pb = new ProcessBuilder ("java.exe", "scanPopular.sh" , "padre", nomeDB);
 			while (DatabaseMySql.getCount(nomeDB, "popToCheck") != 0) {
 				try {			
 					OutputTxt.writeLog("Padre: processo scanPopular per il DB: " + nomeDB + ".");
@@ -66,7 +66,7 @@ public class padre {
 		
 		if(DatabaseMySql.contiene("root", "scansioni", "nomeDB", nomeDB, "lista", "user", "completed", "false")) {
 			DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".ethernet set flag ='true' where rete='figlio'");
-			pb.command ("/home/m0m0z/Scrivania/tesina_exec/scanUser.sh" , "padre", nomeDB); 
+			pb.command ("java.exe", "scanUser.sh" , "padre", nomeDB); 
 			new figlio();
 			figlio.run(nomeDB);
 			while (DatabaseMySql.getCount(nomeDB, "toCheck") != 0 && Orario.getDataOra().compareTo(
@@ -88,13 +88,13 @@ public class padre {
 					flagEth = !flagEth;
 					OutputTxt.writeLog("Padre: User scansionati    totale: " + DatabaseMySql.getCount("" + nomeDB + "", "profile"));
 					OutputTxt.writeLog("Padre: User scansionati    attivi: " + DatabaseMySql.eseguiQuery("Select count(*) from " + nomeDB + ".profile where status='active'").get(0)[0]);
-					OutputTxt.writeLog("Padre: User scansionati corrupted: " + DatabaseMySql.eseguiQuery("Select count(*) from " + nomeDB + ".profile where status='corrupted'").get(0)[0]);
+					OutputTxt.writeLog("Padre: User scancontienesionati corrupted: " + DatabaseMySql.eseguiQuery("Select count(*) from " + nomeDB + ".profile where status='corrupted'").get(0)[0]);
 				} catch (IOException e) {
 					OutputTxt.writeError("Errore IO nel try scanUser del padreExec.");
 				}  
 			}
 			while (DatabaseMySql.contiene(nomeDB, "ethernet", "rete", "figlio", "flag", "true")) {
-				System.out.println("Attesa per la fine del processo scanUser del figlio");
+				System.out.println("Attesa per la fine del processo scanUser del figlio.");
 				try {Thread.sleep(30000);} catch (InterruptedException e) {}
 			}
 			DatabaseMySql.eseguiAggiornamento("Update root.scansioni set fine='"   + Orario.getDataOra() + "' where nomeDB='" + nomeDB + "' and lista='user'");
@@ -105,7 +105,7 @@ public class padre {
 		if(DatabaseMySql.contiene("root", "scansioni", "nomeDB", nomeDB, "lista", "corrupted", "completed", "false")) {
 			if (DatabaseMySql.getCount(nomeDB, "corruptedList") == 0)
 				DatabaseMySql.copyCorrupted(nomeDB);
-			pb.command ("/home/m0m0z/Scrivania/tesina_exec/scanCorrupted.sh" , "padre", nomeDB); 
+			pb.command ("java.exe", "scanCorrupted.sh" , "padre", nomeDB); 
 			while (DatabaseMySql.getCount(nomeDB, "corruptedList") != 0) { // && getCount(nomeDB, "profile*ACTIVE*) < CAP)
 				try {
 					OutputTxt.writeLog("Padre: processo scanCorrupted per il DB: " + nomeDB + ".");
@@ -167,7 +167,7 @@ public class padre {
 		
 		// Messo perchè non penso di utilizzare il figlio nelle scansioni veloci.
 		DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".ethernet set flag ='false' where rete='figlio'");
-		pb = new ProcessBuilder ("/home/m0m0z/Scrivania/tesina_exec/scanActivity.sh" , "padre" , nomeDB, scansioneN + "");
+		pb = new ProcessBuilder ("java.exe", "scanActivity.sh" , "padre" , nomeDB, scansioneN + "");
 		while (DatabaseMySql.getCount(nomeDB, "activeList") != 0) {
 			try {			
 				OutputTxt.writeLog("Padre: processo scanActivity per il DB: " + nomeDB + ".");
