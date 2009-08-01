@@ -20,6 +20,11 @@ public class Orario extends GregorianCalendar {
 		return data;
 	}
 	
+	public static String getData (int giorno) {
+		data = (Orologio.get(Calendar.YEAR)) + "-" + getMeseMod(0) + "-" + getGiornoMod(giorno);
+		return data;
+	}
+	
 	public static String getSecondi () {
 		data = Orologio.get(Calendar.SECOND) + "";
 		if (Orologio.get(Calendar.SECOND) < 10)
@@ -82,7 +87,7 @@ public class Orario extends GregorianCalendar {
 		return data;
 	}
 	
-	public static String getMeseModNORMALRE (int mod) {
+	public static String getMeseModNORMALE (int mod) {
 		if (mod != 0) {
 			if(Orologio.get(Calendar.MONTH) - mod < 0)
 				data = "01";
@@ -102,6 +107,10 @@ public class Orario extends GregorianCalendar {
 	
 	public static String getDataOra () {
 		return  Orario.getData() + "T" + Orario.getOra();
+	}
+	
+	public static String getDataOra (int giorno) {
+		return  Orario.getData(giorno) + "T" + Orario.getOra();
 	}
 	
 	private static String ora;
