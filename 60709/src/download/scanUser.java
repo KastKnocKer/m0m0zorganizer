@@ -43,8 +43,8 @@ public class scanUser {
 	
 	public static void  completeScan (YouTubeService myService, String devKey, String nomeDB, String user) {
 		API.getSubscriptions(myService, devKey, nomeDB, user);
-		API.getFavorites(myService, devKey, nomeDB, user);
 		urlReader.userReader(nomeDB, "subscribers", user);	
+		API.getFavorites(myService, devKey, nomeDB, user);
 		urlReader.userReader(nomeDB, "friends", user);
 		API.getVideo(myService, devKey, nomeDB, user);
 	}
