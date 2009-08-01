@@ -3,6 +3,7 @@
 
 //import com.google.gdata.client.youtube.YouTubeService;
 
+import scansioni.figlio;
 import scansioni.padre;
 
 import com.google.gdata.client.youtube.YouTubeService;
@@ -32,11 +33,10 @@ public class proveIO {
 		YouTubeService myService = new YouTubeService("Tesi");
 		//new scanUser(myService, devKey);
 		//System.out.println(devKey.length());
-		DatabaseMySql.eseguiAggiornamento("insert into scansione.ethernet values (\"mamma\", \"true\")");
-	//	DatabaseMySql.eseguiAggiornamento("update scansione.ethernet set flag='true' where rete='padre'");
-	//	DatabaseMySql.eseguiAggiornamento("insert into scansione.ethernet values (\"figlio\", \"false\")");
-	//	DatabaseMySql.copyCorrupted("scansione");
-	//	new Orario();
-	//	new scanCorrupted(myService, devKey, "scansione");
+		DatabaseMySql.eseguiAggiornamento("insert into prima.ethernet values (\"figlio\", \"true\")");
+		DatabaseMySql.eseguiAggiornamento("insert into prima.ethernet values (\"padre\", \"true\")");
+		new figlio();
+		figlio.run("prima");
+
 	}
 }

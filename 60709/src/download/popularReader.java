@@ -14,8 +14,8 @@ public class popularReader {
 
 	public popularReader (String nomeDB) {
 		popularReaderTool(nomeDB, "t", 1);
-		popularReaderTool(nomeDB, "w", 1);
-		popularReaderTool(nomeDB, "m", 1);
+	//	popularReaderTool(nomeDB, "w", 1);
+	//	popularReaderTool(nomeDB, "m", 1);
 	}	
 	    
 	public static void popularReaderTool (String nomeDB, String time, int pag) {
@@ -43,7 +43,7 @@ public class popularReader {
 						if (count < 24)
 							pag--;
 						in.close();
-						popularReaderTool (nomeDB, time, pag);
+						//popularReaderTool (nomeDB, time, pag);
 						return;
 					}
 					else {

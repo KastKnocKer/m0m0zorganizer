@@ -7,8 +7,6 @@ public class createDatabase {
 		DatabaseMySql.connetti();
 		DatabaseMySql.eseguiAggiornamento("create database " + nomeDB);
 		currentDB = nomeDB;
-		DatabaseMySql.eseguiAggiornamento("create table " + nomeDB + ".key 				(crawler Char(10), devKey char(100), PRIMARY KEY(crawler))");
-		DatabaseMySql.eseguiAggiornamento("create table " + nomeDB + ".ethernet 		(rete Char(6), flag char(5), PRIMARY KEY (rete))");
 		DatabaseMySql.eseguiAggiornamento("create table " + nomeDB + ".popular 			(user Char(20), data char(19), tipo Char(10), PRIMARY KEY(user, tipo))");
 		DatabaseMySql.eseguiAggiornamento("create table " + nomeDB + ".popToCheck 		(user Char(20), PRIMARY KEY(user))");
 		DatabaseMySql.eseguiAggiornamento("create table " + nomeDB + ".profile 			(user Char(20) UNIQUE, status char(10), dataScan char (19), subcount int(12), viewcount int(12), videowatch int(12), lastacc char(20), PRIMARY KEY(user, status))");

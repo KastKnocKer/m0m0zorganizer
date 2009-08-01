@@ -23,19 +23,22 @@ public class padre {
 		key[4] = "AI39si5XLt78NO1fRB0VaLCqUIXWkZeLDNSITQMvwwo_0scaR2qwzc2FzQTAqNqYBY0mAooL1HM4rl9BNpAefC1jx4PuMYKWsQ";
 		key[5] = "AI39si647HsBMmuW7FnWtDwb037yfACgX-FcXaHuMZXfTUH37tw8DawMPmWgbO-CeSIfoJJF5URC7ww52k94Thj_dbH9wFdxNQ";
 		
-		DatabaseMySql.eseguiAggiornamento("insert into " + nomeDB + ".key values (\"padre\", \"" + key[0] + "\")");
-		DatabaseMySql.eseguiAggiornamento("insert into " + nomeDB + ".ethernet values (\"padre\", \"false\")");
-		DatabaseMySql.eseguiAggiornamento("insert into " + nomeDB + ".ethernet values (\"figlio\", \"false\")");
+		DatabaseMySql.eseguiAggiornamento("insert into root.key values (\"padre\", \"" + key[0] + "\")");
+		DatabaseMySql.eseguiAggiornamento("insert into root.ethernet values (\"padre\", \"false\")");
+		DatabaseMySql.eseguiAggiornamento("insert into root.ethernet values (\"figlio\", \"false\")");
+		DatabaseMySql.eseguiAggiornamento("Update root.config set status='off' where id='figlio'");
+		
 		flagEth = true; 		    // true eth0 up eth1 down     false eth0 down eth1 up
 		ethernet.switchTo(nomeDB, false); 	// Se ho true sono a eth0 up e switho a eth1 e viceversa
-		
+		DatabaseMySql.eseguiAggiornamento("Update root.ethernet set flag='true' where rete='figlio'");
 		if(DatabaseMySql.contiene("root", "scansioni", "nomeDB", nomeDB, "lista", "popular", "completed", "false")) {
 			DatabaseMySql.eseguiAggiornamento("Update root.scansioni set inizio='" + Orario.getDataOra()  + "' where nomeDB='" + nomeDB + "' and lista='popular'");
 			DatabaseMySql.eseguiAggiornamento("Update root.scansioni set fine='"   + Orario.getDataOra()  + "' where nomeDB='" + nomeDB + "' and lista='popular'");
 			DatabaseMySql.eseguiAggiornamento("Update root.scansioni set fine='"   + Orario.getDataOra(0, 0, 3) + "' where nomeDB='" + nomeDB + "' and lista='user'");
-						
-			new popularReader(nomeDB);		
-			pb = new ProcessBuilder ("java.exe", "scanPopular.sh" , "padre", nomeDB);
+			
+			if (DatabaseMySql.getCount(nomeDB, "popular") == 0)
+				new popularReader(nomeDB);		
+			pb = new ProcessBuilder ("java", "crawlerPopular" , "padre", nomeDB);
 			while (DatabaseMySql.getCount(nomeDB, "popToCheck") != 0) {
 				try {			
 					OutputTxt.writeLog("Padre: processo scanPopular per il DB: " + nomeDB + ".");
@@ -47,13 +50,13 @@ public class padre {
 					}
 					if (++n == 6)
 						n = 0;
-					DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".key set devKey='" + key[n] + "' where crawler='padre'");
+					DatabaseMySql.eseguiAggiornamento("update root.key set devKey='" + key[n] + "' where crawler='padre'");
 					ethernet.switchTo(nomeDB, flagEth);
 					flagEth = !flagEth;
 					OutputTxt.writeLog("Padre: Popular scansionati    totale: " + DatabaseMySql.getCount(nomeDB, "profile"));
 					OutputTxt.writeLog("Padre: Popular scansionati    attivi: " + DatabaseMySql.eseguiQuery("Select count(*) from " + nomeDB + ".profile where status='active'").get(0)[0]);
 					OutputTxt.writeLog("Padre: Popular scansionati corrupted: " + DatabaseMySql.eseguiQuery("Select count(*) from " + nomeDB + ".profile where status='corrupted'").get(0)[0]);
-	
+					break;
 				}
 				catch (IOException e) {
 					OutputTxt.writeError("Errore IO nel try start del padreExec.");
@@ -65,10 +68,9 @@ public class padre {
 		DatabaseMySql.eseguiAggiornamento("Update root.scansioni set completed='true' where nomeDB='" + nomeDB + "' and lista='popular'");
 		
 		if(DatabaseMySql.contiene("root", "scansioni", "nomeDB", nomeDB, "lista", "user", "completed", "false")) {
-			DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".ethernet set flag ='true' where rete='figlio'");
-			pb.command ("java.exe", "scanUser.sh" , "padre", nomeDB); 
-			new figlio();
-			figlio.run(nomeDB);
+			pb.command ("java", "crawlerUser" , "padre", nomeDB); 
+			DatabaseMySql.eseguiAggiornamento("Update root.config set lista='user' where id='figlio'");
+			DatabaseMySql.eseguiAggiornamento("Update root.config set status='on' where id='figlio'");
 			while (DatabaseMySql.getCount(nomeDB, "toCheck") != 0 && Orario.getDataOra().compareTo(
 					DatabaseMySql.eseguiQuery("Select fine from root.scansioni where nomeDB='" + 
 							nomeDB + "' and lista='user'").get(0)[0]) < 0) {
@@ -82,31 +84,32 @@ public class padre {
 					} 
 					if (++n == 6) 
 						n = 0;
-					DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".key set devKey='" + key[n] + "' where crawler='padre'");
-					//DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".ethernet set flag='false' where rete='figlio'"); 
+					DatabaseMySql.eseguiAggiornamento("update root.key set devKey='" + key[n] + "' where crawler='padre'");
 					ethernet.switchTo(nomeDB, flagEth);
 					flagEth = !flagEth;
 					OutputTxt.writeLog("Padre: User scansionati    totale: " + DatabaseMySql.getCount("" + nomeDB + "", "profile"));
 					OutputTxt.writeLog("Padre: User scansionati    attivi: " + DatabaseMySql.eseguiQuery("Select count(*) from " + nomeDB + ".profile where status='active'").get(0)[0]);
-					OutputTxt.writeLog("Padre: User scancontienesionati corrupted: " + DatabaseMySql.eseguiQuery("Select count(*) from " + nomeDB + ".profile where status='corrupted'").get(0)[0]);
+					OutputTxt.writeLog("Padre: User scansionati corrupted: " + DatabaseMySql.eseguiQuery("Select count(*) from " + nomeDB + ".profile where status='corrupted'").get(0)[0]);
 				} catch (IOException e) {
 					OutputTxt.writeError("Errore IO nel try scanUser del padreExec.");
 				}  
 			}
-			while (DatabaseMySql.contiene(nomeDB, "ethernet", "rete", "figlio", "flag", "true")) {
+			while (DatabaseMySql.contiene("root", "config", "id", "figlio", "lista", "user", "status", "on")) {
 				System.out.println("Attesa per la fine del processo scanUser del figlio.");
-				try {Thread.sleep(30000);} catch (InterruptedException e) {}
+				try {Thread.sleep(15000);} catch (InterruptedException e) {}
 			}
 			DatabaseMySql.eseguiAggiornamento("Update root.scansioni set fine='"   + Orario.getDataOra() + "' where nomeDB='" + nomeDB + "' and lista='user'");
 			DatabaseMySql.eseguiAggiornamento("Update root.scansioni set inizio='" + Orario.getDataOra() + "' where nomeDB='" + nomeDB + "' and lista='corrupted'");
 		}
+		DatabaseMySql.eseguiAggiornamento("Update root.config set lista='video' where id='figlio'");
+		DatabaseMySql.eseguiAggiornamento("Update root.config set status='on' where id='figlio'");
 		DatabaseMySql.eseguiAggiornamento("Update root.scansioni set completed='true' where nomeDB='" + nomeDB + "' and lista='user'");
 			
 		if(DatabaseMySql.contiene("root", "scansioni", "nomeDB", nomeDB, "lista", "corrupted", "completed", "false")) {
 			if (DatabaseMySql.getCount(nomeDB, "corruptedList") == 0)
 				DatabaseMySql.copyCorrupted(nomeDB);
-			pb.command ("java.exe", "scanCorrupted.sh" , "padre", nomeDB); 
-			while (DatabaseMySql.getCount(nomeDB, "corruptedList") != 0) { // && getCount(nomeDB, "profile*ACTIVE*) < CAP)
+			pb.command ("java", "crawlerCorrupted" , "padre", nomeDB); 
+			while (DatabaseMySql.getCount(nomeDB, "corruptedList") != 0) {
 				try {
 					OutputTxt.writeLog("Padre: processo scanCorrupted per il DB: " + nomeDB + ".");
 					scanner = pb.start();
@@ -117,8 +120,7 @@ public class padre {
 					} 
 					if (++n == 6) 
 						n = 0;
-					DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".key set devKey='" + key[n] + "' where crawler='padre'");
-				//	DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".ethernet set flag='false' where rete='figlio'"); 
+					DatabaseMySql.eseguiAggiornamento("update root.key set devKey='" + key[n] + "' where crawler='padre'");
 					ethernet.switchTo(nomeDB, flagEth);
 					flagEth = !flagEth;
 					OutputTxt.writeLog("Padre: User corrupted 				    totale: " + DatabaseMySql.getCount("" + nomeDB + "", "profile"));
@@ -133,7 +135,7 @@ public class padre {
 		}
 		DatabaseMySql.eseguiAggiornamento("Update root.scansioni set completed='true' where nomeDB='" + nomeDB + "' and " +
 		"lista='corrupted'");
-		System.out.println("Pausa di sicurezza per l'inizio delle scansioni veloce.");
+		System.out.println("Pausa di sicurezza per l'inizio del controllo delle scansioni veloci.");
 		try {Thread.sleep(5000);} catch (InterruptedException e) {}
 	}
 	
@@ -143,8 +145,8 @@ public class padre {
 		while (Orario.getDataOra().compareTo(DatabaseMySql.eseguiQuery("Select inizio from root.scansioni where nomeDB='" + 
 							nomeDB + "' and lista='veloce" + scansioneN + "'").get(0)[0]) < 0) {
 			try {
-				System.out.println("Attesa del momento corretto per iniziare la scansione veloce " + scansioneN);
-				OutputTxt.writeLog("Attesa del momento corretto per iniziare la scansione veloce " + scansioneN);
+				System.out.println("Attesa del momento corretto per iniziare la scansione veloce " + scansioneN  + " per il DB: " + nomeDB);
+				OutputTxt.writeLog("Attesa del momento corretto per iniziare la scansione veloce " + scansioneN  + " per il DB: " + nomeDB);
 				Thread.sleep(1000); // DEVE ESSERE DI PIÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙ
 			} catch (InterruptedException e) {}
 		}
@@ -165,9 +167,7 @@ public class padre {
 		key[4] = "AI39si5XLt78NO1fRB0VaLCqUIXWkZeLDNSITQMvwwo_0scaR2qwzc2FzQTAqNqYBY0mAooL1HM4rl9BNpAefC1jx4PuMYKWsQ";
 		key[5] = "AI39si647HsBMmuW7FnWtDwb037yfACgX-FcXaHuMZXfTUH37tw8DawMPmWgbO-CeSIfoJJF5URC7ww52k94Thj_dbH9wFdxNQ";
 		
-		// Messo perchè non penso di utilizzare il figlio nelle scansioni veloci.
-		DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".ethernet set flag ='false' where rete='figlio'");
-		pb = new ProcessBuilder ("java.exe", "scanActivity.sh" , "padre" , nomeDB, scansioneN + "");
+		pb = new ProcessBuilder ("java", "crawlerActivity" , "padre" , nomeDB, scansioneN + "");
 		while (DatabaseMySql.getCount(nomeDB, "activeList") != 0) {
 			try {			
 				OutputTxt.writeLog("Padre: processo scanActivity per il DB: " + nomeDB + ".");
@@ -179,7 +179,7 @@ public class padre {
 				}
 				if (++n == 6)
 					n = 0;
-				DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".key set devKey='" + key[n] + "' where crawler='padre'");
+				DatabaseMySql.eseguiAggiornamento("update root.key set devKey='" + key[n] + "' where crawler='padre'");
 				ethernet.switchTo(nomeDB, flagEth);
 			    flagEth = !flagEth;
 				OutputTxt.writeLog("Padre: User scansionati nelle actvity    totale: " + DatabaseMySql.getCount("" + nomeDB + "", "profile"));

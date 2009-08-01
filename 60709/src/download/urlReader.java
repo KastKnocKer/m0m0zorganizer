@@ -158,7 +158,7 @@ public class urlReader  {
     	}
     }
     
-    public static void getVideoUploader (String nomeDB, String videoId, int N) {
+    public static void getVideoUploader (String videoId) {
 		try {
 			metafeedUrl = new URL ("http://gdata.youtube.com/feeds/api/videos/" + videoId);
 			in = new BufferedReader(new InputStreamReader(metafeedUrl.openStream()));
@@ -173,17 +173,17 @@ public class urlReader  {
 				if (inputLine.contains("favoriteCount="))
 					temp4 = inputLine.substring(inputLine.indexOf("favoriteCount=") + 15, inputLine.indexOf("viewCount") - 2);
 			}
-			DatabaseMySql.insert(nomeDB, "videoUploadedBy", temp2, videoId, temp1, temp3, temp4);
+			DatabaseMySql.insert("root", "videoUploadedBy", temp2, videoId, temp1, temp3, temp4);
 			temp1 = "";
 			temp2 = "";
 			temp3 = "";
 			temp4 = "";
 		} catch (MalformedURLException e) {
-			if (!DatabaseMySql.contiene(nomeDB, "videoUploadedBy", "id", videoId))
-				DatabaseMySql.insert(nomeDB, "videoToCheck", videoId);
+			if (!DatabaseMySql.contiene("root", "videoUploadedBy", "id", videoId))
+				DatabaseMySql.insert("root", "videoToCheck", videoId);
 		} catch (IOException e) {
-			if (!DatabaseMySql.contiene(nomeDB, "videoUploadedBy", "id", videoId))
-				DatabaseMySql.insert(nomeDB, "videoToCheck", videoId);
+			if (!DatabaseMySql.contiene("root", "videoUploadedBy", "id", videoId))
+				DatabaseMySql.insert("root", "videoToCheck", videoId);
 		}
     }
     
