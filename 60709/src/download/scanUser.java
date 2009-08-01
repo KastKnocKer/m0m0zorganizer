@@ -31,7 +31,7 @@ public class scanUser {
 					else
 						API.getUser(myService, devKey, "inactive", nomeDB, userToCheck);
 				}
-				if (temp == 50) {
+				if (temp == 40) {
 					OutputTxt.writeLog("Richieste API per il processo: " + Contatore.getTotApi());
 					OutputTxt.writeLog("Richieste URL per il processo: " + Contatore.getTotUrl());
 					return;
