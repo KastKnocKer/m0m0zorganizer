@@ -1,7 +1,5 @@
 package database;
 
-import java.sql.SQLException;
-
 public class createRootDB {
 
 	public createRootDB () {

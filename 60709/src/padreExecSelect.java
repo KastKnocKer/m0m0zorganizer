@@ -3,7 +3,6 @@ import scansioni.padre;
 import database.DatabaseMySql;
 import database.Orario;
 import database.OutputTxt;
-import database.createDatabase;
 
 public class padreExecSelect {
 

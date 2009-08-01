@@ -9,13 +9,9 @@ public class padreExecTotale {
 	public static void main(String[] args) {
 		new DatabaseMySql("connessione"); 
 		DatabaseMySql.connetti();	// Connessione al database
-		OutputTxt.writeLog("Inizio scansione");
 		String nomeDB;
-		if (args[0] == null) {
-			System.out.println("Inserire il nome del db per la scansione.");
-			System.exit(0);
-		}
-		nomeDB = "prima";			
+		nomeDB = "prima";		
+		OutputTxt.writeLog("Inizio scansione per il DB: " + nomeDB);
 		padre.scansioneCompleta(nomeDB);
 		padre.scansioneVeloce(1, nomeDB, Orario.getDataOra());
 		padre.scansioneVeloce(2, nomeDB, Orario.getDataOra());
@@ -24,7 +20,8 @@ public class padreExecTotale {
 		padre.scansioneVeloce(5, nomeDB, Orario.getDataOra());
 		padre.scansioneVeloce(6, nomeDB, Orario.getDataOra());
 		padre.scansioneVeloce(7, nomeDB, Orario.getDataOra());
-		nomeDB = "seconda";
+		nomeDB = "seconda";		
+		OutputTxt.writeLog("Inizio scansione per il DB: " + nomeDB);
 		padre.scansioneCompleta(nomeDB);
 		padre.scansioneVeloce(1, nomeDB, Orario.getDataOra());
 		padre.scansioneVeloce(2, nomeDB, Orario.getDataOra());
@@ -33,7 +30,8 @@ public class padreExecTotale {
 		padre.scansioneVeloce(5, nomeDB, Orario.getDataOra());
 		padre.scansioneVeloce(6, nomeDB, Orario.getDataOra());
 		padre.scansioneVeloce(7, nomeDB, Orario.getDataOra());
-		nomeDB = "terza";
+		nomeDB = "terza";		
+		OutputTxt.writeLog("Inizio scansione per il DB: " + nomeDB);
 		padre.scansioneCompleta(nomeDB);
 		padre.scansioneVeloce(1, nomeDB, Orario.getDataOra());
 		padre.scansioneVeloce(2, nomeDB, Orario.getDataOra());
@@ -42,7 +40,8 @@ public class padreExecTotale {
 		padre.scansioneVeloce(5, nomeDB, Orario.getDataOra());
 		padre.scansioneVeloce(6, nomeDB, Orario.getDataOra());
 		padre.scansioneVeloce(7, nomeDB, Orario.getDataOra());
-		nomeDB = "quarta";
+		nomeDB = "quarta";		
+		OutputTxt.writeLog("Inizio scansione per il DB: " + nomeDB);
 		padre.scansioneCompleta(nomeDB);
 		padre.scansioneVeloce(1, nomeDB, Orario.getDataOra());
 		padre.scansioneVeloce(2, nomeDB, Orario.getDataOra());
@@ -51,7 +50,8 @@ public class padreExecTotale {
 		padre.scansioneVeloce(5, nomeDB, Orario.getDataOra());
 		padre.scansioneVeloce(6, nomeDB, Orario.getDataOra());
 		padre.scansioneVeloce(7, nomeDB, Orario.getDataOra());
-		nomeDB = "quinta";
+		nomeDB = "quinta";		
+		OutputTxt.writeLog("Inizio scansione per il DB: " + nomeDB);
 		padre.scansioneCompleta(nomeDB);
 		padre.scansioneVeloce(1, nomeDB, Orario.getDataOra());
 		padre.scansioneVeloce(2, nomeDB, Orario.getDataOra());
