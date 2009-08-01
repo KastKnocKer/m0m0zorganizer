@@ -32,11 +32,9 @@ public class padre {
 		if(DatabaseMySql.contiene("root", "scansioni", "nomeDB", nomeDB, "lista", "popular", "completed", "false")) {
 			DatabaseMySql.eseguiAggiornamento("Update root.scansioni set inizio='" + Orario.getDataOra()  + "' where nomeDB='" + nomeDB + "' and lista='popular'");
 			DatabaseMySql.eseguiAggiornamento("Update root.scansioni set fine='"   + Orario.getDataOra()  + "' where nomeDB='" + nomeDB + "' and lista='popular'");
-			DatabaseMySql.eseguiAggiornamento("Update root.scansioni set fine='"   + Orario.getDataOra(6, 12, 0) + "' where nomeDB='" + nomeDB + "' and lista='user'");
+			DatabaseMySql.eseguiAggiornamento("Update root.scansioni set fine='"   + Orario.getDataOra(0, 0, 3) + "' where nomeDB='" + nomeDB + "' and lista='user'");
 						
 			new popularReader(nomeDB);		
-			// Blocca il figlio fino alla fine del popularReader
-			//DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".ethernet set flag ='true' where rete='figlio'");
 			pb = new ProcessBuilder ("/home/m0m0z/Scrivania/tesina_exec/scanPopular.sh" , "padre", nomeDB);
 			while (DatabaseMySql.getCount(nomeDB, "popToCheck") != 0) {
 				try {			
@@ -60,14 +58,17 @@ public class padre {
 				catch (IOException e) {
 					OutputTxt.writeError("Errore IO nel try start del padreExec.");
 				}  
-			} 
+			}  
 			DatabaseMySql.eseguiAggiornamento("Update root.scansioni set fine='"   + Orario.getDataOra() + "' where nomeDB='" + nomeDB + "' and lista='popular'");
 			DatabaseMySql.eseguiAggiornamento("Update root.scansioni set inizio='" + Orario.getDataOra() + "' where nomeDB='" + nomeDB + "' and lista='user'");
 		} 
-		
 		DatabaseMySql.eseguiAggiornamento("Update root.scansioni set completed='true' where nomeDB='" + nomeDB + "' and lista='popular'");
+		
 		if(DatabaseMySql.contiene("root", "scansioni", "nomeDB", nomeDB, "lista", "user", "completed", "false")) {
+			DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".ethernet set flag ='true' where rete='figlio'");
 			pb.command ("/home/m0m0z/Scrivania/tesina_exec/scanUser.sh" , "padre", nomeDB); 
+			new figlio();
+			figlio.run(nomeDB);
 			while (DatabaseMySql.getCount(nomeDB, "toCheck") != 0 && Orario.getDataOra().compareTo(
 					DatabaseMySql.eseguiQuery("Select fine from root.scansioni where nomeDB='" + 
 							nomeDB + "' and lista='user'").get(0)[0]) < 0) {
@@ -91,7 +92,11 @@ public class padre {
 				} catch (IOException e) {
 					OutputTxt.writeError("Errore IO nel try scanUser del padreExec.");
 				}  
-			} 
+			}
+			while (DatabaseMySql.contiene(nomeDB, "ethernet", "rete", "figlio", "flag", "true")) {
+				System.out.println("Attesa per la fine del processo scanUser del figlio");
+				try {Thread.sleep(30000);} catch (InterruptedException e) {}
+			}
 			DatabaseMySql.eseguiAggiornamento("Update root.scansioni set fine='"   + Orario.getDataOra() + "' where nomeDB='" + nomeDB + "' and lista='user'");
 			DatabaseMySql.eseguiAggiornamento("Update root.scansioni set inizio='" + Orario.getDataOra() + "' where nomeDB='" + nomeDB + "' and lista='corrupted'");
 		}
@@ -122,12 +127,14 @@ public class padre {
 				} catch (IOException e) {
 					OutputTxt.writeError("Errore IO nel try scanUser del padreExec.");
 				}  
-			}
+			} 
 			DatabaseMySql.eseguiAggiornamento("Update root.scansioni set fine='"   + Orario.getDataOra() + "' where nomeDB='" + nomeDB + "' and lista='corrupted'");
+			DatabaseMySql.eseguiAggiornamento("Update root.scansioni set inizio='"   + Orario.getDataOra() + "' where nomeDB='" + nomeDB + "' and lista='veloce1'");
 		}
 		DatabaseMySql.eseguiAggiornamento("Update root.scansioni set completed='true' where nomeDB='" + nomeDB + "' and " +
 		"lista='corrupted'");
-		// flag per dire al figlio se partire o no
+		System.out.println("Pausa di sicurezza per l'inizio delle scansioni veloce.");
+		try {Thread.sleep(5000);} catch (InterruptedException e) {}
 	}
 	
 	public static void scansioneVeloce (int scansioneN, String nomeDB, String data) {
@@ -138,19 +145,18 @@ public class padre {
 			try {
 				System.out.println("Attesa del momento corretto per iniziare la scansione veloce " + scansioneN);
 				OutputTxt.writeLog("Attesa del momento corretto per iniziare la scansione veloce " + scansioneN);
-				Thread.sleep(3600000);
+				Thread.sleep(1000); // DEVE ESSERE DI PIÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙ
 			} catch (InterruptedException e) {}
 		}
-		DatabaseMySql.eseguiAggiornamento("Update root.scansioni set inizio='"   + Orario.getDataOra() + 		 "' where nomeDB='" + nomeDB + "' and lista='veloce" + scansioneN + "'");
-		if (scansioneN != 7)
-			DatabaseMySql.eseguiAggiornamento("Update root.scansioni set inizio='"   + Orario.getDataOra(1, 0 , 1) + "' where nomeDB='" + nomeDB + "' and lista='veloce" + (scansioneN + 1)+ "'");
-		
-		
+			
 		// Copia degli utenti attivi per avere una lista per le scansioni veloci
 		if (DatabaseMySql.getCount(nomeDB, "activeList") == 0) {
+			DatabaseMySql.eseguiAggiornamento("Update root.scansioni set inizio='" + Orario.getDataOra() + "' where nomeDB='" + nomeDB + "' and lista='veloce" + scansioneN + "'");
+			if (scansioneN != 7)
+				DatabaseMySql.eseguiAggiornamento("Update root.scansioni set inizio='" + Orario.getDataOra(0, 0, 2) + "' where nomeDB='" + nomeDB + "' and lista='veloce" + (scansioneN + 1)+ "'");
 			DatabaseMySql.copyAttivi(nomeDB);
 		}
-		
+			
 		key = new String[6];
 		key[0] = "AI39si4fzIi01PLvZIYjyHDVpyEKyvUHJAUvG4N9US4g1SYHmmcojgJ-joGo4q3ajF6eLPom3lmUoFw7IpYStDWUoOm29jadMA";
 		key[1] = "AI39si7e_IYXZqXB764Zgqll4sJlxizsHT02LAx1yo6CHG-8eaayATP-OGG330hhLj1HUHmjzwU62X7s8WHSe8JpiqpfrfGoGw";
@@ -194,5 +200,4 @@ public class padre {
 	private static boolean flagEth;
 	private static String[] key;
 	private static int n;
-
 }
