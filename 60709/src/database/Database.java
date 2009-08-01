@@ -120,7 +120,8 @@ public class Database {
 	      risultato = true;
 	      stmt.close();
       } catch (SQLException e) {
-     	 if (!e.getMessage().contains("Duplicate entry")) {
+     	 if (!(e.getMessage().contains("Duplicate entry") || e.getMessage().contains("Can't drop "))) {
+     		 System.out.println(e.getMessage());
      		 e.printStackTrace();
      		 OutputTxt.writeException(e.getLocalizedMessage());
      		 OutputTxt.writeException("Errore SQL nel Database.eseguiAggiornamento()");

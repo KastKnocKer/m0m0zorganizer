@@ -1,17 +1,23 @@
 package database;
 
+import java.sql.SQLException;
+
 public class createRootDB {
 
 	public createRootDB () {
 		new DatabaseMySql("connessione");
 		DatabaseMySql.connetti();
 		
-		DatabaseMySql.eseguiAggiornamento("create database root");
-		DatabaseMySql.Disconnetti();
-		new DatabaseMySql("root");
-		DatabaseMySql.connetti();
-		
+		DatabaseMySql.eseguiAggiornamento("Drop database root");
+		DatabaseMySql.eseguiAggiornamento("Drop database prima");
+		DatabaseMySql.eseguiAggiornamento("Drop database seconda");
+		DatabaseMySql.eseguiAggiornamento("Drop database terza");
+		DatabaseMySql.eseguiAggiornamento("Drop database quarta");
+		DatabaseMySql.eseguiAggiornamento("Drop database quinta");
+				
+		DatabaseMySql.eseguiAggiornamento("create database root");				
 		DatabaseMySql.eseguiAggiornamento("create table root.scansioni (nomeDB Char(10), lista char(10), status Char(5), PRIMARY KEY(nomeDB, lista))");
+		
 		makeListeScansione("prima");
 		makeListeScansione("seconda");
 		makeListeScansione("terza");
