@@ -120,6 +120,13 @@ public class DatabaseMySql {
 	}
 	
 	public static boolean insert (String nomeDB, String lista, String values1, String values2, String values3,
+			String values4, String values5 , String values6) {
+		return db.eseguiAggiornamento("insert into " + nomeDB + "." + lista + 
+				" values (\"" + values1 + "\" , \"" + values2 + "\" , \"" + values3 + "\" ," +
+				"\"" + values4 + "\" , \"" + values5 + "\" , \"" + values6 + "\")");
+	} 
+	
+	public static boolean insert (String nomeDB, String lista, String values1, String values2, String values3,
 			String values4, String values5 , String values6, String values7) {
 		return db.eseguiAggiornamento("insert into " + nomeDB + "." + lista + 
 				" values (\"" + values1 + "\" , \"" + values2 + "\" , \"" + values3 + "\" ," +

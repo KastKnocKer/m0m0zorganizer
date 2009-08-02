@@ -160,6 +160,11 @@ public class urlReader  {
     
     public static void getVideoUploader (String videoId) {
 		try {
+			temp1 = "";
+			temp2 = "";
+			temp3 = "";
+			temp4 = "";
+			System.out.println("ANALISI per il video: " + videoId);
 			metafeedUrl = new URL ("http://gdata.youtube.com/feeds/api/videos/" + videoId);
 			ethernet.checkEthernet();
 			Contatore.incApi();
@@ -167,15 +172,23 @@ public class urlReader  {
 	    	System.out.println("\t\t\t\t\t\t\t\t\t\t\t\tPacchetto arrivato.");
 			while ((inputLine = in.readLine()) != null) {
 				if (inputLine.contains("<published>"))
-					temp1 = inputLine.substring(inputLine.indexOf("<published>") + 11, inputLine.indexOf("</published>"));
+					temp1 = inputLine.substring(inputLine.indexOf("<published>") + 11, inputLine.indexOf("</published>") - 5);
 				if (inputLine.contains("<name>"))
 					temp2 = inputLine.substring(inputLine.indexOf("<name>") + 6, inputLine.indexOf("</name>"));
-				if (inputLine.contains("numRaters="))
-					temp3 = inputLine.substring(inputLine.indexOf("numRaters=") + 11, inputLine.indexOf("rel") - 2);
-				if (inputLine.contains("favoriteCount="))
+				if (inputLine.contains("numRaters=")) {
+					inputLine = inputLine.substring(inputLine.indexOf("numRaters=") + 11);
+					temp3 = inputLine.substring(0, inputLine.indexOf("'"));
+				}
+				if (inputLine.contains("favoriteCount=")) {
+					temp5 = inputLine;
+					temp5 = temp5.substring(temp5.indexOf("viewCount=") + 11);
+					temp5 = temp5.substring(0, temp5.indexOf("'/"));
 					temp4 = inputLine.substring(inputLine.indexOf("favoriteCount=") + 15, inputLine.indexOf("viewCount") - 2);
+					
+				}
 			}
-			DatabaseMySql.insert("root", "videoUploadedBy", temp2, videoId, temp1, temp3, temp4);
+			DatabaseMySql.insert("root", "videoUploadedBy", temp2, videoId);
+			DatabaseMySql.insert("root", "videoChecked", temp2, videoId, temp1, temp3, temp4, temp5);
 			temp1 = "";
 			temp2 = "";
 			temp3 = "";
@@ -246,5 +259,5 @@ public class urlReader  {
     private static URL metafeedUrl;
     private static BufferedReader in;
     private static int tot;
-    private static String inputLine, temp1 , temp2, temp3, temp4;  
+    private static String inputLine, temp1 , temp2, temp3, temp4, temp5;  
 }
