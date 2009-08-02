@@ -31,7 +31,7 @@ public class scanPopular {
 						API.getUser(myService, devKey, "inactive", nomeDB, popularToCheck);
 					temp++;
 				}
-				if (temp == 10) {
+				if (temp == control) {
 					OutputTxt.writeLog("Richieste API per il processo: " + Contatore.getTotApi());
 					OutputTxt.writeLog("Richieste URL per il processo: " + Contatore.getTotUrl());
 					return;
