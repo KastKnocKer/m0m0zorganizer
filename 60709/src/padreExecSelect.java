@@ -9,7 +9,7 @@ public class padreExecSelect {
 	public static void main(String[] args) {
 		new DatabaseMySql("connessione"); 
 		DatabaseMySql.connetti();	// Connessione al database
-		OutputTxt.writeLog("Inizio scansione");
+		OutputTxt.writeLog("root", "Inizio scansione totale");
 		String nomeDB;
 		if (args[0] == null) {
 			System.out.println("Inserire il nome del db per la scansione.");

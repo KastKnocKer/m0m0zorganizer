@@ -51,16 +51,13 @@ public class scanActivity {
 						try {
 							Thread.sleep(500);
 						} catch (InterruptedException e) {e.printStackTrace();}
-						OutputTxt.writeError("ERRORE 500 per users" + userTemp);
+						OutputTxt.writeError(nomeDB, "ERRORE 500 per users" + userTemp);
 					}
 				}
-			//	if (++temp == 25) {
-					System.out.println("RICHIESTA ACTIVITY NUMERO: " + ++temp);
-					System.out.println("RICHIESTA ACTIVITY NUMERO: " + temp);
-					System.out.println("RICHIESTA ACTIVITY NUMERO: " + temp);
-					System.out.println("RICHIESTA ACTIVITY NUMERO: " + temp);
-					//return;
-			//	}
+				System.out.println("RICHIESTA ACTIVITY NUMERO: " + temp);
+				if (++temp == 150) {					
+					return;
+				}
 			}
 		} catch (NullPointerException e) {System.out.println("Lista activeList terminata.");}
 	}

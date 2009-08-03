@@ -14,6 +14,7 @@ import database.OutputTxt;
 import database.createDatabase;
 import download.API;
 import download.Contatore;
+import download.popularReader;
 import download.scanActivity;
 import download.scanCorrupted;
 import download.urlReader;
@@ -33,10 +34,9 @@ public class proveIO {
 		YouTubeService myService = new YouTubeService("Tesi");
 		//new scanUser(myService, devKey);
 		//System.out.println(devKey.length());
-		DatabaseMySql.eseguiAggiornamento("insert into prima.ethernet values (\"figlio\", \"true\")");
-		DatabaseMySql.eseguiAggiornamento("insert into prima.ethernet values (\"padre\", \"true\")");
-		new figlio();
-		figlio.run("prima");
+	//	DatabaseMySql.eseguiAggiornamento("insert into prima.ethernet values (\"figlio\", \"true\")");
+		//DatabaseMySql.eseguiAggiornamento("insert into prima.ethernet values (\"padre\", \"true\")");
+		DatabaseMySql.selectVideoToCheck();
 
 	}
 }

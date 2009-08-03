@@ -21,7 +21,7 @@ import java.net.URL;
 	    try {   
 	    	System.out.println("\nANALISI per il DB: "+ nomeDB + "  del profilo dell' utente " + user + ".");
             metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/users/" + user + "?v=2&key=" + devKey);
-            ethernet.checkEthernet();
+            ethernet.checkEthernet(nomeDB);
             Contatore.incApi();
             UserProfileEntry profileEntry = myService.getEntry(metafeedUrl, 
            			UserProfileEntry.class);
@@ -37,17 +37,17 @@ import java.net.URL;
         }
         catch(AuthenticationException e) { 
     		e.printStackTrace();
-        	OutputTxt.writeException(e.getCodeName() + " : " + e.getLocalizedMessage());
-        	OutputTxt.writeException("Errore nel getUser dell'utente: " + user);
+        	OutputTxt.writeException(nomeDB, e.getCodeName() + " : " + e.getLocalizedMessage());
+        	OutputTxt.writeException(nomeDB, "Errore nel getUser dell'utente: " + user);
         	return false;
         } catch(MalformedURLException e) { 
     		e.printStackTrace();
-            OutputTxt.writeException(e.getLocalizedMessage());
-            OutputTxt.writeException("Errore nel getUser dell'utente: " + user);
+            OutputTxt.writeException(nomeDB, e.getLocalizedMessage());
+            OutputTxt.writeException(nomeDB, "Errore nel getUser dell'utente: " + user);
             return false;
         } catch(ResourceNotFoundException e){
         	DatabaseMySql.insert(nomeDB , "profile", user, "blocked", Orario.getDataOra(), 0, 0, 0, "block");
-        	OutputTxt.writeLog("Errore 404: User not found: " + user);
+        	OutputTxt.writeLog(nomeDB, "Errore 404: User not found: " + user);
         	return false;
         } catch(ServiceException e) {
         	urlReader.getErrorCode(nomeDB, "profile", metafeedUrl, user);
@@ -55,8 +55,8 @@ import java.net.URL;
         } catch(IOException e) { 
         	urlReader.getErrorCode(nomeDB, "profile", metafeedUrl, user);
     		e.printStackTrace();
-            OutputTxt.writeException(e.getLocalizedMessage());
-            OutputTxt.writeException("Errore nel getUser dell'utente: " + user);
+            OutputTxt.writeException(nomeDB, e.getLocalizedMessage());
+            OutputTxt.writeException(nomeDB, "Errore nel getUser dell'utente: " + user);
             return false;
         }
 		return false;
@@ -72,7 +72,7 @@ import java.net.URL;
 		try {
 			metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/users/" + user + "/favorites?&key=" + devKey +
 					"&max-results=50&start-index=" + count );
-			ethernet.checkEthernet();
+			ethernet.checkEthernet(nomeDB);
 			Contatore.incApi();
 			videoFeed = myService.getFeed(metafeedUrl, VideoFeed.class);
 	    	System.out.println("\t\t\t\t\t\t\t\t\t\t\t\tPacchetto arrivato.");
@@ -114,7 +114,7 @@ import java.net.URL;
 		} catch (IOException e) {
 			return urlReader.getErrorCode(nomeDB, "favorites", metafeedUrl, user);
 		} catch(ResourceNotFoundException e){
-        	OutputTxt.writeLog("Errore 404: User not found: " + user);
+        	OutputTxt.writeLog(nomeDB, "Errore 404: User not found: " + user);
         	return false;
         } catch(ServiceException e) {
         	return urlReader.getErrorCode(nomeDB, "favorites", metafeedUrl, user);
@@ -127,7 +127,7 @@ import java.net.URL;
 		countTemp = false;
 		try {
 			metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/users/" + user + "/uploads?&key=" + devKey);
-			ethernet.checkEthernet();
+			ethernet.checkEthernet(nomeDB);
 			Contatore.incApi();
 			videoFeed = myService.getFeed(metafeedUrl, VideoFeed.class);
 	    	System.out.println("\t\t\t\t\t\t\t\t\t\t\t\tPacchetto arrivato.");
@@ -136,7 +136,7 @@ import java.net.URL;
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}  catch(ResourceNotFoundException e){
-			OutputTxt.writeLog("Errore 404: User not found: " + user);
+			OutputTxt.writeLog(nomeDB, "Errore 404: User not found: " + user);
 			return false;
         } catch (IOException e) {
 			return urlReader.getErrorCode(nomeDB, "video", metafeedUrl, user);	
@@ -156,7 +156,7 @@ import java.net.URL;
 		try {
 			metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/users/" + user + "/uploads?&key=" + devKey +
 					"&max-results=50&start-index=" + count);
-			ethernet.checkEthernet();
+			ethernet.checkEthernet(nomeDB);
 			Contatore.incApi();
 			videoFeed = myService.getFeed(metafeedUrl, VideoFeed.class);
 	    	System.out.println("\t\t\t\t\t\t\t\t\t\t\t\tPacchetto arrivato.");
@@ -189,7 +189,7 @@ import java.net.URL;
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}  catch(ResourceNotFoundException e){
-        	OutputTxt.writeLog("Errore 404: User not found: " + user);
+        	OutputTxt.writeLog(nomeDB, "Errore 404: User not found: " + user);
         } catch (IOException e) {
 			urlReader.getErrorCode(nomeDB, "video", metafeedUrl, user);	
 		} catch(ServiceException e) {
@@ -207,7 +207,7 @@ import java.net.URL;
 		try {
 			metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/events?v=2&max-results=50&start-index=" + count + "&author=" 
 					+ user + "&key=" + devKey);
-			ethernet.checkEthernet();
+			ethernet.checkEthernet(nomeDB);
 			Contatore.incApi();
 			activityFeed = myService.getFeed(metafeedUrl, UserEventFeed.class);
 	    	System.out.println("\t\t\t\t\t\t\t\t\t\t\t\tPacchetto arrivato.");
@@ -299,8 +299,7 @@ import java.net.URL;
 		try {
 			metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/events?v=2&published-min=" + data + 
 					".000Z&max-results=50&start-index=" + (count + 1) + "&author=" + user + "&key=" + devKey);
-			System.out.println(metafeedUrl);
-			ethernet.checkEthernet();
+			ethernet.checkEthernet(nomeDB);
 			Contatore.incApi();
 			activityFeed = myService.getFeed(metafeedUrl, UserEventFeed.class);
 	    	System.out.println("\t\t\t\t\t\t\t\t\t\t\t\tPacchetto arrivato.");
@@ -353,7 +352,7 @@ import java.net.URL;
 			  }
 			System.out.println("Activity " + N + " dell'user " + user + " scaricati fino al num: " + count + ".");
 			tot = activityFeed.getTotalResults();
-			OutputTxt.writeException(tot + "");
+			OutputTxt.writeException(nomeDB, tot + "");
 			if (count > 950 && count < tot) {
 				count= 950;
 				maxCount++;
@@ -394,7 +393,7 @@ import java.net.URL;
 		try {
 			metafeedUrl = new URL("http://gdata.youtube.com/feeds/api/users/" + user + "/subscriptions?key=" + devKey +
 					"&max-results=50&start-index=" + count);
-			ethernet.checkEthernet();
+			ethernet.checkEthernet(nomeDB);
 			Contatore.incApi();
 			feed = myService.getFeed(metafeedUrl, SubscriptionFeed.class);
 	    	System.out.println("\t\t\t\t\t\t\t\t\t\t\t\tPacchetto arrivato.");
@@ -435,7 +434,7 @@ import java.net.URL;
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}  catch(ResourceNotFoundException e){
-        	OutputTxt.writeLog("Errore 404: User not found: " + user);
+        	OutputTxt.writeLog(nomeDB, "Errore 404: User not found: " + user);
         	return false;
 		} catch (IOException e) {
 			return urlReader.getErrorCode(nomeDB, "subscriptions", metafeedUrl, user);
@@ -446,12 +445,12 @@ import java.net.URL;
 	}
 	
     public static void notifyApiFlood (String nomeDB, String tabella, String user) {
-    	OutputTxt.writeLog("Errore 403: Rete floodata dalle API per il DB: "+ nomeDB + " dall'user " + user);    // DA RIFAREEEEE
+    	OutputTxt.writeLog(nomeDB, "Errore 403: Rete floodata dalle API per il DB: "+ nomeDB + " dall'user " + user);    // DA RIFAREEEEE
     	System.out.println("Errore 403: Rete floodata dalle API per il DB: "+ nomeDB + " dall'user " + user);
-		OutputTxt.writeLog("Richieste API: " + Contatore.getApi());
-		OutputTxt.writeLog("\t\t\t\t\tTotale    API: " + Contatore.getTotApi());
-		OutputTxt.writeLog("Richieste URL: " + Contatore.getUrl());
-		OutputTxt.writeLog("\t\t\t\t\tTotale    URL: " + Contatore.getTotUrl());
+		OutputTxt.writeLog(nomeDB, "Richieste API: " + Contatore.getApi());
+		OutputTxt.writeLog(nomeDB, "\t\t\t\t\tTotale    API: " + Contatore.getTotApi());
+		OutputTxt.writeLog(nomeDB, "Richieste URL: " + Contatore.getUrl());
+		OutputTxt.writeLog(nomeDB, "\t\t\t\t\tTotale    URL: " + Contatore.getTotUrl());
 		System.out.println("PAUSA di 331 secondi per flood API");
 		Contatore.setApi(0);
 		Contatore.setUrl(0);
@@ -464,8 +463,8 @@ import java.net.URL;
 		}
 		catch (InterruptedException e) { 
 			e.printStackTrace();
-            OutputTxt.writeException(e.getLocalizedMessage());
-            OutputTxt.writeException("Errore nel notifyFlood dell'utente.");
+            OutputTxt.writeException(nomeDB, e.getLocalizedMessage());
+            OutputTxt.writeException(nomeDB, "Errore nel notifyFlood dell'utente.");
 		}
     }
     
@@ -475,43 +474,43 @@ import java.net.URL;
     	System.out.println("ActivityGetErrorCode per il DB: "+ nomeDB + " sui " + tabella  + " dell'utente " + user);
 		HttpURLConnection connection;
 		try {		
-			ethernet.checkEthernet();
+			ethernet.checkEthernet(nomeDB);
 			Contatore.incApi();
 			connection = (HttpURLConnection) url.openConnection();
 			System.out.println((code = connection.getResponseCode()));
 			System.out.println(msg = connection.getResponseMessage());
 			if (code >= 500) {
-				OutputTxt.writeLog("Errore 500+ : servizio non disponibile al momento. Analisi activity per il DB: "+ nomeDB);
+				OutputTxt.writeLog(nomeDB, "Errore 500+ : servizio non disponibile al momento. Analisi activity per il DB: "+ nomeDB);
 				System.out.println("Errore 500+ : servizio non disponibile al momento. Analisi activity per il DB: "+ nomeDB);
 				return;
 			}				
 			else if (msg.contains("many")) {
-		    	OutputTxt.writeLog("Errore 403: Rete floodata dalle SOLE activity per il DB: "+ nomeDB + " dall'user " + user);    // DA RIFAREEEEE
+		    	OutputTxt.writeLog(nomeDB, "Errore 403: Rete floodata dalle SOLE activity per il DB: "+ nomeDB + " dall'user " + user);    // DA RIFAREEEEE
 		    	System.out.println("Errore 403: Rete floodata dalle SOLE activity per il DB: "+ nomeDB + " dall'user " + user);
-				OutputTxt.writeLog("Richieste API: " + Contatore.getApi());
-				OutputTxt.writeLog("\t\t\t\t\tTotale    API: " + Contatore.getTotApi());
-				OutputTxt.writeLog("Richieste URL: " + Contatore.getUrl());
-				OutputTxt.writeLog("\t\t\t\t\tTotale    URL: " + Contatore.getTotUrl());
+				OutputTxt.writeLog(nomeDB, "Richieste API: " + Contatore.getApi());
+				OutputTxt.writeLog(nomeDB, "\t\t\t\t\tTotale    API: " + Contatore.getTotApi());
+				OutputTxt.writeLog(nomeDB, "Richieste URL: " + Contatore.getUrl());
+				OutputTxt.writeLog(nomeDB, "\t\t\t\t\tTotale    URL: " + Contatore.getTotUrl());
 				System.out.println("PAUSA di 331 secondi per flood API");
 				Contatore.setApi(0);
 				Contatore.setUrl(0);
 				try {Thread.currentThread();Thread.sleep(331000);}
 				catch (InterruptedException e) { 
 					e.printStackTrace();
-		            OutputTxt.writeException(e.getLocalizedMessage());
-		            OutputTxt.writeException("Errore nel activityNotifyFlood dell'utente.");
+		            OutputTxt.writeException(nomeDB, e.getLocalizedMessage());
+		            OutputTxt.writeException(nomeDB, "Errore nel activityNotifyFlood dell'utente.");
 				}
 				return;
 			}	
 			else if (msg.contains("Bad Request")) {
-				OutputTxt.writeError("Errore per il DB: "+ nomeDB + " bad request all'url: " + url);
+				OutputTxt.writeError(nomeDB, "Errore per il DB: "+ nomeDB + " bad request all'url: " + url);
 				System.out.println("Errore bad request all'url: " + url);
 				return;
 			}	
 		} catch (IOException e) { 
 			e.printStackTrace();
-			OutputTxt.writeException(e.getLocalizedMessage());
-	        OutputTxt.writeException("Errore nel activityGetErrorCode dell'utente: " + user);	
+			OutputTxt.writeException(nomeDB, e.getLocalizedMessage());
+	        OutputTxt.writeException(nomeDB, "Errore nel activityGetErrorCode dell'utente: " + user);	
 		}
 		return;
 	}

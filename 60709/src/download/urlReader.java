@@ -24,7 +24,7 @@ public class urlReader  {
     	}
     	try {
 	    	metafeedUrl = new URL("http://www.youtube.com/profile?user=" + user + "&view=" + tabella + "&start=" + count);
-	    	ethernet.checkEthernet();
+	    	ethernet.checkEthernet(nomeDB);
 	    	Contatore.incUrl();
 	    	in = new BufferedReader(new InputStreamReader(metafeedUrl.openStream()));
 	    	System.out.println("\t\t\t\t\t\t\t\t\t\t\t\tPacchetto arrivato.");
@@ -47,19 +47,19 @@ public class urlReader  {
 				}
 				else if (inputLine.contains("non ha") && count <= 1) {
 					in.close();
-			    	OutputTxt.writeLog("Errore: L' utente " + user + " non ha aggiunto " + tabella + ".");
+			    	OutputTxt.writeLog(nomeDB, "Errore: L' utente " + user + " non ha aggiunto " + tabella + ".");
 			    	return true;
 			    }
 			    else if (inputLine.contains("Non è")) {
 					in.close();
-			    	OutputTxt.writeLog("Errore 403: Informazione non pubblica: " + tabella + " dell' user " + user);
+			    	OutputTxt.writeLog(nomeDB, "Errore 403: Informazione non pubblica: " + tabella + " dell' user " + user);
 			    	DatabaseMySql.insert(nomeDB, "infoCorrupted", user, tabella, "Reserved");
 			    	DatabaseMySql.eseguiAggiornamento("Update " + nomeDB + ".profile set status='corrupted' where user='" + user + "'");
 			    	return true;
 			    }
 			    else if (inputLine.contains("Questo account è stato")) {
 					in.close();
-			    	OutputTxt.writeLog("Errore 404: User not found: " + user);
+			    	OutputTxt.writeLog(nomeDB, "Errore 404: User not found: " + user);
 			    	return false;
 			    }
 			    else if (inputLine.equals("</html>") && count != 0 && count < tot) {
@@ -71,7 +71,7 @@ public class urlReader  {
 			    }
 				else if (inputLine.contains("is down for") || inputLine.contains("manutenzione")) {
 					in.close();
-					OutputTxt.writeLog("Youtube down per manutenzione o non al 100%");
+					OutputTxt.writeLog(nomeDB, "Youtube down per manutenzione o non al 100%");
 					System.out.println("Youtube down per manutenzione o non al 100%. Pausa di  45 secondi.");  
 					pausa(nomeDB, 45, user);
 					return false;
@@ -84,28 +84,28 @@ public class urlReader  {
     	}
     	catch (MalformedURLException e) { 
     		e.printStackTrace();
-    		OutputTxt.writeException(e.getLocalizedMessage()); 
-    		OutputTxt.writeException("Errore nel " + tabella + "Reader dell'utente: " + user);	
+    		OutputTxt.writeException(nomeDB, e.getLocalizedMessage()); 
+    		OutputTxt.writeException(nomeDB, "Errore nel " + tabella + "Reader dell'utente: " + user);	
     	}
     	catch (IOException e) {  
     		if(e.getMessage().contains("Server returned HTTP response code: 50")) {
 				System.out.println("Errore 500+ : servizio non disponibile al momento.");
-				OutputTxt.writeLog("Errore 500+ : servizio non disponibile al momento sulla tabella " + tabella +
+				OutputTxt.writeLog(nomeDB, "Errore 500+ : servizio non disponibile al momento sulla tabella " + tabella +
 						" dell'utente " + user);
 				DatabaseMySql.insert500error(nomeDB, tabella, user);
     			return false;
     		}
     	}
     	catch (StringIndexOutOfBoundsException e) {
-    		OutputTxt.writeException(e.getLocalizedMessage());
-    		OutputTxt.writeException("Errore CONOSCIUTO E CONTROLLATO " + tabella + "Reader dell'utente: " + user);	
+    		OutputTxt.writeException(nomeDB, e.getLocalizedMessage());
+    		OutputTxt.writeException(nomeDB, "Errore CONOSCIUTO E CONTROLLATO " + tabella + "Reader dell'utente: " + user);	
     		return true;
     		// Pensare come gestire: farei controllo se ci sono amici/subscribers nel db o se no segnalo no amici/sub
     	}
     	try {
     		in.close();
     	} catch (IOException e) {
-    		OutputTxt.writeError("Errore IO nella  " + tabella + " reader dell'utente " + user);
+    		OutputTxt.writeError(nomeDB, "Errore IO nella  " + tabella + " reader dell'utente " + user);
     		return true;
     	}
     	System.out.println("Fine del " + tabella + " reader dell'utente " + user);
@@ -113,9 +113,9 @@ public class urlReader  {
     }
 	
     public static void notifyUrlFlood (String nomeDB, String inputLine, String user) {
-			OutputTxt.writeLog("Rete floodata dalle URL.");    // DA RIFAREEEEE
-			OutputTxt.writeLog("Richieste API: " + Contatore.getApi());
-			OutputTxt.writeLog("Richieste URL: " + Contatore.getUrl());
+			OutputTxt.writeLog(nomeDB, "Rete floodata dalle URL.");    // DA RIFAREEEEE
+			OutputTxt.writeLog(nomeDB, "Richieste API: " + Contatore.getApi());
+			OutputTxt.writeLog(nomeDB, "Richieste URL: " + Contatore.getUrl());
 			Contatore.setApi(0);
 			Contatore.setUrl(0);
 			System.out.println("Rete floodata dalle URL.");
@@ -129,8 +129,8 @@ public class urlReader  {
 			}
 			catch (InterruptedException e) { 
 				e.printStackTrace();
-	            OutputTxt.writeException(e.getLocalizedMessage());
-	            OutputTxt.writeException("Errore nel notifyFlood dell'utente.");
+	            OutputTxt.writeException(nomeDB, e.getLocalizedMessage());
+	            OutputTxt.writeException(nomeDB, "Errore nel notifyFlood dell'utente.");
 			}
 			return;
     }
@@ -153,8 +153,8 @@ public class urlReader  {
     	}
     	catch (InterruptedException e) { 
     		e.printStackTrace();
-    		OutputTxt.writeException(e.getLocalizedMessage());
-    		OutputTxt.writeException("Errore nella funzione pausa(nomeDB, (nomeDB, .");	
+    		OutputTxt.writeException(nomeDB, e.getLocalizedMessage());
+    		OutputTxt.writeException(nomeDB, "Errore nella funzione pausa(nomeDB, (nomeDB, .");	
     	}
     }
     
@@ -166,7 +166,7 @@ public class urlReader  {
 			temp4 = "";
 			System.out.println("ANALISI per il video: " + videoId);
 			metafeedUrl = new URL ("http://gdata.youtube.com/feeds/api/videos/" + videoId);
-			ethernet.checkEthernet();
+			ethernet.checkEthernet("root");
 			Contatore.incApi();
 			in = new BufferedReader(new InputStreamReader(metafeedUrl.openStream()));
 	    	System.out.println("\t\t\t\t\t\t\t\t\t\t\t\tPacchetto arrivato.");
@@ -208,13 +208,13 @@ public class urlReader  {
     	System.out.println("GetErrorCode per il DB: "+ nomeDB + " sui " + tabella  + " dell'utente " + user);
 		HttpURLConnection connection;
 		try {		
-			ethernet.checkEthernet();
+			ethernet.checkEthernet(nomeDB);
 			Contatore.incApi();
 			connection = (HttpURLConnection) url.openConnection();
 			System.out.println((code = connection.getResponseCode()));
 			System.out.println(msg = connection.getResponseMessage());
 			if (code >= 500) {
-				OutputTxt.writeLog("Errore 500+ : servizio non disponibile al momento. Analisi per il DB: "+ nomeDB + "dell'utente " + user);
+				OutputTxt.writeLog(nomeDB, "Errore 500+ : servizio non disponibile al momento. Analisi per il DB: "+ nomeDB + "dell'utente " + user);
 				System.out.println("Errore 500+ : servizio non disponibile al momento. Analisi per il DB: "+ nomeDB + "dell'utente " + user);
 				DatabaseMySql.insert500error(nomeDB, tabella, user);
 				return false;
@@ -228,7 +228,7 @@ public class urlReader  {
 					DatabaseMySql.insert(nomeDB , "profile", user, "corrupted", Orario.getDataOra(), 0, 0, 0, "profreserv");
 				}
 				System.out.println("Errore 403: Informazione per il DB: "+ nomeDB + " non pubblica: " + tabella + " dell' user " + user);
-				OutputTxt.writeLog("Errore 403: Informazione per il DB: "+ nomeDB + " non pubblica: " + tabella + " dell' user " + user);
+				OutputTxt.writeLog(nomeDB, "Errore 403: Informazione per il DB: "+ nomeDB + " non pubblica: " + tabella + " dell' user " + user);
 				return false;
 			}
 			else if (msg.contains("many")) {
@@ -237,18 +237,18 @@ public class urlReader  {
 			}	
 			else if (code == 404) {
 				System.out.println("Errore 404: User not found: " + user);
-				OutputTxt.writeLog("Errore 404: per il DB: "+ nomeDB + " User not found: " + user);
+				OutputTxt.writeLog(nomeDB, "Errore 404: per il DB: "+ nomeDB + " User not found: " + user);
 				return false; 
 			}
 			else if (msg.contains("Bad Request")) {
-				OutputTxt.writeError("Errore per il DB: "+ nomeDB + " bad request all'url: " + url);
+				OutputTxt.writeError(nomeDB, "Errore per il DB: "+ nomeDB + " bad request all'url: " + url);
 				System.out.println("Errore bad request all'url: " + url);
 				return false;
 			}	
 		} catch (IOException e) { 
 			e.printStackTrace();
-			OutputTxt.writeException(e.getLocalizedMessage());
-	        OutputTxt.writeException("Errore nel getErrorCode dell'utente: " + user);	
+			OutputTxt.writeException(nomeDB, e.getLocalizedMessage());
+	        OutputTxt.writeException(nomeDB, "Errore nel getErrorCode dell'utente: " + user);	
 	        return true;
 		}
 		return true;

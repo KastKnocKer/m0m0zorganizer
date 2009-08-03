@@ -34,9 +34,9 @@ public class figlio  extends Thread {
 				DatabaseMySql.eseguiQuery("Select fine from root.scansioni where nomeDB='" + 
 						nomeDB + "' and lista='user'").get(0)[0]) < 0) {
 			try {
-				OutputTxt.writeLog("Figlio: processo scanUser per il DB: " + nomeDB);
+				OutputTxt.writeLog(nomeDB, "Figlio: processo scanUser per il DB: " + nomeDB);
 				scanner = pb.start();
-				OutputTxt.writeLog("Figlio: partito scanUser per il DB: " + nomeDB);
+				OutputTxt.writeLog(nomeDB, "Figlio: partito scanUser per il DB: " + nomeDB);
 				BufferedReader in = new BufferedReader(	new InputStreamReader(scanner.getInputStream()));
 				String line = null;
 				while ((line = in.readLine()) != null)	{
@@ -45,11 +45,11 @@ public class figlio  extends Thread {
 				if (++n == 6) 
 					n = 0;
 				DatabaseMySql.eseguiAggiornamento("update root.key set devKey='" + key[n] + "' where crawler='figlio'");
-				OutputTxt.writeLog("Figlio: Popular scansionati   totale: " + DatabaseMySql.getCount("" + nomeDB + "", "profile"));
-				OutputTxt.writeLog("Figlio: Popular scansionati   attivi: " + DatabaseMySql.eseguiQuery("Select count(*) from " + nomeDB + ".profile where status='active'").get(0)[0]);
-				OutputTxt.writeLog("Figlio: Popular scansionati   corrupted: " + DatabaseMySql.eseguiQuery("Select count(*) from " + nomeDB + ".profile where status='corrupted'").get(0)[0]);
+				OutputTxt.writeLog(nomeDB, "Figlio: Popular scansionati   totale: " + DatabaseMySql.getCount("" + nomeDB + "", "profile"));
+				OutputTxt.writeLog(nomeDB, "Figlio: Popular scansionati   attivi: " + DatabaseMySql.eseguiQuery("Select count(*) from " + nomeDB + ".profile where status='active'").get(0)[0]);
+				OutputTxt.writeLog(nomeDB, "Figlio: Popular scansionati   corrupted: " + DatabaseMySql.eseguiQuery("Select count(*) from " + nomeDB + ".profile where status='corrupted'").get(0)[0]);
 			} catch (IOException e) {
-				OutputTxt.writeError("Errore IO nel try scanUser del figlioExec.");
+				OutputTxt.writeError(nomeDB, "Errore IO nel try scanUser del figlioExec.");
 			}  
 		} 
 		DatabaseMySql.eseguiAggiornamento("update " + nomeDB + ".ethernet set flag ='false' where rete='figlio'");		

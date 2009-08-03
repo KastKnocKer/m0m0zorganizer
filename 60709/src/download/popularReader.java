@@ -19,8 +19,6 @@ public class popularReader {
 	}	
 	    
 	public static void popularReaderTool (String nomeDB, String time, int pag) {
-		if (DatabaseMySql.getCount(nomeDB, "popular") != 0)
-			return;
 		int count = 0;
 		int tmp = 24 * (pag - 1);
 		System.out.println("\n popularReader reader del " + time);
@@ -43,6 +41,7 @@ public class popularReader {
 						if (count < 24)
 							pag--;
 						in.close();
+						System.out.println(nomeDB + " " + time + " " + pag);
 						popularReaderTool (nomeDB, time, pag);
 						return;
 					}
@@ -58,17 +57,17 @@ public class popularReader {
 		}
 		catch (MalformedURLException e) {  
 			e.printStackTrace();
-			OutputTxt.writeException(e.getLocalizedMessage());
-			OutputTxt.writeException("Errore nel popularReader del tipo " + time + " alla pag: " + pag);	
+			OutputTxt.writeException(nomeDB, e.getLocalizedMessage());
+			OutputTxt.writeException(nomeDB, "Errore nel popularReader del tipo " + time + " alla pag: " + pag);	
 		} 						
 		catch (IOException e) { 
-			OutputTxt.writeLog("Errore nel download dei canali più popolari del " + time);
+			OutputTxt.writeLog(nomeDB, "Errore nel download dei canali più popolari del " + time);
 			urlReader.getErrorCode(nomeDB, "popularReader", metafeedUrl, "popular");
 		}
 		try {
 			in.close();
 		} catch (IOException e) {
-			OutputTxt.writeError ("Errore nel download dei canali più popolari del " + time);
+			OutputTxt.writeError (nomeDB, "Errore nel download dei canali più popolari del " + time);
 		}
 		return;
 	}

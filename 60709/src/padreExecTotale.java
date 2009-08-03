@@ -11,7 +11,7 @@ public class padreExecTotale {
 		DatabaseMySql.connetti();	// Connessione al database
 		String nomeDB;
 		nomeDB = "prima";		
-		OutputTxt.writeLog("Inizio scansione per il DB: " + nomeDB);
+		OutputTxt.writeLog(nomeDB, "Inizio scansione per il DB: " + nomeDB);
 		padre.scansioneCompleta(nomeDB);
 		padre.scansioneVeloce(1, nomeDB, Orario.getDataOra());
 		padre.scansioneVeloce(2, nomeDB, Orario.getDataOra());
@@ -21,7 +21,7 @@ public class padreExecTotale {
 		padre.scansioneVeloce(6, nomeDB, Orario.getDataOra());
 		padre.scansioneVeloce(7, nomeDB, Orario.getDataOra());
 		nomeDB = "seconda";		
-		OutputTxt.writeLog("Inizio scansione per il DB: " + nomeDB);
+		OutputTxt.writeLog(nomeDB, "Inizio scansione per il DB: " + nomeDB);
 		padre.scansioneCompleta(nomeDB);
 		padre.scansioneVeloce(1, nomeDB, Orario.getDataOra());
 		padre.scansioneVeloce(2, nomeDB, Orario.getDataOra());
@@ -31,7 +31,7 @@ public class padreExecTotale {
 		padre.scansioneVeloce(6, nomeDB, Orario.getDataOra());
 		padre.scansioneVeloce(7, nomeDB, Orario.getDataOra());
 		nomeDB = "terza";		
-		OutputTxt.writeLog("Inizio scansione per il DB: " + nomeDB);
+		OutputTxt.writeLog(nomeDB, "Inizio scansione per il DB: " + nomeDB);
 		padre.scansioneCompleta(nomeDB);
 		padre.scansioneVeloce(1, nomeDB, Orario.getDataOra());
 		padre.scansioneVeloce(2, nomeDB, Orario.getDataOra());
@@ -41,7 +41,7 @@ public class padreExecTotale {
 		padre.scansioneVeloce(6, nomeDB, Orario.getDataOra());
 		padre.scansioneVeloce(7, nomeDB, Orario.getDataOra());
 		nomeDB = "quarta";		
-		OutputTxt.writeLog("Inizio scansione per il DB: " + nomeDB);
+		OutputTxt.writeLog(nomeDB, "Inizio scansione per il DB: " + nomeDB);
 		padre.scansioneCompleta(nomeDB);
 		padre.scansioneVeloce(1, nomeDB, Orario.getDataOra());
 		padre.scansioneVeloce(2, nomeDB, Orario.getDataOra());
@@ -51,7 +51,7 @@ public class padreExecTotale {
 		padre.scansioneVeloce(6, nomeDB, Orario.getDataOra());
 		padre.scansioneVeloce(7, nomeDB, Orario.getDataOra());
 		nomeDB = "quinta";		
-		OutputTxt.writeLog("Inizio scansione per il DB: " + nomeDB);
+		OutputTxt.writeLog(nomeDB, "Inizio scansione per il DB: " + nomeDB);
 		padre.scansioneCompleta(nomeDB);
 		padre.scansioneVeloce(1, nomeDB, Orario.getDataOra());
 		padre.scansioneVeloce(2, nomeDB, Orario.getDataOra());

@@ -21,7 +21,7 @@ public class crawlerActivity {
 		System.out.println("AVVIO NUOVO FILE");
 		System.out.println("AVVIO NUOVO FILE");
 		System.out.println("AVVIO NUOVO FILE");
-		OutputTxt.writeLog("Nuovo crawler Activity");
+		OutputTxt.writeLog(args[1], "Nuovo crawler Activity");
 		
 		YouTubeService myService = new YouTubeService("ytapi-" + UUID.randomUUID().toString().substring(0, (int)(Math.random() * 3) + 2) + "-" +
 				UUID.randomUUID().toString().substring(0, (int)(Math.random() * 6) + 12) + "-" + UUID.randomUUID().toString().substring(0,(int)( Math.random() * 3) + 2),

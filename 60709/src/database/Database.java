@@ -95,15 +95,15 @@ public class Database {
          stmt.close();   // Chiudo lo Statement
       } catch (SQLException e) { 
     	  e.printStackTrace();
-    	  OutputTxt.writeException(e.getLocalizedMessage());
-    	  OutputTxt.writeException("Errore SQL nel Database.eseguiQuery()"); 
+    	  OutputTxt.writeException("root", e.getLocalizedMessage());
+    	  OutputTxt.writeException("root", "Errore SQL nel Database.eseguiQuery()"); 
     	  errore = e.getMessage(); 
       }
       catch (Exception e) { 
     	  e.printStackTrace();
-    	  OutputTxt.writeException(e.getLocalizedMessage());
-    	  OutputTxt.writeException("Errore eccezione nel Database.eseguiQuery()"); 
-    	  OutputTxt.writeException("Stringa errore: " + query);    	  
+    	  OutputTxt.writeException("root", e.getLocalizedMessage());
+    	  OutputTxt.writeException("root", "Errore eccezione nel Database.eseguiQuery()"); 
+    	  OutputTxt.writeException("root", "Stringa errore: " + query);    	  
     	  errore = e.getMessage(); 
       } 
       return v;
@@ -123,9 +123,9 @@ public class Database {
      	 if (!(e.getMessage().contains("Duplicate entry") || e.getMessage().contains("Can't drop "))) {
      		 System.out.println(e.getMessage());
      		 e.printStackTrace();
-     		 OutputTxt.writeException(e.getLocalizedMessage());
-     		 OutputTxt.writeException("Errore SQL nel Database.eseguiAggiornamento()");
-     		 OutputTxt.writeException("Stringa errore: " + query);
+     		 OutputTxt.writeException("root", e.getLocalizedMessage());
+     		 OutputTxt.writeException("root", "Errore SQL nel Database.eseguiAggiornamento()");
+     		 OutputTxt.writeException("root", "Stringa errore: " + query);
      		 risultato = false;
      	 }
        }
@@ -148,8 +148,8 @@ public class Database {
          connesso = false;
       } catch (SQLException e) { 
     	  e.printStackTrace();
-    	  OutputTxt.writeException(e.getLocalizedMessage());
-    	  OutputTxt.writeException("Errore nel Database.discconnetti()"); 
+    	  OutputTxt.writeException("root", e.getLocalizedMessage());
+    	  OutputTxt.writeException("root", "Errore nel Database.discconnetti()"); 
       }
    }
 

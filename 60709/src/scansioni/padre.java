@@ -29,7 +29,7 @@ public class padre {
 		DatabaseMySql.eseguiAggiornamento("Update root.config set status='off' where id='figlio'");
 		
 		flagEth = true; 		    // true eth0 up eth1 down     false eth0 down eth1 up
-		ethernet.switchTo(false); 	// Se ho true sono a eth0 up e switho a eth1 e viceversa
+		ethernet.switchTo(false, nomeDB); 	// Se ho true sono a eth0 up e switho a eth1 e viceversa
 		DatabaseMySql.eseguiAggiornamento("Update root.ethernet set flag='true' where rete='figlio'");
 		pb = new ProcessBuilder ("java", "crawlerPopular" , "padre", nomeDB);
 		
@@ -42,7 +42,7 @@ public class padre {
 				new popularReader(nomeDB);		
 			while (DatabaseMySql.getCount(nomeDB, "popToCheck") != 0) {
 				try {			
-					OutputTxt.writeLog("Padre: processo scanPopular per il DB: " + nomeDB + ".");
+					OutputTxt.writeLog(nomeDB, "Padre: processo scanPopular per il DB: " + nomeDB + ".");
 					scanner = pb.start ();
 					BufferedReader in = new BufferedReader(	new InputStreamReader(scanner.getInputStream()));
 					String line = null;
@@ -52,14 +52,14 @@ public class padre {
 					if (++n == 6)
 						n = 0;
 					DatabaseMySql.eseguiAggiornamento("update root.key set devKey='" + key[n] + "' where crawler='padre'");
-					ethernet.switchTo(flagEth);
+					ethernet.switchTo(flagEth, nomeDB);
 					flagEth = !flagEth;
-					OutputTxt.writeLog("Padre: Popular scansionati    totale: " + DatabaseMySql.getCount(nomeDB, "profile"));
-					OutputTxt.writeLog("Padre: Popular scansionati    attivi: " + DatabaseMySql.eseguiQuery("Select count(*) from " + nomeDB + ".profile where status='active'").get(0)[0]);
-					OutputTxt.writeLog("Padre: Popular scansionati corrupted: " + DatabaseMySql.eseguiQuery("Select count(*) from " + nomeDB + ".profile where status='corrupted'").get(0)[0]);
+					OutputTxt.writeLog(nomeDB, "Padre: Popular scansionati    totale: " + DatabaseMySql.getCount(nomeDB, "profile"));
+					OutputTxt.writeLog(nomeDB, "Padre: Popular scansionati    attivi: " + DatabaseMySql.eseguiQuery("Select count(*) from " + nomeDB + ".profile where status='active'").get(0)[0]);
+					OutputTxt.writeLog(nomeDB, "Padre: Popular scansionati corrupted: " + DatabaseMySql.eseguiQuery("Select count(*) from " + nomeDB + ".profile where status='corrupted'").get(0)[0]);
 				}
 				catch (IOException e) {
-					OutputTxt.writeError("Errore IO nel try start del padreExec.");
+					OutputTxt.writeError(nomeDB, "Errore IO nel try start del padreExec.");
 				}  
 			}  
 			DatabaseMySql.eseguiAggiornamento("Update root.scansioni set fine='"   + Orario.getDataOra() + "' where nomeDB='" + nomeDB + "' and lista='popular'");
@@ -75,7 +75,7 @@ public class padre {
 					DatabaseMySql.eseguiQuery("Select fine from root.scansioni where nomeDB='" + 
 							nomeDB + "' and lista='user'").get(0)[0]) < 0) {
 				try {
-					OutputTxt.writeLog("Padre: processo scanUser per il DB: " + nomeDB + ".");
+					OutputTxt.writeLog(nomeDB, "Padre: processo scanUser per il DB: " + nomeDB + ".");
 					scanner = pb.start();
 					BufferedReader in = new BufferedReader(	new InputStreamReader(scanner.getInputStream()));
 					String line = null;
@@ -85,21 +85,22 @@ public class padre {
 					if (++n == 6) 
 						n = 0;
 					DatabaseMySql.eseguiAggiornamento("update root.key set devKey='" + key[n] + "' where crawler='padre'");
-					ethernet.switchTo(flagEth);
+					ethernet.switchTo(flagEth, nomeDB);
 					flagEth = !flagEth;
-					OutputTxt.writeLog("Padre: User scansionati    totale: " + DatabaseMySql.getCount("" + nomeDB + "", "profile"));
-					OutputTxt.writeLog("Padre: User scansionati    attivi: " + DatabaseMySql.eseguiQuery("Select count(*) from " + nomeDB + ".profile where status='active'").get(0)[0]);
-					OutputTxt.writeLog("Padre: User scansionati corrupted: " + DatabaseMySql.eseguiQuery("Select count(*) from " + nomeDB + ".profile where status='corrupted'").get(0)[0]);
+					OutputTxt.writeLog(nomeDB, "Padre: User scansionati    totale: " + DatabaseMySql.getCount("" + nomeDB + "", "profile"));
+					OutputTxt.writeLog(nomeDB, "Padre: User scansionati    attivi: " + DatabaseMySql.eseguiQuery("Select count(*) from " + nomeDB + ".profile where status='active'").get(0)[0]);
+					OutputTxt.writeLog(nomeDB, "Padre: User scansionati corrupted: " + DatabaseMySql.eseguiQuery("Select count(*) from " + nomeDB + ".profile where status='corrupted'").get(0)[0]);
 				} catch (IOException e) {
-					OutputTxt.writeError("Errore IO nel try scanUser del padreExec.");
+					OutputTxt.writeError(nomeDB, "Errore IO nel try scanUser del padreExec.");
 				}  
 			}
 			while (DatabaseMySql.contiene("root", "config", "id", "figlio", "lista", "user", "status", "on")) {
-				System.out.println("Attesa per la fine del processo scanUser del figlio.");
+				System.out.println("Attesa per la fine del processo scanUser del figlio per il DB:" + nomeDB);
 				try {Thread.sleep(15000);} catch (InterruptedException e) {}
 			}
 			DatabaseMySql.eseguiAggiornamento("Update root.scansioni set fine='"   + Orario.getDataOra() + "' where nomeDB='" + nomeDB + "' and lista='user'");
 			DatabaseMySql.eseguiAggiornamento("Update root.scansioni set inizio='" + Orario.getDataOra() + "' where nomeDB='" + nomeDB + "' and lista='corrupted'");
+			DatabaseMySql.selectVideoToCheck();
 		}
 		DatabaseMySql.eseguiAggiornamento("Update root.config set lista='video' where id='figlio'");
 		DatabaseMySql.eseguiAggiornamento("Update root.config set status='on' where id='figlio'");
@@ -111,7 +112,7 @@ public class padre {
 			pb.command ("java", "crawlerCorrupted" , "padre", nomeDB); 
 			while (DatabaseMySql.getCount(nomeDB, "corruptedList") != 0) {
 				try {
-					OutputTxt.writeLog("Padre: processo scanCorrupted per il DB: " + nomeDB + ".");
+					OutputTxt.writeLog(nomeDB, "Padre: processo scanCorrupted per il DB: " + nomeDB + ".");
 					scanner = pb.start();
 					BufferedReader in = new BufferedReader(	new InputStreamReader(scanner.getInputStream()));
 					String line = null;
@@ -121,13 +122,13 @@ public class padre {
 					if (++n == 6) 
 						n = 0;
 					DatabaseMySql.eseguiAggiornamento("update root.key set devKey='" + key[n] + "' where crawler='padre'");
-					ethernet.switchTo(flagEth);
+					ethernet.switchTo(flagEth, nomeDB);
 					flagEth = !flagEth;
-					OutputTxt.writeLog("Padre: User corrupted 				    totale: " + DatabaseMySql.getCount("" + nomeDB + "", "profile"));
-					OutputTxt.writeLog("Padre: User corrupted ri-scansionati    attivi: " + DatabaseMySql.eseguiQuery("Select count(*) from " + nomeDB + ".profile where status='active'").get(0)[0]);
-					OutputTxt.writeLog("Padre: User corrupted ri-scansionati corrupted: " + DatabaseMySql.eseguiQuery("Select count(*) from " + nomeDB + ".profile where status='corrupted'").get(0)[0]);
+					OutputTxt.writeLog(nomeDB, "Padre: User corrupted 				    totale: " + DatabaseMySql.getCount("" + nomeDB + "", "profile"));
+					OutputTxt.writeLog(nomeDB, "Padre: User corrupted ri-scansionati    attivi: " + DatabaseMySql.eseguiQuery("Select count(*) from " + nomeDB + ".profile where status='active'").get(0)[0]);
+					OutputTxt.writeLog(nomeDB, "Padre: User corrupted ri-scansionati corrupted: " + DatabaseMySql.eseguiQuery("Select count(*) from " + nomeDB + ".profile where status='corrupted'").get(0)[0]);
 				} catch (IOException e) {
-					OutputTxt.writeError("Errore IO nel try scanUser del padreExec.");
+					OutputTxt.writeError(nomeDB, "Errore IO nel try scanUser del padreExec.");
 				}  
 			} 
 			DatabaseMySql.eseguiAggiornamento("Update root.scansioni set fine='"   + Orario.getDataOra() + "' where nomeDB='" + nomeDB + "' and lista='corrupted'");
@@ -146,7 +147,7 @@ public class padre {
 							nomeDB + "' and lista='veloce" + scansioneN + "'").get(0)[0]) < 0) {
 			try {
 				System.out.println("Attesa del momento corretto per iniziare la scansione veloce " + scansioneN  + " per il DB: " + nomeDB);
-				OutputTxt.writeLog("Attesa del momento corretto per iniziare la scansione veloce " + scansioneN  + " per il DB: " + nomeDB);
+				OutputTxt.writeLog(nomeDB, "Attesa del momento corretto per iniziare la scansione veloce " + scansioneN  + " per il DB: " + nomeDB);
 				Thread.sleep(1800000); // DEVE ESSERE DI PIÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙ
 			} catch (InterruptedException e) {}
 		}
@@ -170,7 +171,7 @@ public class padre {
 		pb = new ProcessBuilder ("java", "crawlerActivity" , "padre" , nomeDB, scansioneN + "");
 		while (DatabaseMySql.getCount(nomeDB, "activeList") != 0) {
 			try {			
-				OutputTxt.writeLog("Padre: processo scanActivity per il DB: " + nomeDB + ".");
+				OutputTxt.writeLog(nomeDB, "Padre: processo scanActivity per il DB: " + nomeDB + ".");
 				scanner = pb.start ();
 				BufferedReader in = new BufferedReader(new InputStreamReader(scanner.getInputStream()));
 				String line = null;
@@ -180,14 +181,14 @@ public class padre {
 				if (++n == 6)
 					n = 0;
 				DatabaseMySql.eseguiAggiornamento("update root.key set devKey='" + key[n] + "' where crawler='padre'");
-				ethernet.switchTo(flagEth);
+				ethernet.switchTo(flagEth, nomeDB);
 			    flagEth = !flagEth;
-				OutputTxt.writeLog("Padre: User scansionati nelle actvity    totale: " + DatabaseMySql.getCount("" + nomeDB + "", "profile"));
-				OutputTxt.writeLog("Padre: User scansionati nelle actvity    attivi: " + DatabaseMySql.eseguiQuery("Select count(*) from " + nomeDB + ".profile where status='active'").get(0)[0]);
-				OutputTxt.writeLog("Padre: User scansionati nelle actvity corrupted: " + DatabaseMySql.eseguiQuery("Select count(*) from " + nomeDB + ".profile where status='corrupted'").get(0)[0]);
+				OutputTxt.writeLog(nomeDB, "Padre: User scansionati nelle actvity    totale: " + DatabaseMySql.getCount("" + nomeDB + "", "profile"));
+				OutputTxt.writeLog(nomeDB, "Padre: User scansionati nelle actvity    attivi: " + DatabaseMySql.eseguiQuery("Select count(*) from " + nomeDB + ".profile where status='active'").get(0)[0]);
+				OutputTxt.writeLog(nomeDB, "Padre: User scansionati nelle actvity corrupted: " + DatabaseMySql.eseguiQuery("Select count(*) from " + nomeDB + ".profile where status='corrupted'").get(0)[0]);
 			}
 			catch (IOException e) {
-				OutputTxt.writeError("Errore IO nel try start del padreExec.");
+				OutputTxt.writeError(nomeDB, "Errore IO nel try start del padreExec.");
 			}
 		}
 		DatabaseMySql.eseguiAggiornamento("Update root.scansioni set fine='" + Orario.getDataOra() + "' where nomeDB='" + nomeDB + "' and lista='veloce" + scansioneN + "'");

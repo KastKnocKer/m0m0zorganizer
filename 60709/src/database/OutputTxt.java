@@ -39,9 +39,9 @@ public class OutputTxt {
 			}
 	} */
 	
-	public static void writeLog (String check) {
+	public static void writeLog (String nomeDB, String check) {
 		try {			
-			logWriter = new BufferedWriter(new FileWriter("./Log", true));
+			logWriter = new BufferedWriter(new FileWriter("./" + nomeDB + "Log", true));
 			//System.out.println(Orario.getDataOra() + ": " + check);
 			logWriter.write(Orario.getDataOra() + ": " + check);
 			logWriter.newLine();			
@@ -54,9 +54,9 @@ public class OutputTxt {
 		return;
 	}
 	
-	public static void writeError (String check) {
+	public static void writeError (String nomeDB, String check) {
 		try {			
-			logWriter = new BufferedWriter(new FileWriter("./Error", true));
+			logWriter = new BufferedWriter(new FileWriter("./" + nomeDB + "Error", true));
 			System.out.println(Orario.getDataOra() + ": " + check);
 			logWriter.write(Orario.getDataOra() + ": " + check);
 			logWriter.newLine();			
@@ -69,9 +69,9 @@ public class OutputTxt {
 		return;
 	}
 	 
-	public static void writeException (String check) {
+	public static void writeException (String nomeDB, String check) {
 		try {			
-			logWriter = new BufferedWriter(new FileWriter("./Exception", true));
+			logWriter = new BufferedWriter(new FileWriter("./" + nomeDB + "Exception", true));
 			logWriter.write(Orario.getDataOra() + ": " + check);
 			logWriter.newLine();			
 			logWriter.flush();

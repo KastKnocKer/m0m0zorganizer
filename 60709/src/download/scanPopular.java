@@ -32,8 +32,8 @@ public class scanPopular {
 					temp++;
 				}
 				if (temp == control) {
-					OutputTxt.writeLog("Richieste API per il processo: " + Contatore.getTotApi());
-					OutputTxt.writeLog("Richieste URL per il processo: " + Contatore.getTotUrl());
+					OutputTxt.writeLog(nomeDB, "Richieste API per il processo: " + Contatore.getTotApi());
+					OutputTxt.writeLog(nomeDB, "Richieste URL per il processo: " + Contatore.getTotUrl());
 					return;
 				}
 			}

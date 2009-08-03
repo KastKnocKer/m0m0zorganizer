@@ -20,15 +20,15 @@ public class Orario extends GregorianCalendar {
 	
 	public static String getDataOra(int giorno, int ora, int minuto) {
 		if (minuto > 59) {
-			OutputTxt.writeError("Il max incremento dei minuti è di 59");
+			OutputTxt.writeError("root", "Il max incremento dei minuti è di 59");
 			minuto = 59;
 		}
 		if (ora > 23) {
-			OutputTxt.writeError("Il max incremento delle ore è di 23");
+			OutputTxt.writeError("root","Il max incremento delle ore è di 23");
 			ora = 23;
 		}
 		if (giorno > 31) {
-			OutputTxt.writeError("Il max incremento dei giorni è di 31");
+			OutputTxt.writeError("root","Il max incremento dei giorni è di 31");
 			giorno = 31;
 		}
 		new Orario();

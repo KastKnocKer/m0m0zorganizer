@@ -31,9 +31,10 @@ public class scanUser {
 					else
 						API.getUser(myService, devKey, "inactive", nomeDB, userToCheck);
 				}
+				System.out.println("Scansionamento parziale, utente numero: " + temp);
 				if (temp == 30) { // DA MODIFICARE
-					OutputTxt.writeLog("Richieste API per il processo: " + Contatore.getTotApi());
-					OutputTxt.writeLog("Richieste URL per il processo: " + Contatore.getTotUrl());
+					OutputTxt.writeLog(nomeDB, "Richieste API per il processo: " + Contatore.getTotApi());
+					OutputTxt.writeLog(nomeDB, "Richieste URL per il processo: " + Contatore.getTotUrl());
 					return;
 				}
 			}

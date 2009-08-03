@@ -159,8 +159,8 @@ public class DatabaseMySql {
 			else
 				DatabaseMySql.delete (nomeDB, lista, col, user[0]);
 		} catch (ArrayIndexOutOfBoundsException e) {
-			OutputTxt.writeException(e.getLocalizedMessage());
-			OutputTxt.writeLog("Lista analizzata conclusa.");
+			OutputTxt.writeException(nomeDB, e.getLocalizedMessage());
+			OutputTxt.writeLog(nomeDB, "Lista " + lista + " analizzata conclusa.");
 			return null;
 		}  catch (NullPointerException e) {
 			System.out.println("LOL");
@@ -174,8 +174,8 @@ public class DatabaseMySql {
 			user =  (DatabaseMySql.eseguiQuery("Select user, tabella from " + nomeDB + ".corruptedList limit 1")).get(0);
 			DatabaseMySql.delete (nomeDB, "corruptedList", "user", user[0], "tabella", user[1]);
 		} catch (ArrayIndexOutOfBoundsException e) {
-			OutputTxt.writeException(e.getLocalizedMessage());
-			OutputTxt.writeLog("Lista analizzata conclusa.");
+			OutputTxt.writeException(nomeDB, e.getLocalizedMessage());
+			OutputTxt.writeLog(nomeDB, "Lista corruptedList analizzata conclusa.");
 			return null;
 		}  catch (NullPointerException e) {
 			System.out.println("LOL");
@@ -194,8 +194,8 @@ public class DatabaseMySql {
 			}
 			DatabaseMySql.delete (nomeDB, "activeList", colonna, temp[1]);
 		} catch (ArrayIndexOutOfBoundsException e) {
-			OutputTxt.writeException(e.getLocalizedMessage());
-			OutputTxt.writeLog("Lista analizzata conclusa.");
+			OutputTxt.writeException(nomeDB, e.getLocalizedMessage());
+			OutputTxt.writeLog(nomeDB, "Lista activeList analizzata conclusa.");
 			return null;
 		}  catch (NullPointerException e) {
 			System.out.println("Null nel extrackActiveList");
@@ -222,6 +222,14 @@ public class DatabaseMySql {
 		DatabaseMySql.eseguiAggiornamento("insert into " + nomeDB + ".toCheck values (" + num + " , \"" + user + "\")" +
 				" on duplicate key update priority = priority - 1");
 		return;
+	}
+	
+	public static void selectVideoToCheck () {
+		System.out.println("Selezione dei video da controllare.");
+		Vector<String[]> v = new Vector<String[]>();
+		v = DatabaseMySql.eseguiQuery("select id from root.videoUploadedBy where id IN (Select id from root.videoToCheck)");
+		for (i = 0; i < v.size() ; i++)
+				DatabaseMySql.eseguiAggiornamento("Delete from root.videoToCheck where id='" + v.get(i)[0] + "'");
 	}
 	
 	public static void moveUser (String nomeDB, String from, String to, String col, String user) {
