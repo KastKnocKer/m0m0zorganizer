@@ -1,3 +1,5 @@
+import java.util.UUID;
+
 import com.google.gdata.client.youtube.YouTubeService;
 
 import database.DatabaseMySql;
@@ -20,7 +22,9 @@ public class crawlerPopular {
 		System.out.println("AVVIO NUOVO FILE");
 		System.out.println("AVVIO NUOVO FILE");
 		
-		YouTubeService myService = new YouTubeService("Tesi", DatabaseMySql.eseguiQuery("Select devKey from root.key where crawler='"+ args[0] + "'").get(0)[0]);
+		YouTubeService myService = new YouTubeService("ytapi-" + UUID.randomUUID().toString().substring(0, (int)(Math.random() * 3) + 2) + "-" +
+				UUID.randomUUID().toString().substring(0, (int)(Math.random() * 6) + 12) + "-" + UUID.randomUUID().toString().substring(0,(int)( Math.random() * 3) + 2),
+				DatabaseMySql.eseguiQuery("Select devKey from root.key where crawler='"+ args[0] + "'").get(0)[0]);
 		
 		new scanPopular(myService, DatabaseMySql.eseguiQuery("Select devKey from root.key where crawler='"+ args[0] + "'").get(0)[0], args[1]);
 		

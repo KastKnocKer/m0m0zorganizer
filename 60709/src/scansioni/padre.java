@@ -36,7 +36,7 @@ public class padre {
 		if(DatabaseMySql.contiene("root", "scansioni", "nomeDB", nomeDB, "lista", "popular", "completed", "false")) {
 			DatabaseMySql.eseguiAggiornamento("Update root.scansioni set inizio='" + Orario.getDataOra()  + "' where nomeDB='" + nomeDB + "' and lista='popular'");
 			DatabaseMySql.eseguiAggiornamento("Update root.scansioni set fine='"   + Orario.getDataOra()  + "' where nomeDB='" + nomeDB + "' and lista='popular'");
-			DatabaseMySql.eseguiAggiornamento("Update root.scansioni set fine='"   + Orario.getDataOra(0, 0, 3) + "' where nomeDB='" + nomeDB + "' and lista='user'");
+			DatabaseMySql.eseguiAggiornamento("Update root.scansioni set fine='"   + Orario.getDataOra(0, 6, 0) + "' where nomeDB='" + nomeDB + "' and lista='user'");
 			
 			if (DatabaseMySql.getCount(nomeDB, "popular") == 0)
 				new popularReader(nomeDB);		
@@ -155,7 +155,7 @@ public class padre {
 		if (DatabaseMySql.getCount(nomeDB, "activeList") == 0) {
 			DatabaseMySql.eseguiAggiornamento("Update root.scansioni set inizio='" + Orario.getDataOra() + "' where nomeDB='" + nomeDB + "' and lista='veloce" + scansioneN + "'");
 			if (scansioneN != 7)
-				DatabaseMySql.eseguiAggiornamento("Update root.scansioni set inizio='" + Orario.getDataOra(0, 0, 2) + "' where nomeDB='" + nomeDB + "' and lista='veloce" + (scansioneN + 1)+ "'");
+				DatabaseMySql.eseguiAggiornamento("Update root.scansioni set inizio='" + Orario.getDataOra(0, 0, 20) + "' where nomeDB='" + nomeDB + "' and lista='veloce" + (scansioneN + 1)+ "'");
 			DatabaseMySql.copyAttivi(nomeDB);
 		}
 			
