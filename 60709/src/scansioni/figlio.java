@@ -26,7 +26,7 @@ public class figlio  extends Thread {
 		DatabaseMySql.eseguiAggiornamento("insert into root.key values (\"figlio\", \"" + key[0] + "\")");
 		
 		while (DatabaseMySql.contiene(nomeDB, "ethernet", "rete", "figlio", "flag", "false")) {
-			try {Thread.sleep(5000); System.out.println("In attesa della fine dello scanPopular.");} catch (InterruptedException e1) {}
+			try {Thread.sleep(5000); System.out.println("In attesa della fine dello scanPopular per il DB: " + nomeDB);} catch (InterruptedException e1) {}
 			}
 		
 		pb = new ProcessBuilder ("java", "crawlerUser" , "figlio", nomeDB); 
