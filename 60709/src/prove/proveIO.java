@@ -2,22 +2,11 @@
 	package prove;
 
 //import com.google.gdata.client.youtube.YouTubeService;
-
-import scansioni.figlio;
-import scansioni.padre;
-
 import com.google.gdata.client.youtube.YouTubeService;
-
 import database.DatabaseMySql;
-import database.Orario;
 import database.OutputTxt;
-import database.createDatabase;
 import download.API;
 import download.Contatore;
-import download.popularReader;
-import download.scanActivity;
-import download.scanCorrupted;
-import download.urlReader;
 
 
 public class proveIO {
@@ -32,11 +21,8 @@ public class proveIO {
 		//API.getUser(myService, "active", "momoz1987");
 		String devKey = "AI39si5XLt78NO1fRB0VaLCqUIXWkZeLDNSITQMvwwo_0scaR2qwzc2FzQTAqNqYBY0mAooL1HM4rl9BNpAefC1jx4PuMYKWsQ";
 		YouTubeService myService = new YouTubeService("Tesi");
-		//new scanUser(myService, devKey);
-		//System.out.println(devKey.length());
-	//	DatabaseMySql.eseguiAggiornamento("insert into prima.ethernet values (\"figlio\", \"true\")");
-		//DatabaseMySql.eseguiAggiornamento("insert into prima.ethernet values (\"padre\", \"true\")");
-		DatabaseMySql.selectVideoToCheck();
+		API.getUser(myService, devKey, "active", "prima", "Pumpkin71193");
+		
 
 	}
 }

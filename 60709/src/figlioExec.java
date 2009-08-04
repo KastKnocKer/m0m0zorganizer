@@ -29,7 +29,7 @@ public class figlioExec {
 						
 			while (DatabaseMySql.contiene("root", "config", "id", "figlio", "status", "off")) {
 				ethernet.checkEthernet(nomeDB);
-				System.out.println("In attesa della fine dello scanPopular.");
+				System.out.println("In attesa della fine dello scanPopular per il DB:" + nomeDB);
 				try {Thread.sleep(10000);} catch (InterruptedException e1) {}
 			}
 			
