@@ -269,16 +269,29 @@ public class DatabaseMySql {
 		}
 	}
 	
-	public static void copyAttivi (String nomeDB) {
+	public static void copyAttivi (String nomeDB, int scansioneN) {
 		Vector<String[]> v = null;
 		temp = new String[1];
-		v = DatabaseMySql.eseguiQuery("Select user,dataScan from " + nomeDB + ".profile where status='active' or status ='corrupted'");
-		for (int i = 0; i < v.size(); i++) {
-			temp[0] = v.get(i)[1];
-			if (temp[0].equals("corrupted")) {
-				continue;
+		if (scansioneN == 1) 
+			v = DatabaseMySql.eseguiQuery("Select user,dataScan from " + nomeDB + ".profile where status='active' or status ='corrupted'");
+		else if (scansioneN > 1) {
+			v = DatabaseMySql.eseguiQuery("Select * from " + nomeDB + ".active" + (scansioneN - 1));
+			for (int i = 0; i < v.size(); i++) {
+				temp[0] = v.get(i)[1];
+				temp[0] = temp[0].substring(0, 13);
+				 if (temp[0].endsWith("00")) {
+					temp[0] = temp[0].substring(0, temp[0].indexOf("T") + 1);
+					temp[0] = temp[0] + "01:00:01";
+					
+				}
+				else 
+					temp[0] = temp[0] + ":00:00";
+				DatabaseMySql.insert(nomeDB, "activeList", 0 , v.get(i)[0], temp[0]);
 			}
-				
+			v = DatabaseMySql.eseguiQuery("Select * from " + nomeDB + ".inactive" + (scansioneN - 1));
+		}
+		for (int i = 0; i < v.size(); i++) {
+			temp[0] = v.get(i)[1];				
 			temp[0] = temp[0].substring(0, 13);
 			 if (temp[0].endsWith("00")) {
 				temp[0] = temp[0].substring(0, temp[0].indexOf("T") + 1);

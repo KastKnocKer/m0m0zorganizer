@@ -246,7 +246,9 @@ public class urlReader  {
 				return false;
 			}	
 		} catch (IOException e) { 
-			e.printStackTrace();
+			DatabaseMySql.eseguiAggiornamento("update root.ethernet set flag ='false' where rete='figlio'");
+			try {Thread.sleep(60000);} catch (InterruptedException e1) {}
+			DatabaseMySql.eseguiAggiornamento("update root.ethernet set flag ='true' where rete='figlio'");
 			OutputTxt.writeException(nomeDB, e.getLocalizedMessage());
 	        OutputTxt.writeException(nomeDB, "Errore nel getErrorCode dell'utente: " + user);	
 	        return true;

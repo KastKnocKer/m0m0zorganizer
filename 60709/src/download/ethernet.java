@@ -43,7 +43,7 @@ public class ethernet {
 		} catch (IOException e) { OutputTxt.writeError(nomeDB, "Errore di IO nello switchEthernet");
 		}
 		try {
-			Thread.sleep(5000);  // Sistemare se sono a casa 7500 se sono in uni 3500
+			Thread.sleep(7500);  // Sistemare se sono a casa 7500 se sono in uni 3500
 			DatabaseMySql.eseguiAggiornamento("update root.ethernet set flag ='true' where rete='padre'");
 		} catch (InterruptedException e1) {
 			OutputTxt.writeError(nomeDB, "Errore di interrupt nel secondo timer dello switchEthernet");
