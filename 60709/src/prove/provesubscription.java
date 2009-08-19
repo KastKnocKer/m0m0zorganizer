@@ -10,6 +10,7 @@ import com.google.gdata.data.spreadsheet.Data;
 import database.DatabaseMySql;
 import database.Orario;
 import database.createRootDB;
+import download.popularReader;
 import download.urlReader;
 
 public class provesubscription {
@@ -19,6 +20,8 @@ public class provesubscription {
 	 */
 	public static void main(String[] args) {
 		new createRootDB();
-		
+		new DatabaseMySql("connessione");
+		DatabaseMySql.connetti();
+		new popularReader("prima");
 	}
 }

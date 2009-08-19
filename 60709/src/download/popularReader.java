@@ -29,12 +29,15 @@ public class popularReader {
 			in = new BufferedReader(new InputStreamReader(metafeedUrl.openStream()));
 			
 			while ((inputLine = in.readLine()) != null) {
-				if (inputLine.contains("<div class=\"channel-short-title\">")) {
+				if (inputLine.contains("<div  class=\"channel-title\">")) {
+					inputLine = in.readLine();
 					inputLine = in.readLine();
 					inputLine = inputLine.substring(19, inputLine.indexOf("\" title"));
-					System.out.println(++tmp +" : " + ++count + " Inserimento del popular da controllare: " + inputLine);
-					DatabaseMySql.insert(nomeDB, "popToCheck" , inputLine);	
-					DatabaseMySql.insert(nomeDB, "popular" , inputLine, Orario.getDataOra(), time);
+					if (!inputLine.startsWith("/")) {				
+						System.out.println(++tmp +" : " + ++count + " Inserimento del popular da controllare: " + inputLine);
+						DatabaseMySql.insert(nomeDB, "popToCheck" , inputLine);	
+						DatabaseMySql.insert(nomeDB, "popular" , inputLine, Orario.getDataOra(), time);
+					}
 				} 	
 				else if (inputLine.equals("</html>")){
 					if (++pag <= 5) { 
