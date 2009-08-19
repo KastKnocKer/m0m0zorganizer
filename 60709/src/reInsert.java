@@ -1,4 +1,4 @@
-package scansioni;
+
 
 import java.io.BufferedReader;
 import java.io.*;
