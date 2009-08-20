@@ -3,6 +3,7 @@ package download;
 import com.google.gdata.client.youtube.YouTubeService;
 
 import database.DatabaseMySql;
+import database.Orario;
 import database.OutputTxt;
 
 public class scanActivity {
@@ -38,7 +39,7 @@ public class scanActivity {
 				if (API.getActivity(myService, devKey, nomeDB, userTemp, 0, 0, data, scansioneN)) {
 					for (i = 0; i < n; i++) {
 						if(!DatabaseMySql.contiene(nomeDB, "active" + scansioneN, "user", users[i][1])) 
-							DatabaseMySql.insert(nomeDB, "inactive" + scansioneN, users[i][1], data);
+							DatabaseMySql.insert(nomeDB, "inactive" + scansioneN, users[i][1], Orario.getDataOra());
 					}
 				}
 				else  {

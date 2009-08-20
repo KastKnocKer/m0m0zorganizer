@@ -203,13 +203,9 @@ public class urlReader {
 			System.out.println("\t\t\t\t\t\t\t\t\t\t\t\tPacchetto arrivato.");
 			while ((inputLine = in.readLine()) != null) {
 				if (inputLine.contains("<published>"))
-					temp1 = inputLine.substring(inputLine
-							.indexOf("<published>") + 11, inputLine
-							.indexOf("</published>") - 5);
+					temp1 = inputLine.substring(inputLine.indexOf("<published>") + 11, inputLine.indexOf("</published>") - 5);
 				if (inputLine.contains("<name>"))
-					temp2 = inputLine.substring(
-							inputLine.indexOf("<name>") + 6, inputLine
-									.indexOf("</name>"));
+					temp2 = inputLine.substring(inputLine.indexOf("<name>") + 6, inputLine.indexOf("</name>"));
 				if (inputLine.contains("numRaters=")) {
 					inputLine = inputLine.substring(inputLine
 							.indexOf("numRaters=") + 11);
@@ -233,13 +229,9 @@ public class urlReader {
 			temp3 = "";
 			temp4 = "";
 		} catch (MalformedURLException e) {
-			if (!DatabaseMySql.contiene("root", "videoUploadedBy", "id",
-					videoId))
-				DatabaseMySql.insert("root", "videoToCheck", videoId);
+			DatabaseMySql.insert("root", "videoUploadedBy", "*VideoRimosso*", videoId);
 		} catch (IOException e) {
-			if (!DatabaseMySql.contiene("root", "videoUploadedBy", "id",
-					videoId))
-				DatabaseMySql.insert("root", "videoToCheck", videoId);
+			DatabaseMySql.insert("root", "videoUploadedBy", "*VideoRimosso*", videoId);
 		}
 	}
 

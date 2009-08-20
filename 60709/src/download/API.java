@@ -309,7 +309,7 @@ import java.net.URL;
 			for (UserEventEntry entry : activityFeed.getEntries()) {
 				count++;
 				stringTemp = entry.getAuthors().get(0).getName();
-				DatabaseMySql.insert(nomeDB, "active" + N, stringTemp, data);
+				DatabaseMySql.insert(nomeDB, "active" + N, stringTemp, Orario.getDataOra());
 				System.out.println(count + ": Attività riscontrata per l'utente " + stringTemp);
 				countTemp = true;
 				if(entry.getUserEventType() == UserEventEntry.Type.VIDEO_UPLOADED) {

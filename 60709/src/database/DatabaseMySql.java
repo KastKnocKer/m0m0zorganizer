@@ -275,7 +275,7 @@ public class DatabaseMySql {
 		if (scansioneN == 1) 
 			v = DatabaseMySql.eseguiQuery("Select user,dataScan from " + nomeDB + ".profile where status='active' or status='*active*' or status ='corrupted'");
 		else if (scansioneN > 1) {
-			v = DatabaseMySql.eseguiQuery("Select * from " + nomeDB + ".active" + (scansioneN - 1));
+			v = DatabaseMySql.eseguiQuery("Select user,data from " + nomeDB + ".active" + (scansioneN - 1));
 			for (int i = 0; i < v.size(); i++) {
 				temp[0] = v.get(i)[1];
 				temp[0] = temp[0].substring(0, 13);
@@ -288,7 +288,7 @@ public class DatabaseMySql {
 					temp[0] = temp[0] + ":00:00";
 				DatabaseMySql.insert(nomeDB, "activeList", 0 , v.get(i)[0], temp[0]);
 			}
-			v = DatabaseMySql.eseguiQuery("Select * from " + nomeDB + ".inactive" + (scansioneN - 1));
+			v = DatabaseMySql.eseguiQuery("Select user,data from " + nomeDB + ".inactive" + (scansioneN - 1));
 		}
 		for (int i = 0; i < v.size(); i++) {
 			temp[0] = v.get(i)[1];				
