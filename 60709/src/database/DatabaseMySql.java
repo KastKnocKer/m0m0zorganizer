@@ -273,7 +273,7 @@ public class DatabaseMySql {
 		Vector<String[]> v = null;
 		temp = new String[1];
 		if (scansioneN == 1) 
-			v = DatabaseMySql.eseguiQuery("Select user,dataScan from " + nomeDB + ".profile where status='active' or status ='corrupted'");
+			v = DatabaseMySql.eseguiQuery("Select user,dataScan from " + nomeDB + ".profile where status='active' or status='*active*' or status ='corrupted'");
 		else if (scansioneN > 1) {
 			v = DatabaseMySql.eseguiQuery("Select * from " + nomeDB + ".active" + (scansioneN - 1));
 			for (int i = 0; i < v.size(); i++) {
