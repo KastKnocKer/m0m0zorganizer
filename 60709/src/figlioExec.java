@@ -60,7 +60,11 @@ public class figlioExec {
 				DatabaseMySql.eseguiAggiornamento("Update root.config set status='off' where id='figlio'");
 			}
 			else if (DatabaseMySql.contiene("root", "config", "id", "figlio", "lista", "video", "status", "on")) {
-				if ((videoId = DatabaseMySql.extract("root", "videoToCheck", "id")[0]) != null)
+				if (DatabaseMySql.getCount("root", "videoToCheck") == 0) {
+					System.out.println("In attesa di video da controllare. Scansione attuale: " + nomeDB);
+					try { Thread.sleep(1800000); } catch (InterruptedException e) {}
+				}
+				else if	((videoId = DatabaseMySql.extract("root", "videoToCheck", "id")[0]) != null)
 					urlReader.getVideoUploader(videoId);
 			}
 			ethernet.checkEthernet(nomeDB);
