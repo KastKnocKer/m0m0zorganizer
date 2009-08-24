@@ -288,6 +288,19 @@ public class DatabaseMySql {
 					temp[0] = temp[0] + ":00:00";
 				DatabaseMySql.insert(nomeDB, "activeList", 0 , v.get(i)[0], temp[0]);
 			}
+			v = DatabaseMySql.eseguiQuery("Select user,data from " + nomeDB + ".corrupted" + (scansioneN - 1));
+			for (int i = 0; i < v.size(); i++) {
+				temp[0] = v.get(i)[1];
+				temp[0] = temp[0].substring(0, 13);
+				 if (temp[0].endsWith("00")) {
+					temp[0] = temp[0].substring(0, temp[0].indexOf("T") + 1);
+					temp[0] = temp[0] + "01:00:01";
+					
+				}
+				else 
+					temp[0] = temp[0] + ":00:00";
+				DatabaseMySql.insert(nomeDB, "activeList", 0 , v.get(i)[0], temp[0]);
+			}
 			v = DatabaseMySql.eseguiQuery("Select user,data from " + nomeDB + ".inactive" + (scansioneN - 1));
 		}
 		for (int i = 0; i < v.size(); i++) {

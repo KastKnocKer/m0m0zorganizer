@@ -44,7 +44,7 @@ public class scanActivity {
 				}
 				else  {
 					if (n == 1) {
-						DatabaseMySql.insert(nomeDB, "corrupted" + scansioneN, users[0][1], data);
+						DatabaseMySql.insert(nomeDB, "corrupted" + scansioneN, users[0][1], Orario.getDataOra());
 					}
 					else {
 						for (i = 0; i < n; i++) 
