@@ -37,9 +37,9 @@ public class padre {
 			while (Orario.getDataOra().compareTo(DatabaseMySql.eseguiQuery("Select inizio from root.scansioni where nomeDB='" + 
 					nomeDB + "' and lista='popular'").get(0)[0]) < 0) {
 				try {
-					System.out.println("Attesa del momento corretto per iniziare la scansione veloce dei popular per il DB: " + nomeDB);
-					OutputTxt.writeLog(nomeDB, "Attesa del momento corretto per iniziare la scansione veloce dei popular per il DB:  " + nomeDB);
-					Thread.sleep(1800000); // DEVE ESSERE DI PIÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙ
+					System.out.println("Attesa del momento corretto per iniziare la scansione dei popular per il DB: " + nomeDB);
+					OutputTxt.writeLog(nomeDB, "Attesa del momento corretto per iniziare la scansione dei popular per il DB:  " + nomeDB);
+					Thread.sleep(600000); // DEVE ESSERE DI PIÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙÙ
 				} catch (InterruptedException e) {}
 			}
 			DatabaseMySql.eseguiAggiornamento("Update root.scansioni set inizio='" + Orario.getDataOra()  + "' where nomeDB='" + nomeDB + "' and lista='popular'");
@@ -203,9 +203,9 @@ public class padre {
 		DatabaseMySql.eseguiAggiornamento("Update root.scansioni set completed='true' where nomeDB='" + nomeDB + "' and " +
 		"lista='veloce" + scansioneN + "'");	
 		if (scansioneN == 7 && !nomeDB.equals("quinta")) {
-			String temp;
-			temp = DatabaseMySql.eseguiQuery("Select nomeDB from root.scansioni where completed='false' limit 1").get(0)[0];
-			DatabaseMySql.eseguiAggiornamento("Update root.scansioni set inizio='" + Orario.getDataOra() + "' where nomeDB='" + temp + "' and lista='popular'");			
+			DatabaseMySql.eseguiAggiornamento("Update root.scansioni set inizio='" + Orario.getDataOra(0, 17, 0) + "' where nomeDB='" + 
+					DatabaseMySql.eseguiQuery("Select nomeDB from root.scansioni where completed='false' limit 1").get(0)[0]
+					+ "' and lista='popular'");			
 		}
 	}
 	
