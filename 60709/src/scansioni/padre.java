@@ -162,10 +162,11 @@ public class padre {
 			
 		// Copia degli utenti attivi per avere una lista per le scansioni veloci
 		if (DatabaseMySql.getCount(nomeDB, "activeList") == 0) {
+			DatabaseMySql.copyAttivi(nomeDB, scansioneN);
 			DatabaseMySql.eseguiAggiornamento("Update root.scansioni set inizio='" + Orario.getDataOra() + "' where nomeDB='" + nomeDB + "' and lista='veloce" + scansioneN + "'");
 			if (scansioneN != 7)
 				DatabaseMySql.eseguiAggiornamento("Update root.scansioni set inizio='" + Orario.getDataOra(1, 0, 0) + "' where nomeDB='" + nomeDB + "' and lista='veloce" + (scansioneN + 1)+ "'");
-			DatabaseMySql.copyAttivi(nomeDB, scansioneN);
+			
 		}
 			
 		key = new String[6];
