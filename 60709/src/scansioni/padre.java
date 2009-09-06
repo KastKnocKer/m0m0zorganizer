@@ -43,7 +43,6 @@ public class padre {
 				} catch (InterruptedException e) {}
 			}
 			DatabaseMySql.eseguiAggiornamento("Update root.scansioni set inizio='" + Orario.getDataOra()  + "' where nomeDB='" + nomeDB + "' and lista='popular'");
-			DatabaseMySql.eseguiAggiornamento("Update root.scansioni set fine='"   + Orario.getDataOra()  + "' where nomeDB='" + nomeDB + "' and lista='popular'");
 			DatabaseMySql.eseguiAggiornamento("Update root.scansioni set fine='"   + Orario.getDataOra(6, 23, 0) + "' where nomeDB='" + nomeDB + "' and lista='user'");
 			
 			if (DatabaseMySql.getCount(nomeDB, "popular") == 0)

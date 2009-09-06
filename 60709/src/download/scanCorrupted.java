@@ -3,6 +3,7 @@ package download;
 import com.google.gdata.client.youtube.YouTubeService;
 
 import database.DatabaseMySql;
+import database.Orario;
 
 public class scanCorrupted {
 
@@ -65,6 +66,8 @@ public class scanCorrupted {
 			}
 			if (!DatabaseMySql.contiene(nomeDB, "infoCorrupted", "user", user[0])) {
 				DatabaseMySql.eseguiAggiornamento("Update " + nomeDB + ".profile set status='*active*' where user='"
+						+ user[0]	+ "'");				
+				DatabaseMySql.eseguiAggiornamento("Update " + nomeDB + ".profile set lastacc='" + Orario.getDataOra() + "' where user='"
 						+ user[0]	+ "'");
 			}
 			if (count == 200)
