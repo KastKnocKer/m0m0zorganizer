@@ -19,11 +19,11 @@ public class scanActivity {
 							"where data ='" + data + "'").get(0)[0]);
 					if (n > 20)
 						n = 20;
-				}
-				else if (count > 400)
-					n = count / 50;
-				else if (count > 250)
-					n = 2;
+				}	
+				else if (count < 400)
+					n = count / 50;	
+				else if (count < 250)
+					n = 2;		
 				else 
 					n = 1;
 				users = new String[n][3];
