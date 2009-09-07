@@ -20,6 +20,8 @@ public class scanActivity {
 					if (n > 20)
 						n = 20;
 				}	
+				else if (count >= 400)
+					n = 20;	
 				else if (count < 400)
 					n = count / 50;	
 				else if (count < 250)
