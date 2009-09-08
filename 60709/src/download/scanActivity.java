@@ -22,12 +22,13 @@ public class scanActivity {
 				}	
 				else if (count >= 400)
 					n = 20;	
-				else if (count < 400)
+				else if (count < 400 && count >= 250)
 					n = count / 50;	
-				else if (count < 250)
+				else if (count < 250 && count >= 75)
 					n = 2;		
-				else 
+				else if (count < 75)
 					n = 1;
+				System.out.println("N VALE: " + n);
 				users = new String[n][3];
 				for (i = 0; i < n; i++) {
 					users[i] = DatabaseMySql.extractActiveList(nomeDB, "user");
