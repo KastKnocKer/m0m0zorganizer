@@ -23,6 +23,7 @@ public class figlioExec {
 		key[4] = "AI39si7e_IYXZqXB764Zgqll4sJlxizsHT02LAx1yo6CHG-8eaayATP-OGG330hhLj1HUHmjzwU62X7s8WHSe8JpiqpfrfGoGw";
 		key[5] = "AI39si64j5tSsH0ZIWV181HS2TS0Fzybri75KOBcQrm6baZ9TtfyZ7IiGPIEZPfuVZS-HK0LDTsNGDHk6Vu_bqObw0nm68VMog";
 		DatabaseMySql.eseguiAggiornamento("insert into root.key values (\"figlio\", \"" + key[0] + "\")");
+		DatabaseMySql.eseguiAggiornamento("Update root.ethernet set flag='true' where rete='figlio'");
 		
 		while (true) {
 			nomeDB = DatabaseMySql.eseguiQuery("Select nomeDB from root.scansioni where completed='false' limit 1").get(0)[0];

@@ -12,13 +12,17 @@ public class ethernet {
 	
 	public ethernet () {}
 	
-	public static void switchTo (boolean flag, String nomeDB) {		
+	public static void switchTo (boolean flag, String nomeDB) {
+		int n = 0;
 		try {
 			System.out.println("Avvio switching ethernet..Attendere..");
 			DatabaseMySql.eseguiAggiornamento("update root.ethernet set flag ='false' where rete='padre'");
 			while (DatabaseMySql.contiene("root", "ethernet", "rete", "figlio", "flag", "true")) { 
 				try {	
-					System.out.println("Attesa segnale dal processo figlio..Attendere..");
+					if (++n == 3600) {
+						DatabaseMySql.eseguiAggiornamento("update root.ethernet set flag ='false' where rete='figlio'");
+					}
+					System.out.println(n + ": Attesa segnale dal processo figlio..Attendere..");
 					Thread.sleep(1000);	
 				} catch (InterruptedException e2) {
 					OutputTxt.writeError(nomeDB, "Errore di interrupt nel primo timer dello switchEthernet");
