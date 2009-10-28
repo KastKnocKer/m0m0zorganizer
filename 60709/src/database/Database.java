@@ -6,7 +6,7 @@ package database;
  */
 import java.sql.*;
 import java.util.Vector;
-
+// asdasd
 public class Database {
    private String nomeDB;       // Nome del Database a cui connettersi
    private String nomeUtente;   // Nome utente utilizzato per la connessione al Database
