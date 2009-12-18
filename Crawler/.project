@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>60709</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+	</natures>
+	<linkedResources>
+		<link>
+			<name>src_gdata</name>
+			<type>2</type>
+			<location>C:/Users/m0m0z/Documents/Università/Crawler Librerie/gdata-src.java-1.38.0/gdata/java/src</location>
+		</link>
+	</linkedResources>
+</projectDescription>
