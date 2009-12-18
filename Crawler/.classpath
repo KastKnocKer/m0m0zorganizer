@@ -3,12 +3,5 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="src_gdata"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="/home/m0m0z/Scrivania/Crawler/Prog/Jar x Libreria/activation.jar"/>
-	<classpathentry kind="lib" path="/home/m0m0z/Scrivania/Crawler/Prog/Jar x Libreria/antlr-3.1.3.jar"/>
-	<classpathentry kind="lib" path="/home/m0m0z/Scrivania/Crawler/Prog/Jar x Libreria/google-collect-1.0-rc1.jar"/>
-	<classpathentry kind="lib" path="/home/m0m0z/Scrivania/Crawler/Prog/Jar x Libreria/jsr305.jar"/>
-	<classpathentry kind="lib" path="/home/m0m0z/Scrivania/Crawler/Prog/Jar x Libreria/mail.jar"/>
-	<classpathentry kind="lib" path="/home/m0m0z/Scrivania/Crawler/Prog/Jar x Libreria/mysql-connector-java-5.1.7-bin.jar"/>
-	<classpathentry kind="lib" path="/home/m0m0z/Scrivania/Crawler/Prog/Jar x Libreria/servlet-api-2.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
